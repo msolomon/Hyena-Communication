@@ -12,8 +12,7 @@
 class QPainter;
 class QPaintEvent;
 
-class Helper
-{
+class Helper {
 public:
 	Helper();
 

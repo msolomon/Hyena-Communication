@@ -1,6 +1,5 @@
 #include "cell.h"
 
-
 //void cell::draw(HWND hwnd, int x, int y){     
 ////   glClearColor(1.0, 0.0, 0.0, 0.0);
 ////   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
@@ -22,12 +21,12 @@
 //
 //}
 
-void cell::reset(void){
-   interest = 0;
-   if(rand()%100 < INTEREST_PERCENT)
-      interest = 1;
-} 
+void cell::reset(void) {
+	interest = 0;
+	if (rand() % 100 < INTEREST_PERCENT)
+		interest = 1;
+}
 
-cell::cell(void){
-    reset();
+cell::cell(void) {
+	reset();
 }

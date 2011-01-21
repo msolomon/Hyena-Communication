@@ -1,4 +1,4 @@
- /****************************************************************************
+/****************************************************************************
  **
  ** Copyright (C) 2006-2008 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
  **
@@ -18,84 +18,81 @@
  **
  ****************************************************************************/
 
- #include <QtGui>
- #include "widget.h"
- #include "helper.h"
+#include <QtGui>
+#include "widget.h"
+#include "helper.h"
 
 #include "globals.h"
 #include <assert.h>
- Widget::Widget(Helper *helper, QWidget *parent)
-     : QWidget(parent), helper(helper)
- {
-     elapsed = 0;
-     setFixedSize(FIELDX, FIELDY);
- }
+Widget::Widget(Helper *helper, QWidget *parent) :
+	QWidget(parent), helper(helper) {
+	elapsed = 0;
+	setFixedSize(FIELDX, FIELDY);
+}
 
- void Widget::animate()
- {
-     //elapsed = (elapsed + qobject_cast<QTimer*>(sender())->interval()) % 1000;
-	 //bool done = false;
-	 //while (!done){
-		// std::cout << "iteration";
-		// done = true;
-		// for (int i = 0; i < NUM_HYENAS; i++){
-		//	 int currx = helper->currHyenas[i].rx();
-		//	 int curry = helper->currHyenas[i].ry();
-		//	 int endx = helper->hyenas[i].x();
-		//	 int endy = helper->hyenas[i].y();
+void Widget::animate() {
+	//elapsed = (elapsed + qobject_cast<QTimer*>(sender())->interval()) % 1000;
+	//bool done = false;
+	//while (!done){
+	// std::cout << "iteration";
+	// done = true;
+	// for (int i = 0; i < NUM_HYENAS; i++){
+	//	 int currx = helper->currHyenas[i].rx();
+	//	 int curry = helper->currHyenas[i].ry();
+	//	 int endx = helper->hyenas[i].x();
+	//	 int endy = helper->hyenas[i].y();
 
-		//	 if(currx < endx){
-		//		 currx++;
-		//		 done = false;
-		//	 }
-		//	 else if (currx > endx){
-		//		 currx--;
-		//		 done = false;
-		//	 }
-		//	 if(curry < endy){
-		//		 curry++;
-		//		 done = false;
-		//	 }
-		//	 else if (curry > endy){
-		//		 curry--;
-		//		 done = false;
-		//	 }
-		// }
-		// for (int i = 0; i < NUM_LIONS; i++){
-		//	 int currx = helper->currLions[i].rx();
-		//	 int curry = helper->currLions[i].ry();
-		//	 int endx = helper->lions[i].x();
-		//	 int endy = helper->lions[i].y();
-		//	 if(currx < endx){
-		//		 currx++;
-		//		 done = false;
-		//	 }
-		//	 else if (currx > endx){
-		//		 currx--;
-		//		 done = false;
-		//	 }
-		//	 if(curry < endy){
-		//		 curry++;
-		//		 done = false;
-		//	 }
-		//	 else if (curry > endy){
-		//		 curry--;
-		//		 done = false;
-		//	 }
-		// }
+	//	 if(currx < endx){
+	//		 currx++;
+	//		 done = false;
+	//	 }
+	//	 else if (currx > endx){
+	//		 currx--;
+	//		 done = false;
+	//	 }
+	//	 if(curry < endy){
+	//		 curry++;
+	//		 done = false;
+	//	 }
+	//	 else if (curry > endy){
+	//		 curry--;
+	//		 done = false;
+	//	 }
+	// }
+	// for (int i = 0; i < NUM_LIONS; i++){
+	//	 int currx = helper->currLions[i].rx();
+	//	 int curry = helper->currLions[i].ry();
+	//	 int endx = helper->lions[i].x();
+	//	 int endy = helper->lions[i].y();
+	//	 if(currx < endx){
+	//		 currx++;
+	//		 done = false;
+	//	 }
+	//	 else if (currx > endx){
+	//		 currx--;
+	//		 done = false;
+	//	 }
+	//	 if(curry < endy){
+	//		 curry++;
+	//		 done = false;
+	//	 }
+	//	 else if (curry > endy){
+	//		 curry--;
+	//		 done = false;
+	//	 }
+	// }
 
-  //   repaint();
-	 //}
+	//   repaint();
+	//}
 
-	 repaint();
-	 assert(1==2);
- }
+	repaint();
+	assert(1 == 2);
+}
 
- void Widget::paintEvent(QPaintEvent *event)
- {
-     QPainter painter;
-     painter.begin(this);
-     painter.setRenderHint(QPainter::Antialiasing);
-     helper->paint(&painter, event, elapsed);
-     painter.end();
- }
+void Widget::paintEvent(QPaintEvent *event) {
+	QPainter painter;
+	painter.begin(this);
+	painter.setRenderHint(QPainter::Antialiasing);
+	helper->paint(&painter, event, elapsed);
+	painter.end();
+}

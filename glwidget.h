@@ -1,4 +1,4 @@
- /****************************************************************************
+/****************************************************************************
  **
  ** Copyright (C) 2006-2008 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
  **
@@ -18,30 +18,29 @@
  **
  ****************************************************************************/
 
- #ifndef GLWIDGET_H
- #define GLWIDGET_H
+#ifndef GLWIDGET_H
+#define GLWIDGET_H
 
- #include <QGLWidget>
+#include <QGLWidget>
 
- class Helper;
- class QPaintEvent;
- class QWidget;
+class Helper;
+class QPaintEvent;
+class QWidget;
 
- class GLWidget : public QGLWidget
- {
-     Q_OBJECT
+class GLWidget: public QGLWidget {
+Q_OBJECT
 
- public:
-     GLWidget(Helper *helper, QWidget *parent);
-	 Helper *helper;
- public slots:
-     void animate();
+public:
+	GLWidget(Helper *helper, QWidget *parent);
+	Helper *helper;
+public slots:
+	void animate();
 
- protected:
-     void paintEvent(QPaintEvent *event);
+protected:
+	void paintEvent(QPaintEvent *event);
 
- private:
-     int elapsed;
- };
+private:
+	int elapsed;
+};
 
- #endif
+#endif

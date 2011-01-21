@@ -1,4 +1,4 @@
- /****************************************************************************
+/****************************************************************************
  **
  ** Copyright (C) 2006-2008 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
  **
@@ -18,25 +18,24 @@
  **
  ****************************************************************************/
 
- #ifndef WINDOW_H
- #define WINDOW_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
- #include <QWidget>
+#include <QWidget>
 //#include <qwidget.h>
- #include "helper.h"
+#include "helper.h"
 
- //class QLabel;
+//class QLabel;
 class QWidget;
 
- class Window : public QWidget
- {
-     Q_OBJECT
+class Window: public QWidget {
+Q_OBJECT
 
- public:
-     Window();
+public:
+	Window();
 
- private:
-     Helper helper;
- };
+private:
+	Helper helper;
+};
 
- #endif
+#endif

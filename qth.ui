@@ -13,27 +13,22 @@
   <property name="windowTitle">
    <string>qth</string>
   </property>
-  <!--<widget class="QWidget" name="centralWidget">-->
-   <widget class="Widget" name="displayArea" native="true">
-    <property name="geometry">
-     <rect>
-      <x>99</x>
-      <y>49</y>
-      <width>361</width>
-      <height>281</height>
-     </rect>
-    </property>
-   </widget>
-  <!--</widget>-->
+  <widget class="Widget" name="displayArea"/>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>600</width>
-     <height>21</height>
+     <height>27</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuMenu">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+   </widget>
+   <addaction name="menuMenu"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">

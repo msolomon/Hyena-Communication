@@ -1,15 +1,14 @@
 /*#include "qth.h"
-#include <QtGui/QApplication>
+ #include <QtGui/QApplication>
 
-int main(int argc, char *argv[])
-{
-QApplication a(argc, argv);
-qth w;
-w.show();
-return a.exec();
-}
-*/
-
+ int main(int argc, char *argv[])
+ {
+ QApplication a(argc, argv);
+ qth w;
+ w.show();
+ return a.exec();
+ }
+ */
 
 #include <QApplication>
 
@@ -20,8 +19,7 @@ return a.exec();
 #include "window.h"
 #include "globals.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 	Window window;
 
@@ -32,10 +30,10 @@ int main(int argc, char *argv[])
 	outseed << seed << std::endl;
 	outseed.close();
 	srand(seed);
-	for(int t = 0; t < TRIALS; t++){
+	for (int t = 0; t < TRIALS; t++) {
 		//p.generate();
 		//p.evolve(t);
-	}  
+	}
 	window.show();
 
 	return app.exec();
