@@ -1,0 +1,8 @@
+*.[oa]
+*~
+seed.txt
+error.txt
+fit.txt
+debug/
+release/
+/qthyena
