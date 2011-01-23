@@ -47,33 +47,32 @@ void indiv::reset(void) {
 }
 
 indiv &indiv::operator=(const indiv &source) {
-	//x=source.x;
-	//y=source.y;
-	//the_info = source.the_info;
-	//fitness = source.fitness;
-	//size = source.size;
-	//if(tree != NULL)
-	//	clear();
-	//tree = new node;
-	//tree->copy(source.tree,NULL);
-	//return *this;
-	indiv ans;
-	ans.x = source.x;
-	ans.y = source.y;
-	ans.the_info = source.the_info;
-	ans.fitness = source.fitness;
-	ans.size = source.size;
-	if (ans.tree != NULL)
+	x=source.x;
+	y=source.y;
+	the_info = source.the_info;
+	fitness = source.fitness;
+	size = source.size;
+	if(tree != NULL)
 		clear();
+	tree = new node;
+	tree->copy(source.tree,NULL);
+	return *this;
+//	indiv ans;
+//	ans.x = source.x;
+//	ans.y = source.y;
+//	ans.the_info = source.the_info;
+//	ans.fitness = source.fitness;
+//	ans.size = source.size;
+//	if (ans.tree != NULL)
+//		clear();
 	//if(ans.tree != NULL)
 	//	clear();
-	ans.tree = new node;
-	ans.tree->copy(source.tree, NULL);
-	return ans;
+//	ans.tree = new node;
+//	ans.tree->copy(source.tree, NULL);
+//	return ans;
 }
 
 void indiv::grow(void) {
-	std::cout << num_non_terms;
 	x = X / 2;
 	y = Y / 2;
 	fitness = 0.0;

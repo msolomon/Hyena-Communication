@@ -13,6 +13,8 @@ public:
 	//     void indiv::draw(int);
 	void calc_size(void) {
 		int s = 0;
+		//if(tree == NULL)
+		//	return;
 		size = tree->calc_size(s);
 	}
 	indiv(void);
