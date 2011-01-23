@@ -33,7 +33,7 @@ Q_OBJECT
 
 public:
 	Window();
-
+	Window(QWidget *&);
 private:
 	Helper helper;
 };

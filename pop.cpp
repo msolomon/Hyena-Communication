@@ -37,8 +37,8 @@ void pop::write_fitnesses(void) {
 	}
 }
 
-void pop::generate(GLWidget *widj) {
-	wid = widj;
+void pop::generate(Helper *h) {
+	helper = h;
 	pop::generate();
 }
 
@@ -60,7 +60,7 @@ void pop::evaluate_team(int member, int flag) {
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV.update_vectors();
 			if (flag) {
-				ENV.draw(wid);
+				ENV.draw(helper);
 				update();
 			}
 			ENV.move();

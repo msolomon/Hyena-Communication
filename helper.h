@@ -1,6 +1,7 @@
 #ifndef HELPER_H
 #define HELPER_H
 
+#include <QObject>
 #include <QBrush>
 #include <QFont>
 #include <QPen>
@@ -12,7 +13,8 @@
 class QPainter;
 class QPaintEvent;
 
-class Helper {
+class Helper : QObject{
+	Q_OBJECT
 public:
 	Helper();
 

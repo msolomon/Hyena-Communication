@@ -5,12 +5,12 @@
 #include "indiv.h"
 #include "team.h"
 #include "environment.h"
-#include "glwidget.h"
+#include "helper.h"
 
 class pop: QObject {
 Q_OBJECT
 public:
-	void generate(GLWidget*);
+	void generate(Helper*);
 	void generate();
 	void run();
 	int select_best(int, agent_type);
@@ -37,7 +37,7 @@ private:
 	float data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
 	float pop_bestfitness;
 	int pop_bestteam;
-	GLWidget *wid;
+	Helper *helper;
 signals:
 	void update();
 };

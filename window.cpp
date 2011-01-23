@@ -27,6 +27,10 @@
 #include "pop.h"
 pop p;
 
+Window::Window(QWidget *&garbage){
+	Window();
+}
+
 Window::Window() :
 	QWidget() {
 	//Widget *native = new Widget(&helper, this);
@@ -43,14 +47,15 @@ Window::Window() :
 	layout->addWidget(openGLLabel, 1, 1);
 	setLayout(layout);
 
-	p.generate(openGL);
+	//p.generate(openGL);
 	connect((QObject*) &p, SIGNAL(pop::update()), openGL, SLOT(animate()));
 	//p.evolve(0);
-	for (int i = 0; i < TRIALS; i++) {
+	for (int i = 0; i < 1/*TRIALS*/; i++) {
 		//TODO: Make concurrent
 		//QtConcurrent::run(&p, &pop::evolve, i);
 		p.evolve(i);
 	}
+	std::cout << "MADE";
 	//QTimer *timer = new QTimer(this);
 	//connect(timer, SIGNAL(timeout()), native, SLOT(animate()));
 	//connect(timer, SIGNAL(timeout()), openGL, SLOT(animate()));

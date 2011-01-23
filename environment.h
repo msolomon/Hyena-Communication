@@ -8,12 +8,13 @@
 
 #include "glwidget.h"
 #include "team.h"
+#include "helper.h"
 
 class environment {
 public:
 	environment(void);
 	void update_vectors(void);
-	void draw(QPointer<GLWidget> );
+	void draw(Helper*);
 	void rand_move(void);
 	void move(void);
 	void evaluate();

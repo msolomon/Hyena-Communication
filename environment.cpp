@@ -167,19 +167,19 @@ void environment::update_vectors(void) {
 environment::environment(void) {
 }
 
-void environment::draw(QPointer<GLWidget> wid) {
-	if (wid) {
+void environment::draw(Helper* helper) {
+	if (helper) {
 	} else
 		return;
-	wid->helper->zebras[0] = QPoint(ZEBRAX * BOX, ZEBRAY * BOX);
+	helper->zebras[0] = QPoint(ZEBRAX * BOX, ZEBRAY * BOX);
 
 	for (int i = 0; i < NUM_LIONS; i++) {
-		wid->helper->lions[i].setX(agents->invests[i].getX() * BOX);// = QPoint(agents->invests[i].getX()*BOX, agents->invests[i].getY()*BOX);
-		wid->helper->lions[i].setY(agents->invests[i].getY() * BOX);
+		helper->lions[i].setX(agents->invests[i].getX() * BOX);// = QPoint(agents->invests[i].getX()*BOX, agents->invests[i].getY()*BOX);
+		helper->lions[i].setY(agents->invests[i].getY() * BOX);
 	}
 
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		wid->helper->hyenas[i] = QPoint(agents->scouts[i].getX() * BOX,
+		helper->hyenas[i] = QPoint(agents->scouts[i].getX() * BOX,
 				agents->scouts[i].getY() * BOX);
 	}
 }

@@ -3,7 +3,8 @@ TARGET = qthyena
 QT += core \
     gui \
     opengl
-HEADERS += globals.h \
+HEADERS += qthyena.h \
+    globals.h \
     environment.h \
     node.h \
     team.h \
@@ -15,7 +16,8 @@ HEADERS += globals.h \
     window.h \
     widget.h \
     glwidget.h
-SOURCES += environment.cpp \
+SOURCES += qthyena.cpp \
+    environment.cpp \
     globals.cpp \
     indiv.cpp \
     main.cpp \

@@ -26,10 +26,17 @@
 #include <assert.h>
 
 #include <iostream>
-Widget::Widget(Helper *helper, QWidget *parent) :
-	QWidget(parent), helper(helper) {
+Widget::Widget(QWidget *parent) :
+	QWidget(parent){
 	elapsed = 0;
 	setFixedSize(FIELDX, FIELDY);
+	std::cout << "Initialized drawing space" << std::endl;
+}
+
+void Widget::runTrial(){
+      p.generate(&helper);
+      // TODO: make this increment
+      p.evolve(0);
 }
 
 void Widget::animate() {
@@ -86,15 +93,15 @@ void Widget::animate() {
 
 	//   repaint();
 	//}
-	std::cout << "Painting...";
+	std::cout << "Painting...\n";
+	std::flush(std::cout);
 	repaint();
-	assert(1 == 2);
 }
 
 void Widget::paintEvent(QPaintEvent *event) {
 	QPainter painter;
 	painter.begin(this);
 	painter.setRenderHint(QPainter::Antialiasing);
-	helper->paint(&painter, event, elapsed);
+	helper.paint(&painter, event, elapsed);
 	painter.end();
 }

@@ -23,6 +23,9 @@
 
 #include <QWidget>
 
+#include "helper.h"
+#include "pop.h"
+
 class Helper;
 class QPaintEvent;
 
@@ -30,10 +33,13 @@ class Widget: public QWidget {
 Q_OBJECT
 
 public:
-	Widget(Helper *helper, QWidget *parent);
-	Helper *helper;
+	Widget(QWidget *parent);
+	Helper helper;
+	pop p;
+
 
 public slots:
+	void runTrial();
 	void animate();
 
 protected:
