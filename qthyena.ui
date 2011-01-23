@@ -110,22 +110,6 @@
    <sender>pushButton</sender>
    <signal>clicked()</signal>
    <receiver>widget</receiver>
-   <slot>animate()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>206</x>
-     <y>440</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>199</x>
-     <y>226</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>widget</receiver>
    <slot>runTrial()</slot>
    <hints>
     <hint type="sourcelabel">

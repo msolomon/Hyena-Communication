@@ -30,6 +30,7 @@ Widget::Widget(QWidget *parent) :
 	QWidget(parent){
 	elapsed = 0;
 	setFixedSize(FIELDX, FIELDY);
+	connect((QObject*) &p, SIGNAL(update()), this, SLOT(animate()));
 	std::cout << "Initialized drawing space" << std::endl;
 }
 
