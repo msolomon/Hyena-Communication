@@ -23,10 +23,6 @@ public:
 	QPoint hyenas[NUM_HYENAS];
 	QPoint lions[NUM_LIONS];
 	QPoint zebras[1];
-	// used for moving between two points
-	QPoint currHyenas[NUM_HYENAS];
-	QPoint currLions[NUM_LIONS];
-	QPoint currZebras[1];
 
 private:
 	QBrush background;

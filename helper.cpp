@@ -47,17 +47,17 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed) {
 	 */
 	painter->setBrush(zebraColor);
 	for (int i = 0; i < 1; i++) {
-		painter->drawEllipse(currZebras[i], 12, 12);
+		painter->drawEllipse(zebras[i], 12, 12);
 	}
 
 	painter->setBrush(lionColor);
 	for (int i = 0; i < NUM_LIONS; i++) {
-		painter->drawEllipse(currLions[i], 10, 10);
+		painter->drawEllipse(lions[i], 10, 10);
 	}
 
 	painter->setBrush(hyenaColor);
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		painter->drawEllipse(currHyenas[i], 8, 8);
+		painter->drawEllipse(hyenas[i], 8, 8);
 	}
 
 	//assert(5==2);
