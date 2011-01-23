@@ -73,6 +73,7 @@ indiv &indiv::operator=(const indiv &source) {
 }
 
 void indiv::grow(void) {
+	std::cout << num_non_terms;
 	x = X / 2;
 	y = Y / 2;
 	fitness = 0.0;

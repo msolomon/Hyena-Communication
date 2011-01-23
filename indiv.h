@@ -96,12 +96,12 @@ public:
 	int get_size(void) {
 		return size;
 	}
-	int get_num_non_terms(void) {
-		return num_non_terms;
-	}
+//	int get_num_non_terms(void) {
+//		return num_non_terms;
+//	}
 	void xOver(indiv*);
 private:
-	int num_non_terms;
+//	int num_non_terms;
 	float x;
 	float y;
 	int size;

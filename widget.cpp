@@ -24,6 +24,8 @@
 
 #include "globals.h"
 #include <assert.h>
+
+#include <iostream>
 Widget::Widget(Helper *helper, QWidget *parent) :
 	QWidget(parent), helper(helper) {
 	elapsed = 0;
@@ -84,7 +86,7 @@ void Widget::animate() {
 
 	//   repaint();
 	//}
-
+	std::cout << "Painting...";
 	repaint();
 	assert(1 == 2);
 }
