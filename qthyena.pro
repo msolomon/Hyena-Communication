@@ -9,7 +9,6 @@ HEADERS += qthyena.h \
     node.h \
     team.h \
     vect.h \
-    qth.h \
     indiv.h \
     pop.h \
     helper.h \
