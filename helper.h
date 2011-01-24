@@ -13,7 +13,7 @@
 class QPainter;
 class QPaintEvent;
 
-class Helper : QObject{
+class Helper : public QObject{
 	Q_OBJECT
 public:
 	Helper();
@@ -32,6 +32,10 @@ private:
 	QFont textFont;
 	QPen circlePen;
 	QPen textPen;
+	int box;
+
+public slots:
+	void scale_box(int);
 };
 
 #endif

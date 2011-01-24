@@ -18,7 +18,6 @@ const float PI = 3.141592654;
 /*HDC hDc;
  HGLRC hrc;
  */
-const int BOX = 30;
 const int SCOUT_SIZE = 10;
 const int X = 25;
 const int Y = 25;
@@ -48,10 +47,10 @@ const int ITERATIONS = 51;
 const int TEAM_SIZE = 3;
 const int TRIALS = 20;
 const int GROW_DEPTH = 4;
-const float xscale = X * BOX / 2;
-const float xshift = X * BOX / (2 * xscale);
-const float yscale = Y * BOX / 2;
-const float yshift = Y * BOX / (2 * yscale);
+//const float xscale = X * BOX / 2;
+//const float xshift = X * BOX / (2 * xscale);
+//const float yscale = Y * BOX / 2;
+//const float yshift = Y * BOX / (2 * yscale);
 const int INTEREST_PERCENT = 0;
 
 const int FIELDX = 400;

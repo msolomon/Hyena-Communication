@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'qthyena.ui'
 **
-** Created: Sun Jan 23 20:50:30 2011
+** Created: Mon Jan 24 11:37:46 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -31,9 +31,10 @@ class Ui_qthyenaClass
 public:
     QWidget *centralwidget;
     QGridLayout *gridLayout;
-    Widget *widget;
     QProgressBar *percentCalculated;
     QPushButton *beginButton;
+    QGridLayout *gridLayout_3;
+    Widget *widget;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -53,35 +54,40 @@ public:
         centralwidget->setSizePolicy(sizePolicy);
         gridLayout = new QGridLayout(centralwidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        widget = new Widget(centralwidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy1.setHorizontalStretch(100);
-        sizePolicy1.setVerticalStretch(100);
-        sizePolicy1.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
-        widget->setSizePolicy(sizePolicy1);
-        widget->setMinimumSize(QSize(400, 400));
-        widget->setCursor(QCursor(Qt::ArrowCursor));
-        widget->setAcceptDrops(true);
-        widget->setAutoFillBackground(true);
-
-        gridLayout->addWidget(widget, 0, 0, 1, 1);
-
         percentCalculated = new QProgressBar(centralwidget);
         percentCalculated->setObjectName(QString::fromUtf8("percentCalculated"));
         percentCalculated->setValue(24);
 
-        gridLayout->addWidget(percentCalculated, 1, 0, 1, 1);
+        gridLayout->addWidget(percentCalculated, 2, 0, 1, 1);
 
         beginButton = new QPushButton(centralwidget);
         beginButton->setObjectName(QString::fromUtf8("beginButton"));
-        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(beginButton->sizePolicy().hasHeightForWidth());
-        beginButton->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(beginButton->sizePolicy().hasHeightForWidth());
+        beginButton->setSizePolicy(sizePolicy1);
 
-        gridLayout->addWidget(beginButton, 1, 1, 1, 1);
+        gridLayout->addWidget(beginButton, 2, 1, 1, 1);
+
+        gridLayout_3 = new QGridLayout();
+        gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
+        widget = new Widget(centralwidget);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Ignored);
+        sizePolicy2.setHorizontalStretch(100);
+        sizePolicy2.setVerticalStretch(100);
+        sizePolicy2.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
+        widget->setSizePolicy(sizePolicy2);
+        widget->setMinimumSize(QSize(400, 400));
+        widget->setCursor(QCursor(Qt::ArrowCursor));
+        widget->setAcceptDrops(false);
+        widget->setAutoFillBackground(true);
+
+        gridLayout_3->addWidget(widget, 0, 0, 1, 1);
+
+
+        gridLayout->addLayout(gridLayout_3, 0, 0, 1, 1);
 
         qthyenaClass->setCentralWidget(centralwidget);
         menubar = new QMenuBar(qthyenaClass);
@@ -102,10 +108,10 @@ public:
     void retranslateUi(QMainWindow *qthyenaClass)
     {
         qthyenaClass->setWindowTitle(QApplication::translate("qthyenaClass", "Hyena Evolution", 0, QApplication::UnicodeUTF8));
+        beginButton->setText(QApplication::translate("qthyenaClass", "Begin", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         widget->setToolTip(QString());
 #endif // QT_NO_TOOLTIP
-        beginButton->setText(QApplication::translate("qthyenaClass", "Begin", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

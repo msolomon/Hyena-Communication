@@ -57,19 +57,6 @@ indiv &indiv::operator=(const indiv &source) {
 	tree = new node;
 	tree->copy(source.tree,NULL);
 	return *this;
-//	indiv ans;
-//	ans.x = source.x;
-//	ans.y = source.y;
-//	ans.the_info = source.the_info;
-//	ans.fitness = source.fitness;
-//	ans.size = source.size;
-//	if (ans.tree != NULL)
-//		clear();
-	//if(ans.tree != NULL)
-	//	clear();
-//	ans.tree = new node;
-//	ans.tree->copy(source.tree, NULL);
-//	return ans;
 }
 
 void indiv::grow(void) {
@@ -134,49 +121,3 @@ indiv::indiv(void) {
 	//connect(a, SIGNAL(draw()), win, SLOT(animate()));
 }
 
-//void indiv::draw(int i){
-//	int vectorLength = 5;
-//	// Draw agent
-//	if(type == investigator)
-//		glColor3f(1-0.01*i,1-0.01*i,0);
-//	else
-//		glColor3f(0.4,0.3+0.01*i,0);
-//	if(calling == true)
-//		glColor3f(1,0.3+0.01*i,0);
-//
-//	int ix = int(x),iy=int(y);
-//	float ix2,iy2;
-//	glBegin(GL_TRIANGLE_FAN);
-//	glVertex3f((x*BOX+SCOUT_SIZE/2.0)/xscale-xshift,(y*BOX+SCOUT_SIZE/2)/yscale-yshift,0.05);
-//	glVertex3f((x*BOX+SCOUT_SIZE/2.0)/xscale-xshift,(y*BOX)/yscale-yshift,0);
-//	glVertex3f((x*BOX+SCOUT_SIZE)/xscale-xshift, (y*BOX+SCOUT_SIZE/2.0)/yscale-yshift,0);
-//	glVertex3f((x*BOX+SCOUT_SIZE/2.0)/xscale-xshift, (y*BOX+SCOUT_SIZE)/yscale-yshift,0);
-//	glVertex3f((x*BOX)/xscale-xshift, (y*BOX+SCOUT_SIZE/2.0)/yscale-yshift,0);
-//	glVertex3f((x*BOX+SCOUT_SIZE/2.0)/xscale-xshift,(y*BOX)/yscale-yshift,0);
-//	glEnd(); 
-//	/*
-//	//vect to nearest calling 
-//	glLineWidth(2.0); 
-//	glColor3f(0.5,0.0,0.5);
-//	//    glVertex3f((x*BOX+SCOUT_SIZE/2.0)/xscale-xshift,(y*BOX)/yscale-yshift,0);
-//	ix2 = (x-(the_info.nearest_calling.magnitude*sin(the_info.nearest_calling.direction)));
-//	iy2 = (y-(the_info.nearest_calling.magnitude*cos(the_info.nearest_calling.direction)));
-//	glBegin(GL_LINES);
-//	glVertex3f((x*BOX+SCOUT_SIZE/2.0)/xscale-xshift,(y*BOX+SCOUT_SIZE/2.0)/yscale-xshift,0);
-//	glVertex3f((ix2*BOX+SCOUT_SIZE/2.0)/xscale-xshift,(iy2*BOX+SCOUT_SIZE/2.0)/yscale-yshift,0);    
-//	glEnd(); 
-//	*/
-//	//vect to nearest scout
-//	/*
-//	glLineWidth(2.0); 
-//	glColor3f(1,1.0,1);
-//	//    glVertex3f((x*BOX+SCOUT_SIZE/2.0)/xscale-xshift,(y*BOX)/yscale-yshift,0);
-//	ix2 = (x-(the_info.nearest_scout.magnitude*sin(the_info.nearest_scout.direction)));
-//	iy2 = (y-(the_info.nearest_scout.magnitude*cos(the_info.nearest_scout.direction)));
-//	glBegin(GL_LINES);
-//	glVertex3f((x*BOX+SCOUT_SIZE/2.0)/xscale-xshift,(y*BOX+SCOUT_SIZE/2.0)/yscale-xshift,0);
-//	glVertex3f((ix2*BOX+SCOUT_SIZE/2.0)/xscale-xshift,(iy2*BOX+SCOUT_SIZE/2.0)/yscale-yshift,0);      
-//	glEnd(); 
-//	*/
-//
-//}

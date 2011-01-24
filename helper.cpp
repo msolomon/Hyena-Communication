@@ -19,7 +19,8 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed) {
 	painter->setBrush(zebraColor);
 	for (int i = 0; i < 1; i++) {
 		if( !zebras[i].isEmpty()){
-			painter->drawEllipse(zebras[i].dequeue(), 12, 12);
+			QPoint z = zebras[i].dequeue() * box;
+			painter->drawEllipse(z, 12, 12);
 		}
 
 	}
@@ -27,14 +28,20 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed) {
 	painter->setBrush(lionColor);
 	for (int i = 0; i < NUM_LIONS; i++) {
 		if(!lions[i].isEmpty()){
-			painter->drawEllipse(lions[i].dequeue(), 10, 10);
+			QPoint l = lions[i].dequeue() * box;
+			painter->drawEllipse(l, 10, 10);
 		}
 	}
 
 	painter->setBrush(hyenaColor);
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		if(!hyenas[i].isEmpty()){
-			painter->drawEllipse(hyenas[i].dequeue(), 8, 8);
+			QPoint h = hyenas[i].dequeue() * box;
+			painter->drawEllipse(h, 8, 8);
 		}
 	}
+}
+
+void Helper::scale_box(int b){
+	box = b;
 }

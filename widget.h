@@ -38,13 +38,16 @@ public:
 	Helper helper;
 	pop p;
 
-
 public slots:
 	void runTrial();
 	void animate();
 
+signals:
+	void resized(int);
+
 protected:
 	void paintEvent(QPaintEvent *event);
+	void resizeEvent(QResizeEvent *event);
 
 private:
 	int elapsed;

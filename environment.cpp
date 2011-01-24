@@ -1,5 +1,6 @@
 #include "environment.h"
 
+
 void environment::set_up(team *a) {
 	agents = a;
 }
@@ -172,18 +173,18 @@ void environment::draw(Helper* helper) {
 	} else
 		return;
 	//TODO: include moving/multiple zebras
-	helper->zebras[0].enqueue(QPoint(ZEBRAX * BOX, ZEBRAY * BOX));
+	helper->zebras[0].enqueue(QPoint(ZEBRAX, ZEBRAY));
 
 	for (int i = 0; i < NUM_LIONS; i++) {
 		helper->lions[i].enqueue(
-								QPoint(agents->invests[i].getX()*BOX,
-										agents->invests[i].getY()*BOX)
+								QPoint(agents->invests[i].getX(),
+										agents->invests[i].getY())
 								);
 	}
 
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		helper->hyenas[i].enqueue(QPoint(agents->scouts[i].getX() * BOX,
-										agents->scouts[i].getY() * BOX));
+		helper->hyenas[i].enqueue(QPoint(agents->scouts[i].getX(),
+										agents->scouts[i].getY()));
 	}
 }
 

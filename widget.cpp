@@ -27,11 +27,14 @@
 #include <assert.h>
 
 #include <iostream>
+using namespace std;
+
 Widget::Widget(QWidget *parent) :
 	QWidget(parent){
 	elapsed = 0;
 	//setFixedSize(FIELDX, FIELDY);
 	//connect((QObject*) &p, SIGNAL(update()), this, SLOT(animate()));
+
 	std::cout << "Initialized drawing space" << std::endl;
 }
 
@@ -39,9 +42,11 @@ void Widget::runTrial(){
       p.generate(&helper);
       timer.start(200);
       connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
+      connect(this, SIGNAL(resized(int)), &helper, SLOT(scale_box(int)));
       // TODO: make this increment
       QtConcurrent::run(&p, &pop::evolve, 0);
       //p.evolve(0);
+
 }
 
 void Widget::animate() {
@@ -57,3 +62,20 @@ void Widget::paintEvent(QPaintEvent *event) {
 	helper.paint(&painter, event, elapsed);
 	painter.end();
 }
+
+void Widget::resizeEvent(QResizeEvent *event){
+	// TODO: do this in a layout. harder than it sounds in QT
+	QSize s = size();
+	int box = s.width() / X;
+	if(s.width() != s.height()){
+		if(s.width() > s.height()){
+			resize(s.height(), s.height());
+		} else{
+			resize(s.width(), s.width());
+		}
+		// return, as a new event will be generated anyway
+		return;
+	}
+	resized(box);
+}
+
