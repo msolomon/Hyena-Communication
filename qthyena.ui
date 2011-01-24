@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Hyena Evolution</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="sizePolicy">
@@ -60,7 +60,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="beginButton">
     <property name="geometry">
      <rect>
       <x>160</x>
@@ -70,7 +70,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Begin</string>
     </property>
    </widget>
   </widget>
@@ -83,12 +83,6 @@
      <height>27</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuMenu">
-    <property name="title">
-     <string>Menu</string>
-    </property>
-   </widget>
-   <addaction name="menuMenu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
@@ -107,7 +101,7 @@
  <resources/>
  <connections>
   <connection>
-   <sender>pushButton</sender>
+   <sender>beginButton</sender>
    <signal>clicked()</signal>
    <receiver>widget</receiver>
    <slot>runTrial()</slot>
@@ -119,6 +113,22 @@
     <hint type="destinationlabel">
      <x>199</x>
      <y>226</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>beginButton</sender>
+   <signal>clicked()</signal>
+   <receiver>beginButton</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>440</y>
     </hint>
    </hints>
   </connection>
