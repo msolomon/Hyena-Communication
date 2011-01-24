@@ -22,6 +22,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QTimer>
 
 #include "helper.h"
 #include "pop.h"
@@ -47,6 +48,7 @@ protected:
 
 private:
 	int elapsed;
+	QTimer timer;
 };
 
 #endif

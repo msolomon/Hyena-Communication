@@ -6,7 +6,7 @@
 #include <QFont>
 #include <QPen>
 #include <QPoint>
-#include <QList>
+#include <QQueue>
 
 #include "globals.h"
 
@@ -20,9 +20,9 @@ public:
 
 public:
 	void paint(QPainter *painter, QPaintEvent *event, int elapsed);
-	QPoint hyenas[NUM_HYENAS];
-	QPoint lions[NUM_LIONS];
-	QPoint zebras[1];
+	QQueue<QPoint> hyenas[NUM_HYENAS];
+	QQueue<QPoint> lions[NUM_LIONS];
+	QQueue<QPoint> zebras[1];
 
 private:
 	QBrush background;

@@ -19,6 +19,7 @@
  ****************************************************************************/
 
 #include <QtGui>
+#include <qtconcurrentrun.h>
 #include "widget.h"
 #include "helper.h"
 
@@ -30,73 +31,23 @@ Widget::Widget(QWidget *parent) :
 	QWidget(parent){
 	elapsed = 0;
 	setFixedSize(FIELDX, FIELDY);
-	connect((QObject*) &p, SIGNAL(update()), this, SLOT(animate()));
+	//connect((QObject*) &p, SIGNAL(update()), this, SLOT(animate()));
 	std::cout << "Initialized drawing space" << std::endl;
 }
 
 void Widget::runTrial(){
       p.generate(&helper);
+      timer.start(200);
+      connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
       // TODO: make this increment
-      p.evolve(0);
+      QtConcurrent::run(&p, &pop::evolve, 0);
+      //p.evolve(0);
 }
 
 void Widget::animate() {
-	//elapsed = (elapsed + qobject_cast<QTimer*>(sender())->interval()) % 1000;
-	//bool done = false;
-	//while (!done){
-	// std::cout << "iteration";
-	// done = true;
-	// for (int i = 0; i < NUM_HYENAS; i++){
-	//	 int currx = helper->currHyenas[i].rx();
-	//	 int curry = helper->currHyenas[i].ry();
-	//	 int endx = helper->hyenas[i].x();
-	//	 int endy = helper->hyenas[i].y();
-
-	//	 if(currx < endx){
-	//		 currx++;
-	//		 done = false;
-	//	 }
-	//	 else if (currx > endx){
-	//		 currx--;
-	//		 done = false;
-	//	 }
-	//	 if(curry < endy){
-	//		 curry++;
-	//		 done = false;
-	//	 }
-	//	 else if (curry > endy){
-	//		 curry--;
-	//		 done = false;
-	//	 }
-	// }
-	// for (int i = 0; i < NUM_LIONS; i++){
-	//	 int currx = helper->currLions[i].rx();
-	//	 int curry = helper->currLions[i].ry();
-	//	 int endx = helper->lions[i].x();
-	//	 int endy = helper->lions[i].y();
-	//	 if(currx < endx){
-	//		 currx++;
-	//		 done = false;
-	//	 }
-	//	 else if (currx > endx){
-	//		 currx--;
-	//		 done = false;
-	//	 }
-	//	 if(curry < endy){
-	//		 curry++;
-	//		 done = false;
-	//	 }
-	//	 else if (curry > endy){
-	//		 curry--;
-	//		 done = false;
-	//	 }
-	// }
-
-	//   repaint();
-	//}
-	std::cout << "Painting...\n";
-	std::flush(std::cout);
-	repaint();
+		if(!helper.zebras[0].isEmpty()){
+		repaint();
+	}
 }
 
 void Widget::paintEvent(QPaintEvent *event) {

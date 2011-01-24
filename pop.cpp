@@ -62,6 +62,7 @@ void pop::evaluate_team(int member, int flag) {
 			if (flag) {
 				ENV.draw(helper);
 				update();
+				sleep(0);
 			}
 			ENV.move();
 			ENV.evaluate();
