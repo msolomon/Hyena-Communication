@@ -78,7 +78,8 @@ void pop::evolve(int t) {
 	}
 	for (int i = 0; i < ITERATIONS; i++) {
 		//        get_fitnesses();
-		std::cout << t << " " << i << std::endl;
+//		std::cout << t << " " << i << std::endl;
+		updateIteration();
 		//        team_reproduce();
 		//        member_reproduce();
 		//        OET1_reproduce();

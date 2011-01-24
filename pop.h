@@ -40,6 +40,7 @@ private:
 	Helper *helper;
 signals:
 	void update();
+	void updateIteration();
 };
 
 #endif

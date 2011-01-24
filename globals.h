@@ -18,7 +18,7 @@ const float PI = 3.141592654;
 /*HDC hDc;
  HGLRC hrc;
  */
-const int BOX = 20;
+const int BOX = 30;
 const int SCOUT_SIZE = 10;
 const int X = 25;
 const int Y = 25;

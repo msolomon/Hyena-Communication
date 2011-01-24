@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>481</height>
+    <width>902</width>
+    <height>734</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,60 +26,64 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="Widget" name="widget" native="true">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>400</width>
-      <height>400</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-      <horstretch>100</horstretch>
-      <verstretch>100</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>400</width>
-      <height>400</height>
-     </size>
-    </property>
-    <property name="cursor">
-     <cursorShape>ArrowCursor</cursorShape>
-    </property>
-    <property name="acceptDrops">
-     <bool>true</bool>
-    </property>
-    <property name="toolTip">
-     <string/>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="beginButton">
-    <property name="geometry">
-     <rect>
-      <x>160</x>
-      <y>400</y>
-      <width>93</width>
-      <height>27</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Begin</string>
-    </property>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="Widget" name="widget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>100</horstretch>
+        <verstretch>100</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>400</width>
+        <height>400</height>
+       </size>
+      </property>
+      <property name="cursor">
+       <cursorShape>ArrowCursor</cursorShape>
+      </property>
+      <property name="acceptDrops">
+       <bool>true</bool>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
+      <zorder>percentCalculated</zorder>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QProgressBar" name="percentCalculated">
+      <property name="value">
+       <number>24</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="beginButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>Begin</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>400</width>
+     <width>902</width>
      <height>27</height>
     </rect>
    </property>
@@ -103,22 +107,6 @@
   <connection>
    <sender>beginButton</sender>
    <signal>clicked()</signal>
-   <receiver>widget</receiver>
-   <slot>runTrial()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>206</x>
-     <y>440</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>199</x>
-     <y>226</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>beginButton</sender>
-   <signal>clicked()</signal>
    <receiver>beginButton</receiver>
    <slot>close()</slot>
    <hints>
@@ -129,6 +117,22 @@
     <hint type="destinationlabel">
      <x>206</x>
      <y>440</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>beginButton</sender>
+   <signal>clicked()</signal>
+   <receiver>widget</receiver>
+   <slot>runTrial()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>440</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>199</x>
+     <y>226</y>
     </hint>
    </hints>
   </connection>

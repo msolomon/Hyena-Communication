@@ -175,8 +175,8 @@ vect node::evaluate(agent_info *the_indiv) {
 		else
 			return (children[3]->evaluate(the_indiv));
 	case ifVectorZero:
-		std::cout << children[0];
-		std::cout << the_indiv;
+//		std::cout << children[0];
+//		std::cout << the_indiv;
 		temp1 = children[0]->evaluate(the_indiv);
 		if (temp1.direction == 0 && temp1.magnitude == 0)
 			return (children[1]->evaluate(the_indiv));
