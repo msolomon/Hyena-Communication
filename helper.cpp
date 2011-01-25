@@ -12,13 +12,10 @@ Helper::Helper() {
 	hyenaPen = QPen(QBrush(hyenaColor), .5, Qt::SolidLine, Qt::RoundCap);
 	lionPen = QPen(QBrush(lionColor), 1, Qt::SolidLine, Qt::RoundCap);
 	zebraPen = QPen(QBrush(zebraColor), 1.5, Qt::SolidLine, Qt::RoundCap);
-
-	//textFont.setPixelSize(50);
 }
 
 void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed) {
 	painter->fillRect(event->rect(), backgroundBrush);
-	//painter->fillRect(0, 0, 25, 25, backgroundBrush);
 
 	painter->setPen(zebraPen);
 	for (int i = 0; i < 1; i++) {

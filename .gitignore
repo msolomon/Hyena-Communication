@@ -6,3 +6,5 @@ fit.txt
 debug/
 release/
 /qthyena
+Makefile*
+

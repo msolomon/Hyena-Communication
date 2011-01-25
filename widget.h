@@ -31,7 +31,7 @@ class Helper;
 class QPaintEvent;
 
 class Widget: public QWidget {
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	Widget(QWidget *parent);

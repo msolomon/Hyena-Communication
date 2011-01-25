@@ -1,5 +1,6 @@
 #ifndef VECT_H
 #define VECT_H
+
 class vect {
 public:
 	vect();

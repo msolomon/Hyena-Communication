@@ -10,7 +10,6 @@ const float scale = 1.0;
 
 class indiv {
 public:
-	//     void indiv::draw(int);
 	void calc_size(void) {
 		int s = 0;
 		//if(tree == NULL)
@@ -18,7 +17,7 @@ public:
 		size = tree->calc_size(s);
 	}
 	indiv(void);
-	//     void set_nearest_beacon(vect v){the_info.nearest_beacon = v;}
+
 	void set_nearest_scout(vect v) {
 		the_info.nearest_scout = v;
 	}
@@ -98,12 +97,9 @@ public:
 	int get_size(void) {
 		return size;
 	}
-//	int get_num_non_terms(void) {
-//		return num_non_terms;
-//	}
+
 	void xOver(indiv*);
 private:
-//	int num_non_terms;
 	float x;
 	float y;
 	int size;

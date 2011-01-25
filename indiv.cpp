@@ -1,6 +1,4 @@
 #include "indiv.h"
-//Window *win;
-
 
 void indiv::xOver(indiv *p2) {
 	int point1 = rand() % size + 1;

@@ -30,7 +30,6 @@ GLWidget::GLWidget(Helper *helper, QWidget *parent) :
 }
 
 void GLWidget::animate() {
-	//elapsed = (elapsed + qobject_cast<QTimer*>(sender())->interval()) % 1000;
 	repaint();
 }
 

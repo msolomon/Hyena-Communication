@@ -8,7 +8,7 @@
 #include "helper.h"
 
 class pop: QObject {
-Q_OBJECT
+	Q_OBJECT
 public:
 	void generate(Helper*);
 	void generate();

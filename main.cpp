@@ -1,15 +1,3 @@
-/*#include "qth.h"
- #include <QtGui/QApplication>
-
- int main(int argc, char *argv[])
- {
- QApplication a(argc, argv);
- qth w;
- w.show();
- return a.exec();
- }
- */
-
 #include <QApplication>
 
 #include <ctime>
@@ -22,7 +10,6 @@
 
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
-	//Window window;
 	qthyena ui;
 
 	int seed = int(time(NULL));
@@ -34,7 +21,6 @@ int main(int argc, char *argv[]) {
 	srand(seed);
 
 	ui.show();
-	//window.show();
 
 	return app.exec();
 }

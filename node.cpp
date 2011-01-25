@@ -1,4 +1,5 @@
 #include "node.h"
+
 void node::set_child(int c, node *child) {
 	children[c] = child;
 }
@@ -188,8 +189,7 @@ vect node::evaluate(agent_info *the_indiv) {
 		error << "error in evaluate: " << operation << std::endl;
 		error.close();
 	}
-}
-;
+};
 
 void node::grow(int max_d, int depth, node *pare) {
 	the_const.random();
@@ -290,8 +290,7 @@ int node::calc_size(int &size) {
 		error << "error in calc size: unknown operator" << std::endl;
 		error.close();
 	}
-}
-;
+};
 
 node::node(void) {
 	operation = ops(rand() % num_terms);

@@ -1,8 +1,11 @@
 TEMPLATE = app
+
 TARGET = qthyena
+
 QT += core \
     gui \
     opengl
+    
 HEADERS += qthyena.h \
     globals.h \
     environment.h \
@@ -15,9 +18,9 @@ HEADERS += qthyena.h \
     window.h \
     widget.h \
     glwidget.h
+    
 SOURCES += qthyena.cpp \
     environment.cpp \
-    globals.cpp \
     indiv.cpp \
     main.cpp \
     node.cpp \
@@ -28,5 +31,7 @@ SOURCES += qthyena.cpp \
     helper.cpp \
     widget.cpp \
     window.cpp
+    
 FORMS += qthyena.ui
+
 RESOURCES += 

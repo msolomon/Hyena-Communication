@@ -1,9 +1,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-//#include <windows.h>
-//#include <gl/gl.h>
-//#include <vector>
+
 #include <cmath>
 //#include <ctime>
 #include <cstdlib>
@@ -12,12 +10,6 @@
 
 const float PI = 3.141592654;
 
-//void sleep(unsigned int);
-
-//using namespace std;
-/*HDC hDc;
- HGLRC hrc;
- */
 const int SCOUT_SIZE = 10;
 const int X = 25;
 const int Y = 25;
@@ -47,10 +39,7 @@ const int ITERATIONS = 51;
 const int TEAM_SIZE = 3;
 const int TRIALS = 20;
 const int GROW_DEPTH = 4;
-//const float xscale = X * BOX / 2;
-//const float xshift = X * BOX / (2 * xscale);
-//const float yscale = Y * BOX / 2;
-//const float yshift = Y * BOX / (2 * yscale);
+
 const int INTEREST_PERCENT = 0;
 
 const int FIELDX = 400;
@@ -71,16 +60,5 @@ typedef struct {
 enum agent_type {
 	scout, investigator
 };
-
-/*
- #include"node.h"
- #include"indiv.h"
- #include"team.h"
- #include"environment.h"
- #include"pop.h"
-
- environment ENV;
- pop p;
- */
 
 #endif
