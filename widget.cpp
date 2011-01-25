@@ -36,7 +36,7 @@ Widget::Widget(QWidget *parent) : QWidget(parent){
 
 void Widget::runTrial(){
       p.generate(&helper);
-      timer.start(10);
+      timer.start(100);
       connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
       // TODO: make this increment
       QtConcurrent::run(&p, &pop::evolve, 0);

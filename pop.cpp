@@ -88,6 +88,8 @@ void pop::evolve(int t) {
 //		std::cout << t << " " << i << std::endl;
 		next_calc_iteration(QString::number(i+1));
 		calc_iteration_total(QString::number(ITERATIONS));
+		calc_percent(i+1);
+		calc_percent_total(ITERATIONS);
 		//        team_reproduce();
 		//        member_reproduce();
 		//        OET1_reproduce();

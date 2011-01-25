@@ -43,6 +43,8 @@ private:
 signals:
 	void next_calc_iteration(QString);
 	void calc_iteration_total(QString);
+	void calc_percent(int);
+	void calc_percent_total(int);
 
 };
 

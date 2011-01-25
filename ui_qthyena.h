@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'qthyena.ui'
 **
-** Created: Tue Jan 25 10:25:52 2011
+** Created: Tue Jan 25 12:52:37 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -36,22 +36,6 @@ class Ui_qthyenaClass
 public:
     QWidget *centralwidget;
     QGridLayout *gridLayout;
-    Widget *widget;
-    QGroupBox *displayingBox;
-    QFormLayout *formLayout;
-    QGroupBox *groupBox;
-    QHBoxLayout *horizontalLayout;
-    QLineEdit *disp_iteration_curr;
-    QLabel *label_5;
-    QLineEdit *disp_iteration_total;
-    QGroupBox *groupBox_2;
-    QHBoxLayout *horizontalLayout_2;
-    QLineEdit *disp_time_curr;
-    QLabel *label_4;
-    QLineEdit *disp_time_total;
-    QGroupBox *groupBox_3;
-    QHBoxLayout *horizontalLayout_3;
-    QProgressBar *disp_percent;
     QGroupBox *calculatingBox;
     QGridLayout *gridLayout_2;
     QProgressBar *calc_percent;
@@ -67,6 +51,22 @@ public:
     QLabel *label_7;
     QLineEdit *calc_iterations_total;
     QPushButton *beginButton;
+    Widget *widget;
+    QGroupBox *displayingBox;
+    QFormLayout *formLayout;
+    QGroupBox *groupBox_3;
+    QHBoxLayout *horizontalLayout_3;
+    QProgressBar *disp_percent;
+    QGroupBox *groupBox;
+    QHBoxLayout *horizontalLayout;
+    QLineEdit *disp_iteration_curr;
+    QLabel *label_5;
+    QLineEdit *disp_iteration_total;
+    QGroupBox *groupBox_2;
+    QHBoxLayout *horizontalLayout_2;
+    QLineEdit *disp_time_curr;
+    QLabel *label_4;
+    QLineEdit *disp_time_total;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -86,109 +86,13 @@ public:
         centralwidget->setSizePolicy(sizePolicy);
         gridLayout = new QGridLayout(centralwidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        widget = new Widget(centralwidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-        sizePolicy1.setHorizontalStretch(100);
-        sizePolicy1.setVerticalStretch(100);
-        sizePolicy1.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
-        widget->setSizePolicy(sizePolicy1);
-        widget->setMinimumSize(QSize(400, 400));
-        widget->setCursor(QCursor(Qt::ArrowCursor));
-        widget->setAcceptDrops(false);
-        widget->setAutoFillBackground(true);
-
-        gridLayout->addWidget(widget, 1, 3, 1, 3);
-
-        displayingBox = new QGroupBox(centralwidget);
-        displayingBox->setObjectName(QString::fromUtf8("displayingBox"));
-        sizePolicy.setHeightForWidth(displayingBox->sizePolicy().hasHeightForWidth());
-        displayingBox->setSizePolicy(sizePolicy);
-        formLayout = new QFormLayout(displayingBox);
-        formLayout->setObjectName(QString::fromUtf8("formLayout"));
-        formLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
-        groupBox = new QGroupBox(displayingBox);
-        groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        horizontalLayout = new QHBoxLayout(groupBox);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        disp_iteration_curr = new QLineEdit(groupBox);
-        disp_iteration_curr->setObjectName(QString::fromUtf8("disp_iteration_curr"));
-        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(disp_iteration_curr->sizePolicy().hasHeightForWidth());
-        disp_iteration_curr->setSizePolicy(sizePolicy2);
-        disp_iteration_curr->setReadOnly(true);
-
-        horizontalLayout->addWidget(disp_iteration_curr);
-
-        label_5 = new QLabel(groupBox);
-        label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-
-        horizontalLayout->addWidget(label_5);
-
-        disp_iteration_total = new QLineEdit(groupBox);
-        disp_iteration_total->setObjectName(QString::fromUtf8("disp_iteration_total"));
-        sizePolicy2.setHeightForWidth(disp_iteration_total->sizePolicy().hasHeightForWidth());
-        disp_iteration_total->setSizePolicy(sizePolicy2);
-        disp_iteration_total->setReadOnly(true);
-
-        horizontalLayout->addWidget(disp_iteration_total);
-
-
-        formLayout->setWidget(0, QFormLayout::LabelRole, groupBox);
-
-        groupBox_2 = new QGroupBox(displayingBox);
-        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        horizontalLayout_2 = new QHBoxLayout(groupBox_2);
-        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
-        disp_time_curr = new QLineEdit(groupBox_2);
-        disp_time_curr->setObjectName(QString::fromUtf8("disp_time_curr"));
-
-        horizontalLayout_2->addWidget(disp_time_curr);
-
-        label_4 = new QLabel(groupBox_2);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
-
-        horizontalLayout_2->addWidget(label_4);
-
-        disp_time_total = new QLineEdit(groupBox_2);
-        disp_time_total->setObjectName(QString::fromUtf8("disp_time_total"));
-
-        horizontalLayout_2->addWidget(disp_time_total);
-
-
-        formLayout->setWidget(1, QFormLayout::LabelRole, groupBox_2);
-
-        groupBox_3 = new QGroupBox(displayingBox);
-        groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
-        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(groupBox_3->sizePolicy().hasHeightForWidth());
-        groupBox_3->setSizePolicy(sizePolicy3);
-        horizontalLayout_3 = new QHBoxLayout(groupBox_3);
-        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
-        disp_percent = new QProgressBar(groupBox_3);
-        disp_percent->setObjectName(QString::fromUtf8("disp_percent"));
-        disp_percent->setValue(0);
-
-        horizontalLayout_3->addWidget(disp_percent);
-
-
-        formLayout->setWidget(2, QFormLayout::SpanningRole, groupBox_3);
-
-
-        gridLayout->addWidget(displayingBox, 1, 6, 1, 1);
-
         calculatingBox = new QGroupBox(centralwidget);
         calculatingBox->setObjectName(QString::fromUtf8("calculatingBox"));
-        QSizePolicy sizePolicy4(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-        sizePolicy4.setHorizontalStretch(100);
-        sizePolicy4.setVerticalStretch(0);
-        sizePolicy4.setHeightForWidth(calculatingBox->sizePolicy().hasHeightForWidth());
-        calculatingBox->setSizePolicy(sizePolicy4);
+        QSizePolicy sizePolicy1(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(100);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(calculatingBox->sizePolicy().hasHeightForWidth());
+        calculatingBox->setSizePolicy(sizePolicy1);
         gridLayout_2 = new QGridLayout(calculatingBox);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         calc_percent = new QProgressBar(calculatingBox);
@@ -217,11 +121,11 @@ public:
 
         calc_trials_curr = new QLineEdit(statsBox);
         calc_trials_curr->setObjectName(QString::fromUtf8("calc_trials_curr"));
-        QSizePolicy sizePolicy5(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy5.setHorizontalStretch(0);
-        sizePolicy5.setVerticalStretch(0);
-        sizePolicy5.setHeightForWidth(calc_trials_curr->sizePolicy().hasHeightForWidth());
-        calc_trials_curr->setSizePolicy(sizePolicy5);
+        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(calc_trials_curr->sizePolicy().hasHeightForWidth());
+        calc_trials_curr->setSizePolicy(sizePolicy2);
         calc_trials_curr->setReadOnly(true);
 
         gridLayout_4->addWidget(calc_trials_curr, 0, 1, 1, 1);
@@ -264,16 +168,113 @@ public:
 
         beginButton = new QPushButton(calculatingBox);
         beginButton->setObjectName(QString::fromUtf8("beginButton"));
-        QSizePolicy sizePolicy6(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy6.setHorizontalStretch(0);
-        sizePolicy6.setVerticalStretch(0);
-        sizePolicy6.setHeightForWidth(beginButton->sizePolicy().hasHeightForWidth());
-        beginButton->setSizePolicy(sizePolicy6);
+        QSizePolicy sizePolicy3(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(beginButton->sizePolicy().hasHeightForWidth());
+        beginButton->setSizePolicy(sizePolicy3);
 
         gridLayout_2->addWidget(beginButton, 0, 0, 1, 1);
 
 
-        gridLayout->addWidget(calculatingBox, 2, 3, 1, 4);
+        gridLayout->addWidget(calculatingBox, 1, 3, 1, 3);
+
+        widget = new Widget(centralwidget);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        QSizePolicy sizePolicy4(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+        sizePolicy4.setHorizontalStretch(100);
+        sizePolicy4.setVerticalStretch(100);
+        sizePolicy4.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
+        widget->setSizePolicy(sizePolicy4);
+        widget->setMinimumSize(QSize(400, 400));
+        widget->setCursor(QCursor(Qt::ArrowCursor));
+        widget->setAcceptDrops(false);
+        widget->setAutoFillBackground(true);
+
+        gridLayout->addWidget(widget, 0, 3, 1, 2);
+
+        displayingBox = new QGroupBox(centralwidget);
+        displayingBox->setObjectName(QString::fromUtf8("displayingBox"));
+        sizePolicy.setHeightForWidth(displayingBox->sizePolicy().hasHeightForWidth());
+        displayingBox->setSizePolicy(sizePolicy);
+        formLayout = new QFormLayout(displayingBox);
+        formLayout->setObjectName(QString::fromUtf8("formLayout"));
+        formLayout->setFieldGrowthPolicy(QFormLayout::ExpandingFieldsGrow);
+        groupBox_3 = new QGroupBox(displayingBox);
+        groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
+        QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(groupBox_3->sizePolicy().hasHeightForWidth());
+        groupBox_3->setSizePolicy(sizePolicy5);
+        horizontalLayout_3 = new QHBoxLayout(groupBox_3);
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        disp_percent = new QProgressBar(groupBox_3);
+        disp_percent->setObjectName(QString::fromUtf8("disp_percent"));
+        disp_percent->setMinimum(5);
+        disp_percent->setValue(4);
+
+        horizontalLayout_3->addWidget(disp_percent);
+
+
+        formLayout->setWidget(2, QFormLayout::SpanningRole, groupBox_3);
+
+        groupBox = new QGroupBox(displayingBox);
+        groupBox->setObjectName(QString::fromUtf8("groupBox"));
+        horizontalLayout = new QHBoxLayout(groupBox);
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        disp_iteration_curr = new QLineEdit(groupBox);
+        disp_iteration_curr->setObjectName(QString::fromUtf8("disp_iteration_curr"));
+        QSizePolicy sizePolicy6(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed);
+        sizePolicy6.setHorizontalStretch(0);
+        sizePolicy6.setVerticalStretch(0);
+        sizePolicy6.setHeightForWidth(disp_iteration_curr->sizePolicy().hasHeightForWidth());
+        disp_iteration_curr->setSizePolicy(sizePolicy6);
+        disp_iteration_curr->setReadOnly(true);
+
+        horizontalLayout->addWidget(disp_iteration_curr);
+
+        label_5 = new QLabel(groupBox);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_5->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        horizontalLayout->addWidget(label_5);
+
+        disp_iteration_total = new QLineEdit(groupBox);
+        disp_iteration_total->setObjectName(QString::fromUtf8("disp_iteration_total"));
+        sizePolicy6.setHeightForWidth(disp_iteration_total->sizePolicy().hasHeightForWidth());
+        disp_iteration_total->setSizePolicy(sizePolicy6);
+        disp_iteration_total->setReadOnly(true);
+
+        horizontalLayout->addWidget(disp_iteration_total);
+
+
+        formLayout->setWidget(0, QFormLayout::SpanningRole, groupBox);
+
+        groupBox_2 = new QGroupBox(displayingBox);
+        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
+        horizontalLayout_2 = new QHBoxLayout(groupBox_2);
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        disp_time_curr = new QLineEdit(groupBox_2);
+        disp_time_curr->setObjectName(QString::fromUtf8("disp_time_curr"));
+
+        horizontalLayout_2->addWidget(disp_time_curr);
+
+        label_4 = new QLabel(groupBox_2);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+
+        horizontalLayout_2->addWidget(label_4);
+
+        disp_time_total = new QLineEdit(groupBox_2);
+        disp_time_total->setObjectName(QString::fromUtf8("disp_time_total"));
+
+        horizontalLayout_2->addWidget(disp_time_total);
+
+
+        formLayout->setWidget(1, QFormLayout::SpanningRole, groupBox_2);
+
+
+        gridLayout->addWidget(displayingBox, 0, 5, 1, 1);
 
         qthyenaClass->setCentralWidget(centralwidget);
         menubar = new QMenuBar(qthyenaClass);
@@ -294,15 +295,6 @@ public:
     void retranslateUi(QMainWindow *qthyenaClass)
     {
         qthyenaClass->setWindowTitle(QApplication::translate("qthyenaClass", "Hyena Evolution", 0, QApplication::UnicodeUTF8));
-#ifndef QT_NO_TOOLTIP
-        widget->setToolTip(QString());
-#endif // QT_NO_TOOLTIP
-        displayingBox->setTitle(QApplication::translate("qthyenaClass", "Displaying", 0, QApplication::UnicodeUTF8));
-        groupBox->setTitle(QApplication::translate("qthyenaClass", "Iteration", 0, QApplication::UnicodeUTF8));
-        label_5->setText(QApplication::translate("qthyenaClass", "of", 0, QApplication::UnicodeUTF8));
-        groupBox_2->setTitle(QApplication::translate("qthyenaClass", "Time Step", 0, QApplication::UnicodeUTF8));
-        label_4->setText(QApplication::translate("qthyenaClass", "of", 0, QApplication::UnicodeUTF8));
-        groupBox_3->setTitle(QApplication::translate("qthyenaClass", "Percent Displayed", 0, QApplication::UnicodeUTF8));
         calculatingBox->setTitle(QApplication::translate("qthyenaClass", "Calculating", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("qthyenaClass", "Percent Calculated:", 0, QApplication::UnicodeUTF8));
         statsBox->setTitle(QApplication::translate("qthyenaClass", "Statistics", 0, QApplication::UnicodeUTF8));
@@ -311,6 +303,15 @@ public:
         label_6->setText(QApplication::translate("qthyenaClass", "Iterations:", 0, QApplication::UnicodeUTF8));
         label_7->setText(QApplication::translate("qthyenaClass", "of", 0, QApplication::UnicodeUTF8));
         beginButton->setText(QApplication::translate("qthyenaClass", "Begin", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        widget->setToolTip(QString());
+#endif // QT_NO_TOOLTIP
+        displayingBox->setTitle(QApplication::translate("qthyenaClass", "Displaying", 0, QApplication::UnicodeUTF8));
+        groupBox_3->setTitle(QApplication::translate("qthyenaClass", "Percent Displayed", 0, QApplication::UnicodeUTF8));
+        groupBox->setTitle(QApplication::translate("qthyenaClass", "Iteration", 0, QApplication::UnicodeUTF8));
+        label_5->setText(QApplication::translate("qthyenaClass", "of", 0, QApplication::UnicodeUTF8));
+        groupBox_2->setTitle(QApplication::translate("qthyenaClass", "Time Step", 0, QApplication::UnicodeUTF8));
+        label_4->setText(QApplication::translate("qthyenaClass", "of", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

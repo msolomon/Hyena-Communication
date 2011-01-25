@@ -20,15 +20,20 @@ using namespace std;
 void Helper::updateGui(){
 
 	disp_timestep(QString::number(timestep + 1));
-	timestep++;
-	timestep = timestep % 25;
 
-	disp_timestep_total(QString::number(TIME_STEPS * TIME_STEPS));
+	const int total_steps = TIME_STEPS * NUM_TESTS;
 
-	disp_iteration(QString::number(iter.dequeue() + EVALUATE_EVERY));
+	disp_timestep_total(QString::number(total_steps));
+
+	int curr_iteration = iter.dequeue() + EVALUATE_EVERY;
+	disp_iteration(QString::number(curr_iteration));
 	disp_iteration_total(QString::number(ITERATIONS));
 
+	disp_percent(curr_iteration * total_steps + timestep * EVALUATE_EVERY);
+	disp_percent_total((ITERATIONS) * total_steps + total_steps);
 
+	timestep++;
+	timestep = timestep % 25;
 }
 
 void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed) {

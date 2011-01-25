@@ -16,6 +16,16 @@ qthyena::qthyena(QWidget *parent) : QMainWindow(parent){
 				ui.calc_iterations_curr, SLOT(setText(QString)));
 	connect(&ui.widget->p, SIGNAL(calc_iteration_total(QString)),
 				ui.calc_iterations_total, SLOT(setText(QString)));
+
+	connect(&ui.widget->helper, SIGNAL(disp_percent(int)),
+			ui.disp_percent, SLOT(setValue(int)));
+	connect(&ui.widget->helper, SIGNAL(disp_percent_total(int)),
+			ui.disp_percent, SLOT(setMaximum(int)));
+
+	connect(&ui.widget->p, SIGNAL(calc_percent(int)),
+			ui.calc_percent, SLOT(setValue(int)));
+	connect(&ui.widget->p, SIGNAL(calc_percent_total(int)),
+			ui.calc_percent, SLOT(setMaximum(int)));
 }
 
 qthyena::~qthyena(){

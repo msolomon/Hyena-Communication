@@ -40,7 +40,8 @@ signals:
 	void disp_timestep_total(QString);
 	void disp_iteration(QString);
 	void disp_iteration_total(QString);
-
+	void disp_percent(int);
+	void disp_percent_total(int);
 };
 
 #endif
