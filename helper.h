@@ -25,17 +25,11 @@ public:
 	QQueue<QPoint> zebras[1];
 
 private:
-	QBrush background;
-	QBrush hyenaColor;
-	QBrush lionColor;
-	QBrush zebraColor;
-	QFont textFont;
-	QPen circlePen;
-	QPen textPen;
-	int box;
+	QPen hyenaPen;
+	QPen lionPen;
+	QPen zebraPen;
+	QBrush backgroundBrush;
 
-public slots:
-	void scale_box(int);
 };
 
 #endif
