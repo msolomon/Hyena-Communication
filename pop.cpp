@@ -52,7 +52,11 @@ void pop::generate(void) {
 	}
 }
 
-void pop::evaluate_team(int member, int flag) {
+void pop::evaluate_team(int member, int flag){
+	evaluate_team(member, flag, -1);
+}
+
+void pop::evaluate_team(int member, int flag, int iteration) {
 	ENV.set_up(the_pop[member]);
 	the_pop[member]->reset_fitness();
 	for (int tests = 0; tests < NUM_TESTS; tests++) {
@@ -60,13 +64,16 @@ void pop::evaluate_team(int member, int flag) {
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV.update_vectors();
 			if (flag) {
-				ENV.draw(helper);
-				update();
-				sleep(0);
+				ENV.draw(helper, iteration);
+				//update();
 			}
 			ENV.move();
 			ENV.evaluate();
 		}
+//		if (flag) {
+//			ENV.draw(helper);
+//			//update();
+//		}
 	}
 	the_pop[member]->calc_avg_fit();
 }
@@ -79,16 +86,18 @@ void pop::evolve(int t) {
 	for (int i = 0; i < ITERATIONS; i++) {
 		//        get_fitnesses();
 //		std::cout << t << " " << i << std::endl;
-		updateIteration();
+		next_calc_iteration(QString::number(i+1));
+		calc_iteration_total(QString::number(ITERATIONS));
 		//        team_reproduce();
 		//        member_reproduce();
 		//        OET1_reproduce();
 		oet_generational();
 		save_data(i, t);
-		if (i % 3 == 0) { //  && t == (TRIALS-1)){
+		if (i % EVALUATE_EVERY == 0) { //  && t == (TRIALS-1)){
 			int bestTeam;
 			bestTeam = select_best_team(1);
-			evaluate_team(bestTeam, 1);
+			evaluate_team(bestTeam, 1, i);
+//			std::cout << i << std::endl;
 		}
 	}
 	if (t + 1 == TRIALS)

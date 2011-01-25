@@ -1,6 +1,10 @@
 #ifndef NODE_H
 #define NODE_H
 
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+
 #include "globals.h"
 
 enum ops {

@@ -14,6 +14,7 @@ public:
 
 private:
     Ui::qthyenaClass ui;
+
 };
 
 #endif // QTHYENA_H

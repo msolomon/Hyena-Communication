@@ -12,6 +12,23 @@ Helper::Helper() {
 	hyenaPen = QPen(QBrush(hyenaColor), .5, Qt::SolidLine, Qt::RoundCap);
 	lionPen = QPen(QBrush(lionColor), 1, Qt::SolidLine, Qt::RoundCap);
 	zebraPen = QPen(QBrush(zebraColor), 1.5, Qt::SolidLine, Qt::RoundCap);
+
+	timestep = 0;
+}
+#include <iostream>
+using namespace std;
+void Helper::updateGui(){
+
+	disp_timestep(QString::number(timestep + 1));
+	timestep++;
+	timestep = timestep % 25;
+
+	disp_timestep_total(QString::number(TIME_STEPS * TIME_STEPS));
+
+	disp_iteration(QString::number(iter.dequeue() + EVALUATE_EVERY));
+	disp_iteration_total(QString::number(ITERATIONS));
+
+
 }
 
 void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed) {

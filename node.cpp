@@ -1,3 +1,4 @@
+
 #include "node.h"
 
 void node::set_child(int c, node *child) {

@@ -7,7 +7,7 @@
 #include "environment.h"
 #include "helper.h"
 
-class pop: QObject {
+class pop: public QObject {
 	Q_OBJECT
 public:
 	void generate(Helper*);
@@ -22,6 +22,7 @@ public:
 	void save_data(int, int);
 	void evolve(int);
 	void evaluate_agent(int, int, int);
+	void evaluate_team(int, int, int);
 	void evaluate_team(int, int);
 	void team_reproduce();
 	void member_reproduce();
@@ -38,9 +39,11 @@ private:
 	float pop_bestfitness;
 	int pop_bestteam;
 	Helper *helper;
+
 signals:
-	void update();
-	void updateIteration();
+	void next_calc_iteration(QString);
+	void calc_iteration_total(QString);
+
 };
 
 #endif

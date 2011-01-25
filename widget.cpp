@@ -30,15 +30,13 @@
 using namespace std;
 
 Widget::Widget(QWidget *parent) : QWidget(parent){
-	elapsed = 0;
 	//setFixedSize(FIELDX, FIELDY);
 	//connect((QObject*) &p, SIGNAL(update()), this, SLOT(animate()));
-	std::cout << "Initialized drawing space" << std::endl;
 }
 
 void Widget::runTrial(){
       p.generate(&helper);
-      timer.start(200);
+      timer.start(10);
       connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
       // TODO: make this increment
       QtConcurrent::run(&p, &pop::evolve, 0);
@@ -48,7 +46,8 @@ void Widget::runTrial(){
 
 void Widget::animate() {
 		if(!helper.zebras[0].isEmpty()){
-		repaint();
+			helper.updateGui();
+			repaint();
 	}
 }
 
