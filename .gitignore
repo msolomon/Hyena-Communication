@@ -5,6 +5,7 @@ error.txt
 fit.txt
 debug/
 release/
+doxygen/
 /qthyena
 Makefile*
 

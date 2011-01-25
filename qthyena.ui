@@ -105,7 +105,11 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="calc_iterations_curr"/>
+           <widget class="QLineEdit" name="calc_iterations_curr">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_6">
@@ -269,7 +273,11 @@
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QLineEdit" name="disp_time_curr"/>
+           <widget class="QLineEdit" name="disp_time_curr">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QLabel" name="label_4">
@@ -279,7 +287,11 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="disp_time_total"/>
+           <widget class="QLineEdit" name="disp_time_total">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

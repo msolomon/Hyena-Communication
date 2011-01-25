@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'qthyena.ui'
 **
-** Created: Tue Jan 25 12:52:37 2011
+** Created: Tue Jan 25 12:56:43 2011
 **      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -143,6 +143,7 @@ public:
 
         calc_iterations_curr = new QLineEdit(statsBox);
         calc_iterations_curr->setObjectName(QString::fromUtf8("calc_iterations_curr"));
+        calc_iterations_curr->setReadOnly(true);
 
         gridLayout_4->addWidget(calc_iterations_curr, 1, 1, 1, 1);
 
@@ -257,6 +258,7 @@ public:
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         disp_time_curr = new QLineEdit(groupBox_2);
         disp_time_curr->setObjectName(QString::fromUtf8("disp_time_curr"));
+        disp_time_curr->setReadOnly(true);
 
         horizontalLayout_2->addWidget(disp_time_curr);
 
@@ -267,6 +269,7 @@ public:
 
         disp_time_total = new QLineEdit(groupBox_2);
         disp_time_total->setObjectName(QString::fromUtf8("disp_time_total"));
+        disp_time_total->setReadOnly(true);
 
         horizontalLayout_2->addWidget(disp_time_total);
 

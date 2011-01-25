@@ -30,7 +30,7 @@ void Helper::updateGui(){
 	disp_iteration_total(QString::number(ITERATIONS));
 
 	disp_percent(curr_iteration * total_steps + timestep * EVALUATE_EVERY);
-	disp_percent_total((ITERATIONS) * total_steps + total_steps);
+	disp_percent_total((ITERATIONS) * total_steps + total_steps - 1);
 
 	timestep++;
 	timestep = timestep % 25;
