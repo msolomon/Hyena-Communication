@@ -8,6 +8,7 @@
 
 #include "team.h"
 #include "helper.h"
+#include "globals.h"
 
 class environment {
 public:

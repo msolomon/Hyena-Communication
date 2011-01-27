@@ -1,6 +1,5 @@
 #include "environment.h"
 
-
 void environment::set_up(team *a) {
 	agents = a;
 }
@@ -13,12 +12,12 @@ void environment::evaluate(void) {
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		tempx = agents->scouts[i].getX();
 		tempy = agents->scouts[i].getY();
-		radius = sqrt(pow((tempx - ZEBRAX), 2) + pow((tempy - ZEBRAY), 2));
+		radius = distance(tempx - ZEBRAX, tempy - ZEBRAY);
 		agents->scouts[i].changeFit(1.0 / (1.0 + radius)); // near zebra
 		agents->scouts[i].inc_dist_to_zebra(radius);
 		for (int j = 0; j < NUM_LIONS; j++) {
-			radius = sqrt(pow((tempx - agents->invests[j].getX()), 2) + pow(
-					(tempy - agents->invests[j].getY()), 2));
+			radius = distance(tempx - agents->invests[j].getX(),
+							  tempy - agents->invests[j].getY());
 			if (radius < LION_ATTACK_RADIUS) { // not too close to lions/investigators
 				//      agents->scouts[i].changeFit(3*(radius-LION_ATTACK_RADIUS)); // near lion
 				agents->scouts[i].inc_lion_attacks();
@@ -49,8 +48,8 @@ void environment::update_vectors(void) {
 		min_mag = 4 * (X + Y); // maximize minimum magnitude
 		agents->scouts[i].set_num_scouts(0);
 		for (int j = 0; j < NUM_HYENAS; j++) {
-			magnitude = sqrt(pow((agentx - agents->scouts[j].getX()), 2) + pow(
-					(agenty - agents->scouts[j].getY()), 2));
+			magnitude = distance(agentx - agents->scouts[j].getX(),
+								 agenty - agents->scouts[j].getY());
 			if (magnitude < min_mag && i != j) {
 				min_mag = magnitude;
 				direction = atan2(agentx - agents->scouts[j].getX(), (agenty
@@ -64,8 +63,8 @@ void environment::update_vectors(void) {
 		//find nearest calling scout
 		min_mag = X + Y; // maximize minimum magnitude
 		for (int j = 0; j < NUM_HYENAS; j++) {
-			magnitude = sqrt(pow((agentx - agents->scouts[j].getX()), 2) + pow(
-					(agenty - agents->scouts[j].getY()), 2));
+			magnitude = distance(agentx - agents->scouts[j].getX(),
+								 agenty - agents->scouts[j].getY());
 			if (agents->scouts[j].get_calling() == true && magnitude < min_mag
 					&& i != j && magnitude < X) {
 				min_mag = magnitude;
@@ -85,8 +84,8 @@ void environment::update_vectors(void) {
 		//find nearest investigator
 		min_mag = 5 * (X + Y); // some large value
 		for (int j = 0; j < NUM_LIONS; j++) {
-			magnitude = sqrt(pow((agentx - agents->invests[j].getX()), 2)
-					+ pow((agenty - agents->invests[j].getY()), 2));
+			magnitude = distance(agentx - agents->invests[j].getX(),
+								 agenty - agents->invests[j].getY());
 			if (magnitude < min_mag && magnitude < X / 4) {
 				min_mag = magnitude;
 				direction = atan2(agentx - agents->invests[j].getX(), (agenty
@@ -102,8 +101,7 @@ void environment::update_vectors(void) {
 		}
 		agents->scouts[i].set_nearest_invest(temp);
 		//zebra     
-		temp.magnitude = sqrt(pow(double(agentx - ZEBRAX), 2.0) + pow(double(
-				agenty - ZEBRAY), 2.0));
+		temp.magnitude = distance(agentx - ZEBRAX, agenty - ZEBRAY);
 		if (temp.magnitude < X / 4) { // min range to zebra
 			temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
 			agents->scouts[i].set_calling(true);
@@ -125,8 +123,8 @@ void environment::update_vectors(void) {
 		int num_scouts = 0;
 		min_mag = X + Y; // maximize minimum magnitude
 		for (int j = 0; j < NUM_HYENAS; j++) {
-			magnitude = sqrt(pow((agentx - agents->scouts[j].getX()), 2) + pow(
-					(agenty - agents->scouts[j].getY()), 2));
+			magnitude = distance(agentx - agents->scouts[j].getX(),
+								 agenty - agents->scouts[j].getY());
 			if (magnitude < LION_HYENA_RADIUS)
 				num_scouts++;
 			if (magnitude < min_mag) {
@@ -142,8 +140,8 @@ void environment::update_vectors(void) {
 		//find nearest investigator, count investigators/lions close enough
 		int num_invests = 0;
 		for (int j = 0; j < NUM_LIONS; j++) {
-			magnitude = sqrt(pow((agentx - agents->invests[j].getX()), 2)
-					+ pow((agenty - agents->invests[j].getY()), 2));
+			magnitude = distance(agentx - agents->invests[j].getX(),
+								 agenty - agents->invests[j].getY());
 			if (magnitude < LION_LION_RADIUS)
 				num_invests++;
 			if (magnitude < min_mag && i != j) {
@@ -158,8 +156,7 @@ void environment::update_vectors(void) {
 		agents->invests[i].set_num_lions(num_invests);
 
 		// zebra
-		temp.magnitude = sqrt(pow((agentx - ZEBRAX), 2) + pow(
-				(agenty - ZEBRAY), 2));
+		temp.magnitude = distance(agentx - ZEBRAX, agenty - ZEBRAY);
 		temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
 		agents->invests[i].set_zebra(temp);
 	}

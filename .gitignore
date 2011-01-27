@@ -10,6 +10,9 @@ doxygen/
 # file patterns
 /Makefile*
 /qthyena.pro.*
+/callgrind.out*
+/.kprof*
+/.graphViz*
 
 # files
 /seed.txt
@@ -17,3 +20,5 @@ doxygen/
 /fit.txt
 /ui_qthyena.h
 /qthyena
+/gmon.out
+

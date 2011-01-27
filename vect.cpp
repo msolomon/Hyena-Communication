@@ -1,6 +1,8 @@
 #include <cmath>
 #include <cstdlib>
+
 #include "vect.h"
+#include "globals.h"
 
 vect::vect() {
 	magnitude = 0;
@@ -23,7 +25,7 @@ vect vect::operator+(const vect v2) const {
 	y1 = magnitude * cos(direction);
 	x2 = v2.magnitude * sin(v2.direction);
 	y2 = v2.magnitude * cos(v2.direction);
-	answer.magnitude = sqrt(pow(x1 + x2, 2) + pow(y1 + y2, 2));
+	answer.magnitude = distance(x1 + x2, y1 + y2);
 	answer.direction = atan2(x1 + x2, y1 + y2);
 	return answer;
 }

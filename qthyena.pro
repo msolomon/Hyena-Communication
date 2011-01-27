@@ -31,3 +31,8 @@ SOURCES += qthyena.cpp \
 FORMS += qthyena.ui
 
 RESOURCES += 
+
+#CONFIG(release, debug|release):
+#QMAKE_CFLAGS+=-pg
+#QMAKE_CXXFLAGS+=-pg
+#QMAKE_LFLAGS+=-pg

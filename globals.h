@@ -1,6 +1,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include <cmath>
+
 #include"vect.h"
 
 const float PI = 3.141592654;
@@ -51,5 +53,14 @@ typedef struct {
 enum agent_type {
 	scout, investigator
 };
+
+
+inline float sq_rt(float a){
+	return sqrt(a);
+}
+
+inline float distance(float x, float y){
+	return sq_rt(pow(x, 2) + pow(y, 2));
+}
 
 #endif
