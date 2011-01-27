@@ -6,7 +6,6 @@
 
 #include <cmath>
 
-#include "glwidget.h"
 #include "team.h"
 #include "helper.h"
 

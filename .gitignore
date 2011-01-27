@@ -1,11 +1,19 @@
+# global patterns
 *.[oa]
 *~
-seed.txt
-error.txt
-fit.txt
+
+# directories
 debug/
 release/
 doxygen/
-/qthyena
-Makefile*
 
+# file patterns
+/Makefile*
+/qthyena.pro.*
+
+# files
+/seed.txt
+/error.txt
+/fit.txt
+/ui_qthyena.h
+/qthyena

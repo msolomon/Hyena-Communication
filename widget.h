@@ -22,6 +22,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+//#include <QGLWidget>
 #include <QTimer>
 
 #include "helper.h"
@@ -31,6 +32,7 @@ class Helper;
 class QPaintEvent;
 
 class Widget: public QWidget {
+//class Widget: public QGLWidget {
 	Q_OBJECT
 
 public:

@@ -3,7 +3,6 @@
 
 #include <cmath>
 
-#include "window.h"
 #include "globals.h"
 #include "node.h"
 const float scale = 1.0;
