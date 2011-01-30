@@ -16,9 +16,6 @@ private:
     Ui::qthyenaClass ui;
     void connectAll();
 
-public slots:
-    void disconnectAll();
-
 };
 
 #endif // QTHYENA_H
