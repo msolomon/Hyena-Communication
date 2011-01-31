@@ -10,21 +10,21 @@ vect::vect() {
 }
 
 vect vect::operator=(const vect v2) {
-	magnitude = v2.magnitude;
-	direction = v2.direction;
 	vect answer;
-	answer.magnitude = magnitude;
-	answer.direction = direction;
+	answer.magnitude = v2.magnitude;
+	answer.direction = v2.direction;
 	return answer;
 }
 
 vect vect::operator+(const vect v2) const {
 	vect answer;
 	float x1, x2, y1, y2;
-	x1 = magnitude * sin(direction);
-	y1 = magnitude * cos(direction);
-	x2 = v2.magnitude * sin(v2.direction);
-	y2 = v2.magnitude * cos(v2.direction);
+	sincosf(direction, &x1, &y1);
+	x1 *= magnitude;
+	y1 *= magnitude;
+	sincosf(v2.direction, &x2, &y2);
+	x2 *= v2.magnitude;
+	y2 *= v2.magnitude;
 	answer.magnitude = distance(x1 + x2, y1 + y2);
 	answer.direction = atan2(x1 + x2, y1 + y2);
 	return answer;

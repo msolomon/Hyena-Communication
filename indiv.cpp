@@ -83,8 +83,12 @@ void indiv::rand_move() {
 
 void indiv::lion_move(void) {
 	if (the_info.num_scouts > (the_info.num_investigators * 3)) {
-		x += 1.0 * sin(the_info.nearest_scout.direction);
-		y += 1.0 * cos(the_info.nearest_scout.direction);
+		float x1, y1;
+		sincosf(the_info.nearest_scout.direction, &x1, &y1);
+		x *= x1;
+		y *= y1;
+//		x += 1.0 * sin(the_info.nearest_scout.direction);
+//		y += 1.0 * cos(the_info.nearest_scout.direction);
 	}
 	/*     else if(the_info.zebra.magnitude < LION_SEES_ZEBRA && the_info.zebra.magnitude > LION_NEAR_ZEBRA){
 	 x-=1.0*sin(the_info.zebra.direction);

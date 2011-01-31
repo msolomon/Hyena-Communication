@@ -121,7 +121,7 @@ void node::mutate(void) {
 }
 
 vect node::evaluate(agent_info *the_indiv) {
-	vect temp, temp1;
+	vect *temp, *temp1;
 //	temp.magnitude = 0;
 //	temp.direction = 0;
 	if (this == NULL) {
@@ -129,14 +129,16 @@ vect node::evaluate(agent_info *the_indiv) {
 		error.open("error.txt", std::ios_base::app);
 		error << "error in evaluate: evaluating null" << std::endl;
 		error.close();
-		return (temp);
+		temp = &vect();
+		return (*temp);
 	}
 
 	switch (operation) {
 	case num_scouts:
-		temp.direction = PI;
-		temp.magnitude = the_indiv->num_scouts; // only magnitude matters
-		return temp;
+		temp = &vect();
+		temp->direction = PI;
+		temp->magnitude = the_indiv->num_scouts; // only magnitude matters
+		return *temp;
 	case zebra:
 		return (the_indiv-> zebra);
 	case nearest_scout:
@@ -144,44 +146,53 @@ vect node::evaluate(agent_info *the_indiv) {
 	case nearest_invest:
 		return (the_indiv->nearest_invest);
 	case randm:
-		temp.random();
-		return temp;
+		temp = &vect();
+		temp->random();
+		return *temp;
 	case north:
-		temp.direction = PI;
-		temp.magnitude = 1;
-		return (temp);
+		temp = &vect();
+		temp->direction = PI;
+		temp->magnitude = 1;
+		return (*temp);
 	case last_move:
 		return (the_indiv->last_move);
 	case constant:
-		return (the_const);
-	case invert:
-		temp = children[0]->evaluate(the_indiv);
-		temp.direction += 3.1417;
-		return (temp);
+		return (the_const);	case invert:
+		temp = &vect();
+		temp = &children[0]->evaluate(the_indiv);
+		temp->direction += 3.1417;
+		return (*temp);
 	case sum:
-		temp = children[0]->evaluate(the_indiv);
-		temp1 = children[1]->evaluate(the_indiv);
+		temp = &vect();
+		temp1 = &vect();
+		temp = &children[0]->evaluate(the_indiv);
+		temp1 = &children[1]->evaluate(the_indiv);
 		//temp3 = temp1 + temp2;
-		return temp + temp1;
+		return ((*temp) + (*temp1));
 	case iflteMAG:
-		temp = children[0]->evaluate(the_indiv);
-		temp1 = children[1]->evaluate(the_indiv);
-		if (temp.magnitude <= temp1.magnitude)
+		temp = &vect();
+		temp1 = &vect();
+		temp = &children[0]->evaluate(the_indiv);
+		temp1 = &children[1]->evaluate(the_indiv);
+		if (temp->magnitude <= temp1->magnitude)
 			return (children[2]->evaluate(the_indiv));
 		else
 			return (children[3]->evaluate(the_indiv));
 	case iflteCLOCKWISE:
-		temp = children[0]->evaluate(the_indiv);
-		temp1 = children[1]->evaluate(the_indiv);
-		if (temp.direction <= temp1.direction)
+		temp = &vect();
+		temp1 = &vect();
+		temp = &children[0]->evaluate(the_indiv);
+		temp1 = &children[1]->evaluate(the_indiv);
+		if (temp->direction <= temp1->direction)
 			return (children[2]->evaluate(the_indiv));
 		else
 			return (children[3]->evaluate(the_indiv));
 	case ifVectorZero:
 //		std::cout << children[0];
 //		std::cout << the_indiv;
-		temp = children[0]->evaluate(the_indiv);
-		if (temp.direction == 0 && temp.magnitude == 0)
+		temp = &vect();
+		temp = &children[0]->evaluate(the_indiv);
+		if (temp->direction == 0 && temp->magnitude == 0)
 			return (children[1]->evaluate(the_indiv));
 		else
 			return (children[2]->evaluate(the_indiv));
