@@ -121,9 +121,9 @@ void node::mutate(void) {
 }
 
 vect node::evaluate(agent_info *the_indiv) {
-	vect temp, temp1, temp2, temp3;
-	temp.magnitude = 0;
-	temp.direction = 0;
+	vect temp, temp1;
+//	temp.magnitude = 0;
+//	temp.direction = 0;
 	if (this == NULL) {
 		std::ofstream error;
 		error.open("error.txt", std::ios_base::app);
@@ -131,6 +131,7 @@ vect node::evaluate(agent_info *the_indiv) {
 		error.close();
 		return (temp);
 	}
+
 	switch (operation) {
 	case num_scouts:
 		temp.direction = PI;
@@ -158,29 +159,29 @@ vect node::evaluate(agent_info *the_indiv) {
 		temp.direction += 3.1417;
 		return (temp);
 	case sum:
-		temp1 = children[0]->evaluate(the_indiv);
-		temp2 = children[1]->evaluate(the_indiv);
-		temp3 = temp1 + temp2;
-		return temp3;
+		temp = children[0]->evaluate(the_indiv);
+		temp1 = children[1]->evaluate(the_indiv);
+		//temp3 = temp1 + temp2;
+		return temp + temp1;
 	case iflteMAG:
-		temp1 = children[0]->evaluate(the_indiv);
-		temp2 = children[1]->evaluate(the_indiv);
-		if (temp1.magnitude <= temp2.magnitude)
+		temp = children[0]->evaluate(the_indiv);
+		temp1 = children[1]->evaluate(the_indiv);
+		if (temp.magnitude <= temp1.magnitude)
 			return (children[2]->evaluate(the_indiv));
 		else
 			return (children[3]->evaluate(the_indiv));
 	case iflteCLOCKWISE:
-		temp1 = children[0]->evaluate(the_indiv);
-		temp2 = children[1]->evaluate(the_indiv);
-		if (temp1.direction <= temp2.direction)
+		temp = children[0]->evaluate(the_indiv);
+		temp1 = children[1]->evaluate(the_indiv);
+		if (temp.direction <= temp1.direction)
 			return (children[2]->evaluate(the_indiv));
 		else
 			return (children[3]->evaluate(the_indiv));
 	case ifVectorZero:
 //		std::cout << children[0];
 //		std::cout << the_indiv;
-		temp1 = children[0]->evaluate(the_indiv);
-		if (temp1.direction == 0 && temp1.magnitude == 0)
+		temp = children[0]->evaluate(the_indiv);
+		if (temp.direction == 0 && temp.magnitude == 0)
 			return (children[1]->evaluate(the_indiv));
 		else
 			return (children[2]->evaluate(the_indiv));

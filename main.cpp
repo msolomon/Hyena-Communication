@@ -10,8 +10,8 @@
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 	qthyena ui;
-	QObject::connect(&app, SIGNAL(aboutToQuit()),
-				&ui, SLOT(disconnectAll()));
+//	QObject::connect(&app, SIGNAL(aboutToQuit()),
+//				&ui, SLOT(disconnectAll()));
 
 	int seed = int(time(NULL));
 	//    seed = 1206369581;

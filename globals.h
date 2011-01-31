@@ -31,12 +31,12 @@ const int NUM_LIONS = 2;
 const int TIME_STEPS = 5;
 const int NUM_TESTS = 5;
 const int TOURNAMENT_SIZE = 5;
-const int ITERATIONS = 51;
+const int ITERATIONS = 9;
 const int TEAM_SIZE = 3;
 const int TRIALS = 20;
 const int GROW_DEPTH = 4;
 const int EVALUATE_EVERY = 3;
-const bool DRAW = true;
+const bool DRAW = false;
 const int DRAW_MS = 100;
 
 //const int INTEREST_PERCENT = 0;

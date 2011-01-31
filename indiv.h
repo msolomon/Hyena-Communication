@@ -48,10 +48,10 @@ public:
 	bool get_calling() {
 		return calling;
 	}
-	float getX(void) {
+	inline float getX(void) {
 		return x;
 	}
-	float getY(void) {
+	inline float getY(void) {
 		return y;
 	}
 	float get_fitness(void) {
