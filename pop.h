@@ -20,6 +20,7 @@ public:
 	int tourn_select(int);
 	void write_fitnesses(void);
 	void save_data(int, int);
+	void evolve_repeat();
 	void evolve(int);
 	void evaluate_agent(int, int, int);
 	void evaluate_team(int, int, int);
@@ -41,10 +42,14 @@ private:
 	Helper *helper;
 
 signals:
-	void next_calc_iteration(QString);
-	void calc_iteration_total(QString);
-	void calc_percent(int);
-	void calc_percent_total(int);
+	void calc_iter(QString);
+	void calc_iter_total(QString);
+	void calc_trial(QString);
+	void calc_trial_total(QString);
+	void calc_iter_percent(int);
+	void calc_iter_percent_total(int);
+	void calc_trial_percent(int);
+	void calc_trial_percent_total(int);
 
 };
 

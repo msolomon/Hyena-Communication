@@ -9,7 +9,7 @@ void Widget::runTrial(){
           timer.start(DRAW_MS);
       }
       connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
-      QtConcurrent::run(&p, &pop::evolve, 0);
+      QtConcurrent::run(&p, &pop::evolve_repeat);
 }
 
 void Widget::animate() {

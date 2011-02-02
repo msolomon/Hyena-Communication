@@ -11,6 +11,7 @@ Helper::Helper() {
 	zebraPen = QPen(QBrush(zebraColor), 1.5, Qt::SolidLine, Qt::RoundCap);
 
 	timestep = 0;
+	it = -1;
 }
 
 void Helper::updateGui(){
@@ -25,8 +26,19 @@ void Helper::updateGui(){
 	disp_iteration(QString::number(curr_iteration + EVALUATE_EVERY));
 	disp_iteration_total(QString::number(ITERATIONS));
 
-	disp_percent(curr_iteration * total_steps * 2 + timestep * EVALUATE_EVERY);
-	disp_percent_total((ITERATIONS) * total_steps * 2 - EVALUATE_EVERY);
+	if(it == -1)
+		disp_trial_total(QString::number(TRIALS));
+	if(curr_iteration == 0 && timestep == 0){
+		it++;
+		disp_trial(QString::number(it + 1));
+	}
+
+	const int full_trial = (ITERATIONS) * total_steps * 2 - EVALUATE_EVERY;
+	int this_it = curr_iteration * total_steps * 2 + timestep * EVALUATE_EVERY;
+	disp_iter_percent(this_it);
+	disp_iter_percent_total(full_trial);
+	disp_trial_percent((it * full_trial) + this_it);
+	disp_trial_percent_total(full_trial * TRIALS);
 
 	timestep++;
 	timestep = timestep % (total_steps * 2);

@@ -11,6 +11,8 @@
 
 #include "globals.h"
 
+// TODO: Rename this class
+
 class QPainter;
 class QPaintEvent;
 
@@ -35,14 +37,19 @@ private:
 	QPen zebraPen;
 	QBrush backgroundBrush;
 	int timestep;
+	int it;
 
 signals:
 	void disp_timestep(QString);
 	void disp_timestep_total(QString);
 	void disp_iteration(QString);
 	void disp_iteration_total(QString);
-	void disp_percent(int);
-	void disp_percent_total(int);
+	void disp_trial(QString);
+	void disp_trial_total(QString);
+	void disp_iter_percent(int);
+	void disp_iter_percent_total(int);
+	void disp_trial_percent(int);
+	void disp_trial_percent_total(int);
 };
 
 #endif

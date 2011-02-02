@@ -1,5 +1,7 @@
 #include "pop.h"
 
+using namespace std;
+
 pop::pop(){
     for(int i = 0; i < POP_SIZE; i++){
         the_pop[i] = NULL;
@@ -29,9 +31,10 @@ void pop::save_data(int g, int trial) {
 }
 
 void pop::write_fitnesses(void) {
-	std::ofstream fit;
+	cout << "writing fitnesses" << endl;
+	ofstream fit;
 //	float avg_fit = 0;
-	fit.open("fit.txt", std::ios_base::app);
+	fit.open("fit.txt", ios_base::app);
 	for (int i = 0; i < ITERATIONS; i++) {
 		fit << i << " ";
 		for (int j = 0; j < (TEAM_SIZE * 2 + 4) * TRIALS; j++) {
@@ -39,7 +42,7 @@ void pop::write_fitnesses(void) {
 				fit << "  :  ";
 			fit << data[j][i] << " ";
 		}
-		fit << std::endl;
+		fit << endl;
 	}
 }
 
@@ -81,26 +84,36 @@ void pop::evaluate_team(int member, int flag, int iteration) {
 	the_pop[member]->calc_avg_fit();
 }
 
+void pop::evolve_repeat(){
+	for(int i = 0; i < TRIALS; i++){
+		calc_trial(QString::number(i+1));
+		calc_trial_total(QString::number(TRIALS));
+		evolve(i);
+	}
+}
+
 void pop::evolve(int t) {
 	for (int i = 0; i < POP_SIZE; i++) {
 		evaluate_team(i, 0);
 	}
 	for (int i = 0; i < ITERATIONS; i++) {
-//		std::cout << t << " " << i << std::endl;
-		next_calc_iteration(QString::number(i+1));
-		calc_iteration_total(QString::number(ITERATIONS));
-		calc_percent(i+1);
-		calc_percent_total(ITERATIONS);
-		//        team_reproduce();
-		//        member_reproduce();
-		//        OET1_reproduce();
+		// update the GUI
+		calc_iter(QString::number(i+1));
+		calc_iter_total(QString::number(ITERATIONS));
+		calc_iter_percent(i+1);
+		calc_iter_percent_total(ITERATIONS);
+		calc_trial_percent(t*ITERATIONS + i);
+		calc_trial_percent(ITERATIONS*TRIALS);
+
+//		team_reproduce();
+//		member_reproduce();
+//		OET1_reproduce();
 		oet_generational();
 		save_data(i, t);
-		if (i % EVALUATE_EVERY == 0) { //  && t == (TRIALS-1)){
+		if (i % EVALUATE_EVERY == 0) {
 			int bestTeam;
 			bestTeam = select_best_team(1);
 			evaluate_team(bestTeam, 1, i);
-//			std::cout << i << std::endl;
 		}
 	}
 	if (t + 1 == TRIALS)
