@@ -1,5 +1,11 @@
 #include "pop.h"
 
+pop::pop(){
+    for(int i = 0; i < POP_SIZE; i++){
+        the_pop[i] = NULL;
+    }
+}
+
 void pop::save_data(int g, int trial) {
 	float avg_fit = 0;
 	for (int i = 0; i < POP_SIZE; i++) {
@@ -44,8 +50,8 @@ void pop::generate(Helper *h) {
 
 void pop::generate(void) {
 	for (int i = 0; i < POP_SIZE; i++) {
-		//if(the_pop[i] != NULL)
-		//	delete the_pop[i];
+		if(the_pop[i] != NULL)
+			delete the_pop[i];
 		the_pop[i] = new team;
 		//TODO:here
 		the_pop[i]->generate();
@@ -62,6 +68,7 @@ void pop::evaluate_team(int member, int flag, int iteration) {
 	for (int tests = 0; tests < NUM_TESTS; tests++) {
 		the_pop[member]->reset_team();
 		for (int g = 0; g < TIME_STEPS; g++) {
+			if(flag) ENV.draw(helper, iteration);
 			ENV.update_vectors();
 			if (flag) {
 				ENV.draw(helper, iteration);
@@ -70,10 +77,6 @@ void pop::evaluate_team(int member, int flag, int iteration) {
 			ENV.move();
 			ENV.evaluate();
 		}
-//		if (flag) {
-//			ENV.draw(helper);
-//			//update();
-//		}
 	}
 	the_pop[member]->calc_avg_fit();
 }
@@ -267,8 +270,12 @@ void pop::oet_generational() {
 
 	for (int i = 0; i < POP_SIZE; i++) {
 		// copy back to pop
+		the_pop[i]->clear();
 		the_pop[i]->copy(temp.the_pop[i]);
+		temp.the_pop[i]->clear();
+		delete temp.the_pop[i];
 	}
+
 }
 
 void pop::team_reproduce() {

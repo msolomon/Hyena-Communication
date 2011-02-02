@@ -13,6 +13,7 @@ doxygen/
 /callgrind.out*
 /.kprof*
 /.graphViz*
+/massif*
 
 # files
 /seed.txt

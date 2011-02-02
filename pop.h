@@ -10,6 +10,7 @@
 class pop: public QObject {
 	Q_OBJECT
 public:
+	pop();
 	void generate(Helper*);
 	void generate();
 	void run();

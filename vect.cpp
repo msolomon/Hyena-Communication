@@ -10,10 +10,10 @@ vect::vect() {
 }
 
 vect vect::operator=(const vect v2) {
-	vect answer;
-	answer.magnitude = v2.magnitude;
-	answer.direction = v2.direction;
-	return answer;
+//	vect answer;
+	magnitude = v2.magnitude;
+	direction = v2.direction;
+	return *this;
 }
 
 vect vect::operator+(const vect v2) const {

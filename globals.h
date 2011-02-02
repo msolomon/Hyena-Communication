@@ -28,8 +28,8 @@ const int POP_SIZE = 80;
 const int NUM_HYENAS = 20;
 const int NUM_LIONS = 2;
 //const int NUM_AGENTS = NUM_HYENAS + NUM_LIONS;
-const int TIME_STEPS = 5;
-const int NUM_TESTS = 5;
+const int TIME_STEPS = 50;
+const int NUM_TESTS = 1;
 const int TOURNAMENT_SIZE = 5;
 const int ITERATIONS = 51;
 const int TEAM_SIZE = 3;
@@ -37,7 +37,7 @@ const int TRIALS = 20;
 const int GROW_DEPTH = 4;
 const int EVALUATE_EVERY = 3;
 const bool DRAW = true;
-const int DRAW_MS = 100;
+const int DRAW_MS = 30;
 
 //const int INTEREST_PERCENT = 0;
 
@@ -78,9 +78,13 @@ inline float sq_rt(float a){
 }
 
 inline float distance(float x, float y){
-	return x * x + y * y;
+	return sq_rt(x * x + y * y);
 //	return sq_rt(pow(x, 2) + pow(y, 2));
 //	return fabs(x) + fabs(y);
 }
+
+#ifdef _WIN32
+void sincosf(float x, float *s, float *c);
+#endif
 
 #endif

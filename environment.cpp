@@ -167,8 +167,7 @@ environment::environment(void) {
 
 void environment::draw(Helper* helper, int itera) {
 	helper->iter.enqueue(itera);
-	//helper->step.enqueue()
-	//TODO: include moving/multiple zebras
+
 	helper->zebras[0].enqueue(QPoint(ZEBRAX, ZEBRAY));
 
 	for (int i = 0; i < NUM_LIONS; i++) {

@@ -26,7 +26,8 @@ SOURCES += qthyena.cpp \
     team.cpp \
     vect.cpp \
     helper.cpp \
-    widget.cpp
+    widget.cpp \
+    globals.cpp
     
 FORMS += qthyena.ui
 
