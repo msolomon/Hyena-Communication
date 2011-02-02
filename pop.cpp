@@ -100,10 +100,10 @@ void pop::evolve(int t) {
 		// update the GUI
 		calc_iter(QString::number(i+1));
 		calc_iter_total(QString::number(ITERATIONS));
-		calc_iter_percent(i+1);
+		calc_iter_percent(i);
 		calc_iter_percent_total(ITERATIONS);
 		calc_trial_percent(t*ITERATIONS + i);
-		calc_trial_percent(ITERATIONS*TRIALS);
+		calc_trial_percent_total(ITERATIONS*TRIALS);
 
 //		team_reproduce();
 //		member_reproduce();
