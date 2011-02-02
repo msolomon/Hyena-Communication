@@ -31,7 +31,6 @@ void pop::save_data(int g, int trial) {
 }
 
 void pop::write_fitnesses(void) {
-	cout << "writing fitnesses" << endl;
 	ofstream fit;
 //	float avg_fit = 0;
 	fit.open("fit.txt", ios_base::app);
@@ -56,7 +55,6 @@ void pop::generate(void) {
 		if(the_pop[i] != NULL)
 			delete the_pop[i];
 		the_pop[i] = new team;
-		//TODO:here
 		the_pop[i]->generate();
 	}
 }
@@ -75,7 +73,6 @@ void pop::evaluate_team(int member, int flag, int iteration) {
 			ENV.update_vectors();
 			if (flag) {
 				ENV.draw(helper, iteration);
-				//update();
 			}
 			ENV.move();
 			ENV.evaluate();
@@ -104,7 +101,8 @@ void pop::evolve(int t) {
 		calc_iter_percent_total(ITERATIONS);
 		calc_trial_percent(t*ITERATIONS + i);
 		calc_trial_percent_total(ITERATIONS*TRIALS);
-
+		// only use one method of reproduction
+//		island_reproduce();
 //		team_reproduce();
 //		member_reproduce();
 //		OET1_reproduce();

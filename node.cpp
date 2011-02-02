@@ -169,7 +169,7 @@ vect node::evaluate(agent_info *the_indiv) {
 	case sum:
 		temp = children[0]->evaluate(the_indiv);
 		temp1 = children[1]->evaluate(the_indiv);
-		//temp3 = temp1 + temp2;
+		// TODO: consider writing a += operator to replace this
 		return ((temp) + (temp1));
 	case iflteMAG:
 		temp = children[0]->evaluate(the_indiv);

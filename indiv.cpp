@@ -88,8 +88,6 @@ void indiv::lion_move(void) {
 		sincosf(the_info.nearest_scout.direction, &x1, &y1);
 		x += x1;
 		y += y1;
-//		x += 1.0 * sin(the_info.nearest_scout.direction);
-//		y += 1.0 * cos(the_info.nearest_scout.direction);
 	}
 	/*     else if(the_info.zebra.magnitude < LION_SEES_ZEBRA && the_info.zebra.magnitude > LION_NEAR_ZEBRA){
 	 x-=1.0*sin(the_info.zebra.direction);
@@ -108,6 +106,7 @@ void indiv::move(void) {
 		v = tree->evaluate(&the_info);
 		if (v.magnitude > 1) // trying to move too far
 			v.magnitude = 1;
+		// this bit never gets reached b/c of the lion_move clause above
 		if (type == investigator && v.magnitude >= 0.5)
 			v.magnitude = 0.5;
 		the_info.last_move.direction = v.direction;
