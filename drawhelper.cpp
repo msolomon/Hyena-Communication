@@ -1,6 +1,6 @@
-#include "helper.h"
+#include "drawhelper.h"
 
-Helper::Helper() {
+DrawHelper::DrawHelper() {
 	backgroundBrush = QBrush(QColor(20, 155, 20));
 	QColor hyenaColor = QColor(139, 69, 19);
 	QColor lionColor = QColor(220, 220, 20);
@@ -14,7 +14,7 @@ Helper::Helper() {
 	it = -1;
 }
 
-void Helper::updateGui(){
+void DrawHelper::updateGui(){
 
 	disp_timestep(QString::number(timestep + 1));
 
@@ -44,7 +44,7 @@ void Helper::updateGui(){
 	timestep = timestep % (total_steps * 2);
 }
 
-void Helper::paint(QPainter *painter, QPaintEvent *event) {
+void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 	painter->fillRect(event->rect(), backgroundBrush);
 
 	painter->setPen(zebraPen);

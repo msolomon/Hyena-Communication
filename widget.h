@@ -9,7 +9,7 @@
 
 #include "globals.h"
 
-#include "helper.h"
+#include "drawhelper.h"
 #include "pop.h"
 
 class Helper;
@@ -21,7 +21,7 @@ class Widget: public QWidget {
 
 public:
 	Widget(QWidget *parent);
-	Helper helper;
+	DrawHelper helper;
 	pop p;
 
 public slots:

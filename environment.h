@@ -7,14 +7,14 @@
 #include <cmath>
 
 #include "team.h"
-#include "helper.h"
+#include "drawhelper.h"
 #include "globals.h"
 
 class environment {
 public:
 	environment(void);
 	void update_vectors(void);
-	void draw(Helper*, int);
+	void draw(DrawHelper*, int);
 	void rand_move(void);
 	void move(void);
 	void evaluate();

@@ -45,7 +45,7 @@ void pop::write_fitnesses(void) {
 	}
 }
 
-void pop::generate(Helper *h) {
+void pop::generate(DrawHelper *h) {
 	helper = h;
 	pop::generate();
 }

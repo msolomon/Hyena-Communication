@@ -1,5 +1,5 @@
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef DRAWHELPER_H
+#define DRAWHELPER_H
 
 #include <QObject>
 #include <QBrush>
@@ -11,15 +11,13 @@
 
 #include "globals.h"
 
-// TODO: Rename this class
-
 class QPainter;
 class QPaintEvent;
 
-class Helper : public QObject{
+class DrawHelper : public QObject{
 	Q_OBJECT
 public:
-	Helper();
+	DrawHelper();
 
 public:
 	void paint(QPainter *painter, QPaintEvent *event);

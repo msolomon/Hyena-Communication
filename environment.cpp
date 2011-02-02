@@ -163,7 +163,7 @@ void environment::update_vectors(void) {
 environment::environment(void) {
 }
 
-void environment::draw(Helper* helper, int itera) {
+void environment::draw(DrawHelper* helper, int itera) {
 	helper->iter.enqueue(itera);
 
 	helper->zebras[0].enqueue(QPoint(ZEBRAX, ZEBRAY));

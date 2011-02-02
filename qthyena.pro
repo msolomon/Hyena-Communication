@@ -14,8 +14,8 @@ HEADERS += qthyena.h \
     vect.h \
     indiv.h \
     pop.h \
-    helper.h \
-    widget.h
+    widget.h \
+    drawhelper.h
     
 SOURCES += qthyena.cpp \
     environment.cpp \
@@ -25,9 +25,9 @@ SOURCES += qthyena.cpp \
     pop.cpp \
     team.cpp \
     vect.cpp \
-    helper.cpp \
     widget.cpp \
-    globals.cpp
+    globals.cpp \
+    drawhelper.cpp
     
 FORMS += qthyena.ui
 
