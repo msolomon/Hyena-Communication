@@ -3,8 +3,8 @@ TEMPLATE = app
 TARGET = qthyena
 
 QT += core \
-    gui \
-    opengl
+#    opengl \
+    gui
     
 HEADERS += qthyena.h \
     globals.h \

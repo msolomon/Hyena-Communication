@@ -1,14 +1,16 @@
 #include "node.h"
 
+using namespace std;
+
 void node::set_child(int c, node *child) {
 	children[c] = child;
 }
 
 int node::find_child(node *c) {
-	std::ofstream error;
+	ofstream error;
 	if (operation < num_terms) {
-		error.open("error.txt", std::ios_base::app);
-		error << "error in find_child: terminal" << std::endl;
+		error.open("error.txt", ios_base::app);
+		error << "error in find_child: terminal" << endl;
 		error.close();
 	}
 	int count; // number of children
@@ -21,10 +23,11 @@ int node::find_child(node *c) {
 			return i;
 		}
 	}
-	error.open("error.txt", std::ios_base::app);
+	error.open("error.txt", ios_base::app);
 	error << "error in find_child: child not found " << int(operation)
-			<< std::endl;
+			<< endl;
 	error.close();
+	return -1; // still an error
 }
 
 void node::copy(node *p, node * parn) {
@@ -71,9 +74,9 @@ void node::copy(node *p, node * parn) {
 		}
 		return;
 	default:
-		std::ofstream error;
+		ofstream error;
 		error.open("error.txt");
-		error << "error in copy" << std::endl;
+		error << "error in copy" << endl;
 		error.close();
 	}
 }
@@ -118,15 +121,21 @@ void node::mutate(void) {
 		children[2]->mutate();
 		children[3]->mutate();
 		break;
+	default:
+		ofstream error;
+		error.open("error.txt", ios_base::app);
+		error << "error in mutate: " << operation << endl;
+		error.close();
+		return;
 	}
 }
 
 vect node::evaluate(agent_info *the_indiv) {
 	vect temp, temp1;
 	if (this == NULL) {
-		std::ofstream error;
-		error.open("error.txt", std::ios_base::app);
-		error << "error in evaluate: evaluating null" << std::endl;
+		ofstream error;
+		error.open("error.txt", ios_base::app);
+		error << "error in evaluate: evaluating null" << endl;
 		error.close();
 		return (temp);
 	}
@@ -177,17 +186,17 @@ vect node::evaluate(agent_info *the_indiv) {
 		else
 			return (children[3]->evaluate(the_indiv));
 	case ifVectorZero:
-//		std::cout << children[0];
-//		std::cout << the_indiv;
+//		cout << children[0];
+//		cout << the_indiv;
 		temp = children[0]->evaluate(the_indiv);
 		if (temp.direction == 0 && temp.magnitude == 0)
 			return (children[1]->evaluate(the_indiv));
 		else
 			return (children[2]->evaluate(the_indiv));
 	default:
-		std::ofstream error;
-		error.open("error.txt", std::ios_base::app);
-		error << "error in evaluate: " << operation << std::endl;
+		ofstream error;
+		error.open("error.txt", ios_base::app);
+		error << "error in evaluate: " << operation << endl;
 		error.close();
 		return temp;
 	}
@@ -231,15 +240,22 @@ void node::grow(int max_d,int depth,node *pare){
             children[1]->grow(max_d,depth+1,this);
             children[2] = new node;
             children[2]->grow(max_d,depth+1,this);
+            break;
+        default:
+            ofstream error;
+            error.open("error.txt", ios_base::app);
+            error << "error in grow: " << operation << endl;
+            error.close();
+            return;
         }
     }
 }
 
 int node::calc_size(int &size) {
 	if (this == NULL) {
-		std::ofstream error;
-		error.open("error.txt", std::ios_base::app);
-		error << "error in calc size: evaluating null" << std::endl;
+		ofstream error;
+		error.open("error.txt", ios_base::app);
+		error << "error in calc size: evaluating null" << endl;
 		error.close();
 	}
 	size++;
@@ -271,10 +287,11 @@ int node::calc_size(int &size) {
 		children[2]->calc_size(size);
 		return size;
 	default:
-		std::ofstream error;
-		error.open("error.txt", std::ios_base::app);
-		error << "error in calc size: unknown operator" << std::endl;
+		ofstream error;
+		error.open("error.txt", ios_base::app);
+		error << "error in calc size: unknown operator" << endl;
 		error.close();
+		return size;
 	}
 }
 
@@ -320,9 +337,10 @@ node *node::get_point(int pn, int &current) {
 		}
 		return answer;
 	default:
-		std::ofstream error;
+		ofstream error;
 		error.open("error.txt");
-		error << "error in get point" << std::endl;
+		error << "error in get point" << endl;
 		error.close();
 	}
+	return this; // error
 }

@@ -30,7 +30,7 @@ void pop::save_data(int g, int trial) {
 
 void pop::write_fitnesses(void) {
 	std::ofstream fit;
-	float avg_fit = 0;
+//	float avg_fit = 0;
 	fit.open("fit.txt", std::ios_base::app);
 	for (int i = 0; i < ITERATIONS; i++) {
 		fit << i << " ";

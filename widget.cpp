@@ -29,6 +29,7 @@ void Widget::paintEvent(QPaintEvent *event) {
 }
 
 void Widget::resizeEvent(QResizeEvent *event){
+	Q_UNUSED(event); // ignore the fact that we ignore the resize event
 	// TODO: do this in a layout. harder than it sounds in QT
 	QSize s = size();
 	// ensure a proportional widget size
