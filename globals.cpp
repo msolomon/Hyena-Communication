@@ -1,4 +1,5 @@
 #include "globals.h"
+
 #ifdef _WIN32
 void sincosf(float x, float *s, float *c){
 

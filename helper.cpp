@@ -1,7 +1,4 @@
-#include <QtGui>
 #include "helper.h"
-#include <QList>
-#include <QPoint>
 
 Helper::Helper() {
 	backgroundBrush = QBrush(QColor(20, 155, 20));
@@ -35,7 +32,7 @@ void Helper::updateGui(){
 	timestep = timestep % (total_steps * 2);
 }
 
-void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed) {
+void Helper::paint(QPainter *painter, QPaintEvent *event) {
 	painter->fillRect(event->rect(), backgroundBrush);
 
 	painter->setPen(zebraPen);

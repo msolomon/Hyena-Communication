@@ -5,10 +5,8 @@ void environment::set_up(team *a) {
 }
 
 void environment::evaluate(void) {
-	float temp_fit;
 	float tempx, tempy;
 	float radius;
-	int erase_flag = 0;
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		tempx = agents->scouts[i].getX();
 		tempy = agents->scouts[i].getY();

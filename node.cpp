@@ -1,4 +1,3 @@
-
 #include "node.h"
 
 void node::set_child(int c, node *child) {
@@ -190,6 +189,7 @@ vect node::evaluate(agent_info *the_indiv) {
 		error.open("error.txt", std::ios_base::app);
 		error << "error in evaluate: " << operation << std::endl;
 		error.close();
+		return temp;
 	}
 }
 

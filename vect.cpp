@@ -1,7 +1,5 @@
-#include <cmath>
-#include <cstdlib>
-
 #include "vect.h"
+// Must include here because vect is used in globals.h
 #include "globals.h"
 
 vect::vect() {

@@ -3,10 +3,11 @@
 
 #include <QObject>
 #include <QBrush>
-#include <QFont>
 #include <QPen>
 #include <QPoint>
 #include <QQueue>
+#include <QtGui>
+#include <QList>
 
 #include "globals.h"
 
@@ -19,7 +20,7 @@ public:
 	Helper();
 
 public:
-	void paint(QPainter *painter, QPaintEvent *event, int elapsed);
+	void paint(QPainter *painter, QPaintEvent *event);
 	void updateGui();
 	QQueue<QPoint> hyenas[NUM_HYENAS];
 	QQueue<QPoint> lions[NUM_LIONS];

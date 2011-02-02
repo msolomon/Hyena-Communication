@@ -82,7 +82,6 @@ void pop::evaluate_team(int member, int flag, int iteration) {
 }
 
 void pop::evolve(int t) {
-	char str[100];
 	for (int i = 0; i < POP_SIZE; i++) {
 		evaluate_team(i, 0);
 	}
@@ -224,7 +223,7 @@ void pop::oet_generational() {
 	pop temp;
 	temp.generate();
 	for (int i = 0; i < POP_SIZE; i = i + 2) {
-		int p1, p2, r1, r2;
+		int p1, p2;
 		// select teams    
 		p1 = tourn_select(1);
 		do {
@@ -305,7 +304,6 @@ int pop::member_select(int c, int member, agent_type t) {
 	int best = 0, current;
 	float current_fit;
 	float best_fit;
-	int start = 0, end;
 	best = rand() % POP_SIZE;
 	if (t == scout) // scout
 		best_fit = the_pop[best]->get_scout_fit(member);
@@ -336,7 +334,6 @@ int pop::tourn_select(int c) { // or worst if c = -1
 	int best = 0, current;
 	float current_fit;
 	float best_fit;
-	int start = 0, end;
 	best = rand() % POP_SIZE;
 	best_fit = the_pop[best]->get_avg_fit();
 	for (int i = 1; i < TOURNAMENT_SIZE; i++) {
