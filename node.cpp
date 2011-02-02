@@ -122,25 +122,21 @@ void node::mutate(void) {
 	}
 }
 
-/*vect node::evaluate(agent_info *the_indiv) {
-	vect *temp, *temp1;
-//	temp.magnitude = 0;
-//	temp.direction = 0;
+vect node::evaluate(agent_info *the_indiv) {
+	vect temp, temp1;
 	if (this == NULL) {
 		std::ofstream error;
 		error.open("error.txt", std::ios_base::app);
 		error << "error in evaluate: evaluating null" << std::endl;
 		error.close();
-		temp = new vect();
-		return (*temp);
+		return (temp);
 	}
 
 	switch (operation) {
 	case num_scouts:
-		temp = new vect();
-		temp->direction = PI;
-		temp->magnitude = the_indiv->num_scouts; // only magnitude matters
-		return *temp;
+		temp.direction = PI;
+		temp.magnitude = the_indiv->num_scouts; // only magnitude matters
+		return temp;
 	case zebra:
 		return (the_indiv-> zebra);
 	case nearest_scout:
@@ -148,46 +144,44 @@ void node::mutate(void) {
 	case nearest_invest:
 		return (the_indiv->nearest_invest);
 	case randm:
-		temp = new vect();
-		temp->random();
-		return *temp;
+		temp.random();
+		return temp;
 	case north:
-		temp = new vect();
-		temp->direction = PI;
-		temp->magnitude = 1;
-		return (*temp);
+		temp.direction = PI;
+		temp.magnitude = 1;
+		return (temp);
 	case last_move:
 		return (the_indiv->last_move);
 	case constant:
 		return (the_const);
 	case invert:
-		temp = &children[0]->evaluate(the_indiv);
-		temp->direction += 3.1417;
-		return (*temp);
+		temp = children[0]->evaluate(the_indiv);
+		temp.direction += 3.1417;
+		return (temp);
 	case sum:
-		temp = &children[0]->evaluate(the_indiv);
-		temp1 = &children[1]->evaluate(the_indiv);
+		temp = children[0]->evaluate(the_indiv);
+		temp1 = children[1]->evaluate(the_indiv);
 		//temp3 = temp1 + temp2;
-		return ((*temp) + (*temp1));
+		return ((temp) + (temp1));
 	case iflteMAG:
-		temp = &children[0]->evaluate(the_indiv);
-		temp1 = &children[1]->evaluate(the_indiv);
-		if (temp->magnitude <= temp1->magnitude)
+		temp = children[0]->evaluate(the_indiv);
+		temp1 = children[1]->evaluate(the_indiv);
+		if (temp.magnitude <= temp1.magnitude)
 			return (children[2]->evaluate(the_indiv));
 		else
 			return (children[3]->evaluate(the_indiv));
 	case iflteCLOCKWISE:
-		temp = &children[0]->evaluate(the_indiv);
-		temp1 = &children[1]->evaluate(the_indiv);
-		if (temp->direction <= temp1->direction)
+		temp = children[0]->evaluate(the_indiv);
+		temp1 = children[1]->evaluate(the_indiv);
+		if (temp.direction <= temp1.direction)
 			return (children[2]->evaluate(the_indiv));
 		else
 			return (children[3]->evaluate(the_indiv));
 	case ifVectorZero:
 //		std::cout << children[0];
 //		std::cout << the_indiv;
-		temp = &children[0]->evaluate(the_indiv);
-		if (temp->direction == 0 && temp->magnitude == 0)
+		temp = children[0]->evaluate(the_indiv);
+		if (temp.direction == 0 && temp.magnitude == 0)
 			return (children[1]->evaluate(the_indiv));
 		else
 			return (children[2]->evaluate(the_indiv));
@@ -197,78 +191,7 @@ void node::mutate(void) {
 		error << "error in evaluate: " << operation << std::endl;
 		error.close();
 	}
-};
-*/
-
-vect node::evaluate(agent_info *the_indiv){
-    vect temp,temp1,temp2,temp3;
-    temp.magnitude = 0;
-    temp.direction = 0;
-    if(this==NULL){
-        std::ofstream error;
-        error.open("error.txt",std::ios_base::app);
-        error << "error in evaluate: evaluating null" << std::endl;
-        error.close();
-        return(temp);
-    }
-    switch (operation){
-    case num_scouts:
-        temp.direction = PI;
-        temp.magnitude = the_indiv->num_scouts; // only magnitude matters
-        return temp;
-    case zebra:
-        return(the_indiv-> zebra);
-    case nearest_scout:
-        return(the_indiv->nearest_scout);
-    case nearest_invest:
-        return(the_indiv->nearest_invest);
-    case randm:
-        temp.random();
-        return temp;
-    case north:
-        temp.direction = PI;
-        temp.magnitude = 1;
-        return(temp);
-    case last_move:
-        return(the_indiv->last_move);
-    case constant:
-        return(the_const);
-    case invert:
-        temp = children[0]->evaluate(the_indiv);
-        temp.direction += 3.1417;
-        return(temp);
-    case sum:
-        temp1 = children[0]->evaluate(the_indiv);
-        temp2 = children[1]->evaluate(the_indiv);
-        temp3 = temp1+temp2;
-        return temp3;
-    case iflteMAG:
-        temp1 = children[0]->evaluate(the_indiv);
-        temp2 = children[1]->evaluate(the_indiv);
-        if(temp1.magnitude <= temp2.magnitude)
-            return(children[2]->evaluate(the_indiv));
-        else
-            return(children[3]->evaluate(the_indiv));
-    case iflteCLOCKWISE:
-        temp1 = children[0]->evaluate(the_indiv);
-        temp2 = children[1]->evaluate(the_indiv);
-        if(temp1.direction <= temp2.direction)
-            return(children[2]->evaluate(the_indiv));
-        else
-            return(children[3]->evaluate(the_indiv));
-    case ifVectorZero:
-        temp1 = children[0]->evaluate(the_indiv);
-        if(temp1.direction == 0 && temp1.magnitude == 0)
-            return(children[1]->evaluate(the_indiv));
-        else
-            return(children[2]->evaluate(the_indiv));
-    default:
-        std::ofstream error;
-        error.open("error.txt",std::ios_base::app);
-        error << "error in evaluate" << std::endl;
-        error.close();
-    }
-};
+}
 
 void node::grow(int max_d,int depth,node *pare){
     the_const.random();
@@ -312,66 +235,6 @@ void node::grow(int max_d,int depth,node *pare){
     }
 }
 
-
-/*
-void node::grow(int max_d, int depth, node *pare) {
-	the_const.random();
-	parent = pare;
-	for (int i = 0; i < 4; i++)
-		children[i] = NULL;
-	if (depth == max_d)
-		operation = ops(rand() % num_terms);
-	else {
-		operation = ops(num_terms + rand() % num_non_terms);
-		switch (operation) {
-		case invert:
-			children[0] = new node;
-			//replace(children, 0);
-			children[0]->grow(max_d, depth + 1, this);
-			break;
-		case sum:
-			children[0] = new node;
-			//  replace(children, 0);
-			children[0]->grow(max_d, depth + 1, this);
-			children[1] = new node;
-			//replace(children, 1);
-			children[1]->grow(max_d, depth + 1, this);
-			break;
-		case iflteMAG:
-		case iflteCLOCKWISE:
-			children[0] = new node;
-			//  replace(children, 0);
-			children[0]->grow(max_d, depth + 1, this);
-			children[1] = new node;
-			//replace(children, 1);
-			children[1]->grow(max_d, depth + 1, this);
-			children[2] = new node;
-			//replace(children, 2);
-			children[2]->grow(max_d, depth + 1, this);
-			children[3] = new node;
-			//replace(children, 3);
-			children[3]->grow(max_d, depth + 1, this);
-			break;
-		case ifVectorZero:
-			children[0] = new node;
-			//  replace(children, 0);
-			children[0]->grow(max_d, depth + 1, this);
-			children[1] = new node;
-			//replace(children, 1);
-			children[1]->grow(max_d, depth + 1, this);
-			children[2] = new node;
-			//replace(children, 2);
-			children[2]->grow(max_d, depth + 1, this);
-		}
-	}
-}
-*/
-void node::replace(node *arr[], int idx) {
-	if (arr[idx] != NULL)
-		delete arr[idx];
-	arr[idx] = new node;
-}
-
 int node::calc_size(int &size) {
 	if (this == NULL) {
 		std::ofstream error;
@@ -413,7 +276,7 @@ int node::calc_size(int &size) {
 		error << "error in calc size: unknown operator" << std::endl;
 		error.close();
 	}
-};
+}
 
 node::node(void) {
 	operation = ops(rand() % num_terms);

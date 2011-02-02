@@ -87,7 +87,6 @@ void pop::evolve(int t) {
 		evaluate_team(i, 0);
 	}
 	for (int i = 0; i < ITERATIONS; i++) {
-		//        get_fitnesses();
 //		std::cout << t << " " << i << std::endl;
 		next_calc_iteration(QString::number(i+1));
 		calc_iteration_total(QString::number(ITERATIONS));

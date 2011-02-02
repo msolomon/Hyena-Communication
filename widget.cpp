@@ -30,8 +30,6 @@
 using namespace std;
 
 Widget::Widget(QWidget *parent) : QWidget(parent){
-	//setFixedSize(FIELDX, FIELDY);
-	//connect((QObject*) &p, SIGNAL(update()), this, SLOT(animate()));
 }
 
 void Widget::runTrial(){
@@ -40,10 +38,7 @@ void Widget::runTrial(){
           timer.start(DRAW_MS);
       }
       connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
-      // TODO: make this increment
       QtConcurrent::run(&p, &pop::evolve, 0);
-      //p.evolve(0);
-
 }
 
 void Widget::animate() {

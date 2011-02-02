@@ -18,7 +18,6 @@ public:
 	int select_best_team(int);
 	int tourn_select(int, agent_type);
 	int tourn_select(int);
-	//     void get_fitnesses(void);
 	void write_fitnesses(void);
 	void save_data(int, int);
 	void evolve(int);

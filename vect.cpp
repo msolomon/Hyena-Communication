@@ -10,7 +10,6 @@ vect::vect() {
 }
 
 vect vect::operator=(const vect v2) {
-//	vect answer;
 	magnitude = v2.magnitude;
 	direction = v2.direction;
 	return *this;

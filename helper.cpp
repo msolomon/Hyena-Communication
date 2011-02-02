@@ -15,8 +15,7 @@ Helper::Helper() {
 
 	timestep = 0;
 }
-#include <iostream>
-using namespace std;
+
 void Helper::updateGui(){
 
 	disp_timestep(QString::number(timestep + 1));
@@ -25,15 +24,15 @@ void Helper::updateGui(){
 
 	disp_timestep_total(QString::number(total_steps));
 
-	int curr_iteration = iter.dequeue() + EVALUATE_EVERY;
-	disp_iteration(QString::number(curr_iteration));
+	int curr_iteration = iter.dequeue();
+	disp_iteration(QString::number(curr_iteration + EVALUATE_EVERY));
 	disp_iteration_total(QString::number(ITERATIONS));
 
-	disp_percent(curr_iteration * total_steps + timestep * EVALUATE_EVERY);
-	disp_percent_total((ITERATIONS) * total_steps + total_steps - 1);
+	disp_percent(curr_iteration * total_steps * 2 + timestep * EVALUATE_EVERY);
+	disp_percent_total((ITERATIONS) * total_steps * 2 - EVALUATE_EVERY);
 
 	timestep++;
-	timestep = timestep % 25;
+	timestep = timestep % (total_steps * 2);
 }
 
 void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed) {

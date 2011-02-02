@@ -45,14 +45,12 @@ void team::generate(void) {
 void team::copy(team *p2) {
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		scouts[i].clear();
-//		delete &scouts[i];
 		scouts[i] = (p2->scouts[i]);
 		scouts[i].set_type(scout);
 		scout_fits[i] = p2->scout_fits[i];
 	}
 	for (int i = 0; i < NUM_LIONS; i++) {
 		invests[i].clear();
-//		delete &invests[i];
 		invest_fits[i] = p2->invest_fits[i];
 		invests[i] = (p2->invests[i]);
 		invests[i].set_type(investigator);
