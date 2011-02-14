@@ -98,9 +98,9 @@ void pop::evolve(int t) {
 		calc_iter(QString::number(i+1));
 		calc_iter_total(QString::number(ITERATIONS));
 		calc_iter_percent(i);
-		calc_iter_percent_total(ITERATIONS);
-		calc_trial_percent(t*ITERATIONS + i);
-		calc_trial_percent_total(ITERATIONS*TRIALS);
+		calc_iter_percent_total(ITERATIONS - 1);
+		calc_trial_percent(t * ITERATIONS + i);
+		calc_trial_percent_total(ITERATIONS * TRIALS - 1);
 		// only use one method of reproduction
 //		island_reproduce();
 //		team_reproduce();

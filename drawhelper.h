@@ -16,10 +16,9 @@ class QPaintEvent;
 
 class DrawHelper : public QObject{
 	Q_OBJECT
-public:
-	DrawHelper();
 
 public:
+	DrawHelper();
 	void paint(QPainter *painter, QPaintEvent *event);
 	void updateGui();
 	QQueue<QPoint> hyenas[NUM_HYENAS];
@@ -32,6 +31,7 @@ public:
 private:
 	QPen hyenaPen;
 	QPen lionPen;
+	QPen lionRadPen;
 	QPen zebraPen;
 	QBrush backgroundBrush;
 	int timestep;

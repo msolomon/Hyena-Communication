@@ -11,13 +11,13 @@ void environment::evaluate(void) {
 		tempx = agents->scouts[i].getX();
 		tempy = agents->scouts[i].getY();
 		radius = distance(tempx - ZEBRAX, tempy - ZEBRAY);
-		agents->scouts[i].changeFit(1.0 / (1.0 + radius)); // near zebra
+		agents->scouts[i].changeFit(1.0 / (1.0 + radius * radius)); // near zebra
 		agents->scouts[i].inc_dist_to_zebra(radius);
 		for (int j = 0; j < NUM_LIONS; j++) {
 			radius = distance(tempx - agents->invests[j].getX(),
 							  tempy - agents->invests[j].getY());
 			if (radius < LION_ATTACK_RADIUS) { // not too close to lions/investigators
-				//      agents->scouts[i].changeFit(3*(radius-LION_ATTACK_RADIUS)); // near lion
+//					  agents->scouts[i].changeFit(3*(radius-LION_ATTACK_RADIUS)); // near lion
 				agents->scouts[i].inc_lion_attacks();
 			}
 		}

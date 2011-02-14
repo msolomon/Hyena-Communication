@@ -8,6 +8,7 @@ DrawHelper::DrawHelper() {
 
 	hyenaPen = QPen(QBrush(hyenaColor), .5, Qt::SolidLine, Qt::RoundCap);
 	lionPen = QPen(QBrush(lionColor), 1, Qt::SolidLine, Qt::RoundCap);
+	lionRadPen = QPen(QBrush(lionColor), LION_ATTACK_RADIUS, Qt::SolidLine, Qt::RoundCap);
 	zebraPen = QPen(QBrush(zebraColor), 1.5, Qt::SolidLine, Qt::RoundCap);
 
 	timestep = 0;
@@ -60,7 +61,12 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 	for (int i = 0; i < NUM_LIONS; i++) {
 		if(!lions[i].isEmpty()){
 			QPoint l = lions[i].dequeue();
+			painter->setPen(lionPen);
 			painter->drawPoint(l);
+			painter->setPen(lionRadPen);
+			painter->setOpacity(.2);
+			painter->drawPoint(l);
+			painter->setOpacity(1);
 		}
 	}
 

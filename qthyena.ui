@@ -393,28 +393,12 @@
   <connection>
    <sender>beginButton</sender>
    <signal>clicked()</signal>
-   <receiver>beginButton</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>206</x>
-     <y>440</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>206</x>
-     <y>440</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>beginButton</sender>
-   <signal>clicked()</signal>
    <receiver>widget</receiver>
    <slot>runTrial()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>206</x>
-     <y>440</y>
+     <x>582</x>
+     <y>356</y>
     </hint>
     <hint type="destinationlabel">
      <x>199</x>
