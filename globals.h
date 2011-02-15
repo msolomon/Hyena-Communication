@@ -22,7 +22,7 @@ const int LION_HYENA_RADIUS = 5;
 
 const int ZEBRAX = X / 2;
 const int ZEBRAY = Y / 2;
-// TODO: Figure out how many/where zebras there actually are
+const float CALLING_RANGE = X / 4;
 
 const int POP_SIZE = 80;
 const int NUM_HYENAS = 20;
@@ -74,7 +74,7 @@ inline float fastSqrt_2(const float x){
 inline float sq_rt(float a){
 	//return sqrt(a);
 	return fastSqrt_2(a);
-	return a;
+//	return a;
 }
 
 inline float distance(float x, float y){

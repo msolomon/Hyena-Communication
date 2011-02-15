@@ -13,7 +13,7 @@ void Widget::runTrial(){
 }
 
 void Widget::animate() {
-		if(!helper.zebras[0].isEmpty()){
+		if(!helper.hyenas[0].isEmpty()){
 			helper.updateGui();
 			repaint();
 	}

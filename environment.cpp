@@ -100,7 +100,7 @@ void environment::update_vectors(void) {
 		agents->scouts[i].set_nearest_invest(temp);
 		//zebra     
 		temp.magnitude = distance(agentx - ZEBRAX, agenty - ZEBRAY);
-		if (temp.magnitude < X / 4) { // min range to zebra
+		if (temp.magnitude < CALLING_RANGE) { // min range to zebra
 			temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
 			agents->scouts[i].set_calling(true);
 		} else {
@@ -165,8 +165,6 @@ environment::environment(void) {
 
 void environment::draw(DrawHelper* helper, int itera) {
 	helper->iter.enqueue(itera);
-
-	helper->zebras[0].enqueue(QPoint(ZEBRAX, ZEBRAY));
 
 	for (int i = 0; i < NUM_LIONS; i++) {
 		helper->lions[i].enqueue(
