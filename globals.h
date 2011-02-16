@@ -35,7 +35,7 @@ const int ITERATIONS = 51;
 const int TEAM_SIZE = 3;
 const int TRIALS = 1;
 const int GROW_DEPTH = 4;
-const int EVALUATE_EVERY = 3;
+const int EVALUATE_EVERY = 5;
 const bool DRAW = true;
 const int DRAW_MS = 30;
 
@@ -72,19 +72,13 @@ inline float fastSqrt_2(const float x){
 }
 
 inline float sq_rt(float a){
-	//return sqrt(a);
-	return fastSqrt_2(a);
+    return sqrt(a);
+//	return fastSqrt_2(a);
 //	return a;
 }
 
 inline float distance(float x, float y){
 	return sq_rt(x * x + y * y);
-//	return sq_rt(pow(x, 2) + pow(y, 2));
-//	return fabs(x) + fabs(y);
 }
-
-#ifdef _WIN32
-void sincosf(float x, float *s, float *c);
-#endif
 
 #endif

@@ -15,15 +15,15 @@ vect vect::operator=(const vect v2) {
 
 vect vect::operator+(const vect v2) const {
 	vect answer;
-	float x1, x2, y1, y2;
-	sincosf(direction, &x1, &y1);
-	x1 *= magnitude;
-	y1 *= magnitude;
-	sincosf(v2.direction, &x2, &y2);
-	x2 *= v2.magnitude;
-	y2 *= v2.magnitude;
-	answer.magnitude = distance(x1 + x2, y1 + y2);
-	answer.direction = atan2(x1 + x2, y1 + y2);
+	float x, y;
+	x = sin(direction) * magnitude;
+	y = cos(direction) * magnitude;
+
+	x += sin(v2.direction) * v2.magnitude;
+	y += cos(v2.direction) * v2.magnitude;
+
+	answer.magnitude = distance(x, y);
+	answer.direction = atan2(x, y);
 	return answer;
 }
 
