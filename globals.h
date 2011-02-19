@@ -23,6 +23,7 @@ const int LION_HYENA_RADIUS = 5;
 const int ZEBRAX = X / 2;
 const int ZEBRAY = Y / 2;
 const float CALLING_RANGE = X / 4;
+const float CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
 
 const int POP_SIZE = 80;
 const int NUM_HYENAS = 20;
@@ -32,12 +33,12 @@ const int TIME_STEPS = 50;
 const int NUM_TESTS = 1;
 const int TOURNAMENT_SIZE = 5;
 const int ITERATIONS = 51;
-const int TEAM_SIZE = 3;
+//const int TEAM_SIZE = 3;
 const int TRIALS = 1;
 const int GROW_DEPTH = 4;
-const int EVALUATE_EVERY = 5;
+const int EVALUATE_EVERY = 3;
 const bool DRAW = true;
-const int DRAW_MS = 30;
+const int DRAW_MS = 50;
 
 //const int INTEREST_PERCENT = 0;
 

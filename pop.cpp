@@ -8,42 +8,42 @@ pop::pop(){
     }
 }
 
-void pop::save_data(int g, int trial) {
-	float avg_fit = 0;
-	for (int i = 0; i < POP_SIZE; i++) {
-		avg_fit += the_pop[i]->get_avg_fit();
-	}
-	data[0 + trial * (TEAM_SIZE * 2 + 2)][g] = avg_fit / POP_SIZE;
-	int best = select_best_team(1);
-	data[1 + trial * (TEAM_SIZE * 2 + 2)][g] = the_pop[best]->get_avg_fit();
-	data[2 + trial * (TEAM_SIZE * 2 + 2)][g]
-			= the_pop[best]->get_avg_dist_to_zebra();
-	data[3 + trial * (TEAM_SIZE * 2 + 2)][g]
-			= the_pop[best]->get_avg_lion_attacks();
-	for (int t = 0; t < TEAM_SIZE; t++) {
-		data[4 + t + trial * (TEAM_SIZE * 2 + 2)][g]
-				= the_pop[best]->get_scout_fit(t);
-		data[4 + t + TEAM_SIZE + trial * (TEAM_SIZE * 2 + 2)][g]
-				= the_pop[best]->get_invest_fit(t);
-	}
-	pop_bestteam = best;
-	data[4][g] = the_pop[pop_bestteam]->get_avg_fit();
-}
-
-void pop::write_fitnesses(void) {
-	ofstream fit;
+//void pop::save_data(int g, int trial) {
 //	float avg_fit = 0;
-	fit.open("fit.txt", ios_base::app);
-	for (int i = 0; i < ITERATIONS; i++) {
-		fit << i << " ";
-		for (int j = 0; j < (TEAM_SIZE * 2 + 4) * TRIALS; j++) {
-			if (j % (TEAM_SIZE * 2 + 2) == 0)
-				fit << "  :  ";
-			fit << data[j][i] << " ";
-		}
-		fit << endl;
-	}
-}
+//	for (int i = 0; i < POP_SIZE; i++) {
+//		avg_fit += the_pop[i]->get_avg_fit();
+//	}
+//	data[0 + trial * (TEAM_SIZE * 2 + 2)][g] = avg_fit / POP_SIZE;
+//	int best = select_best_team(1);
+//	data[1 + trial * (TEAM_SIZE * 2 + 2)][g] = the_pop[best]->get_avg_fit();
+//	data[2 + trial * (TEAM_SIZE * 2 + 2)][g]
+//			= the_pop[best]->get_avg_dist_to_zebra();
+//	data[3 + trial * (TEAM_SIZE * 2 + 2)][g]
+//			= the_pop[best]->get_avg_lion_attacks();
+//	for (int t = 0; t < TEAM_SIZE; t++) {
+//		data[4 + t + trial * (TEAM_SIZE * 2 + 2)][g]
+//				= the_pop[best]->get_scout_fit(t);
+//		data[4 + t + TEAM_SIZE + trial * (TEAM_SIZE * 2 + 2)][g]
+//				= the_pop[best]->get_invest_fit(t);
+//	}
+//	pop_bestteam = best;
+//	data[4][g] = the_pop[pop_bestteam]->get_avg_fit();
+//}
+
+//void pop::write_fitnesses(void) {
+//	ofstream fit;
+////	float avg_fit = 0;
+//	fit.open("fit.txt", ios_base::app);
+//	for (int i = 0; i < ITERATIONS; i++) {
+//		fit << i << " ";
+//		for (int j = 0; j < (TEAM_SIZE * 2 + 4) * TRIALS; j++) {
+//			if (j % (TEAM_SIZE * 2 + 2) == 0)
+//				fit << "  :  ";
+//			fit << data[j][i] << " ";
+//		}
+//		fit << endl;
+//	}
+//}
 
 void pop::generate(DrawHelper *h) {
 	helper = h;
@@ -102,20 +102,20 @@ void pop::evolve(int t) {
 		calc_trial_percent(t * ITERATIONS + i);
 		calc_trial_percent_total(ITERATIONS * TRIALS - 1);
 		// only use one method of reproduction
-//		island_reproduce();
+//              island_reproduce();
 //		team_reproduce();
 //		member_reproduce();
 //		OET1_reproduce();
-		oet_generational();
-		save_data(i, t);
+                oet_generational();
+//		save_data(i, t);
 		if (i % EVALUATE_EVERY == 0) {
 			int bestTeam;
 			bestTeam = select_best_team(1);
 			evaluate_team(bestTeam, 1, i);
 		}
 	}
-	if (t + 1 == TRIALS)
-		write_fitnesses();
+//	if (t + 1 == TRIALS)
+//		write_fitnesses();
 }
 
 void pop::OET1_reproduce() {
@@ -163,72 +163,74 @@ void pop::OET1_reproduce() {
 	evaluate_team(team_replace2, 0);
 }
 
+/*
 void pop::island_reproduce() {
-	int ps1, pi1, rs1, ri1;
-	int ps2, pi2, rs2, ri2;
-	// select scouts   
-	for (int i = 0; i < TEAM_SIZE; i++) {
-		ps1 = member_select(1, i, scout); //
-		do {
-			rs1 = member_select(-1, i, scout);
-		} while (ps1 == rs1);
-		do {
-			ps2 = member_select(1, i, scout);
-		} while (ps2 == ps1 || ps2 == rs1);
-		do {
-			rs2 = member_select(-1, i, scout);
-		} while (rs2 == rs1 || rs2 == ps1 || rs2 == ps2);
-		//select investigators
-		pi1 = member_select(1, i, investigator);
-		do {
-			ri1 = member_select(-1, i, investigator);
-		} while (ri1 == pi1);
-		do {
-			pi2 = member_select(1, i, investigator);
-		} while (pi2 == pi1 || pi2 == ri1);
-		do {
-			ri2 = member_select(-1, i, investigator);
-		} while (ri2 == ri1 || ri2 == pi1 || ri2 == pi2);
-		the_pop[rs1]->copy(the_pop[ps1], i, scout); // scout
-		the_pop[rs2]->copy(the_pop[ps2], i, scout); // scout
-		the_pop[ri1]->copy(the_pop[pi1], i, investigator); // investigator
-		the_pop[ri2]->copy(the_pop[pi2], i, investigator); // investigator
-		the_pop[rs1]->calc_size();
-		the_pop[ri1]->calc_size();
-		the_pop[rs2]->calc_size();
-		the_pop[ri2]->calc_size();
-		the_pop[rs1]->xOver(the_pop[rs2], i, scout);
-		the_pop[ri1]->xOver(the_pop[ri2], i, investigator);
-		the_pop[rs1]->mutate(i, scout);
-		the_pop[ri1]->mutate(i, investigator);
-		evaluate_team(rs1, 0);
-		evaluate_team(ri1, 0);
-	}
+        int ps1, pi1, rs1, ri1;
+        int ps2, pi2, rs2, ri2;
+        // select scouts
+        for (int i = 0; i < TEAM_SIZE; i++) {
+                ps1 = member_select(1, i, scout); //
+                do {
+                        rs1 = member_select(-1, i, scout);
+                } while (ps1 == rs1);
+                do {
+                        ps2 = member_select(1, i, scout);
+                } while (ps2 == ps1 || ps2 == rs1);
+                do {
+                        rs2 = member_select(-1, i, scout);
+                } while (rs2 == rs1 || rs2 == ps1 || rs2 == ps2);
+                //select investigators
+                pi1 = member_select(1, i, investigator);
+                do {
+                        ri1 = member_select(-1, i, investigator);
+                } while (ri1 == pi1);
+                do {
+                        pi2 = member_select(1, i, investigator);
+                } while (pi2 == pi1 || pi2 == ri1);
+                do {
+                        ri2 = member_select(-1, i, investigator);
+                } while (ri2 == ri1 || ri2 == pi1 || ri2 == pi2);
+                the_pop[rs1]->copy(the_pop[ps1], i, scout); // scout
+                the_pop[rs2]->copy(the_pop[ps2], i, scout); // scout
+                the_pop[ri1]->copy(the_pop[pi1], i, investigator); // investigator
+                the_pop[ri2]->copy(the_pop[pi2], i, investigator); // investigator
+                the_pop[rs1]->calc_size();
+                the_pop[ri1]->calc_size();
+                the_pop[rs2]->calc_size();
+                the_pop[ri2]->calc_size();
+                the_pop[rs1]->xOver(the_pop[rs2], i, scout);
+                the_pop[ri1]->xOver(the_pop[ri2], i, investigator);
+                the_pop[rs1]->mutate(i, scout);
+                the_pop[ri1]->mutate(i, investigator);
+                evaluate_team(rs1, 0);
+                evaluate_team(ri1, 0);
+        }
 }
 
 void pop::member_reproduce() {
-	int ps1, pi1, rs1, ri1;
-	// select members   
-	for (int i = 0; i < TEAM_SIZE; i++) {
-		ps1 = member_select(1, i, scout); // 0 == scout
-		do {
-			rs1 = member_select(-1, i, scout); // 0== scout
-		} while (ps1 == rs1);
-		pi1 = member_select(1, i, investigator); // -1 == investigator
-		do {
-			ri1 = member_select(-1, i, investigator);
-		} while (ri1 == pi1);
-		the_pop[rs1]->copy(the_pop[ps1], i, scout); // scout
-		the_pop[ri1]->copy(the_pop[pi1], i, investigator); // investigator
-		the_pop[rs1]->calc_size();
-		the_pop[ri1]->calc_size();
-		//         the_pop[r1]->xOver(the_pop[r2]);
-		the_pop[rs1]->mutate(i, scout);
-		the_pop[ri1]->mutate(i, investigator);
-		evaluate_team(rs1, 0);
-		evaluate_team(ri1, 0);
-	}
+        int ps1, pi1, rs1, ri1;
+        // select members
+        for (int i = 0; i < TEAM_SIZE; i++) {
+                ps1 = member_select(1, i, scout); // 0 == scout
+                do {
+                        rs1 = member_select(-1, i, scout); // 0== scout
+                } while (ps1 == rs1);
+                pi1 = member_select(1, i, investigator); // -1 == investigator
+                do {
+                        ri1 = member_select(-1, i, investigator);
+                } while (ri1 == pi1);
+                the_pop[rs1]->copy(the_pop[ps1], i, scout); // scout
+                the_pop[ri1]->copy(the_pop[pi1], i, investigator); // investigator
+                the_pop[rs1]->calc_size();
+                the_pop[ri1]->calc_size();
+                //         the_pop[r1]->xOver(the_pop[r2]);
+                the_pop[rs1]->mutate(i, scout);
+                the_pop[ri1]->mutate(i, investigator);
+                evaluate_team(rs1, 0);
+                evaluate_team(ri1, 0);
+        }
 }
+*/
 
 void pop::oet_generational() {
 	pop temp;

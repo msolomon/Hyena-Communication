@@ -24,7 +24,7 @@ enum ops {
 };
 
 const int num_terms = 8;
-const int num_non_terms = 4;//5;
+const int num_non_terms = 5;
 
 class node {
 public:

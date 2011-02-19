@@ -18,8 +18,9 @@ public:
 	int select_best_team(int);
 	int tourn_select(int, agent_type);
 	int tourn_select(int);
-	void write_fitnesses(void);
-	void save_data(int, int);
+        // TODO: fix TEAM_SIZE and re-enable calls to write_fitnesses and save_data
+//	void write_fitnesses(void);
+//	void save_data(int, int);
 	void evolve_repeat();
 	void evolve(int);
 	void evaluate_agent(int, int, int);
@@ -36,7 +37,7 @@ private:
 	//    float fitnesses_investigators[POP_SIZE];
 	environment ENV;
 	team *the_pop[POP_SIZE];
-	float data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
+//        float data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
 	float pop_bestfitness;
 	int pop_bestteam;
 	DrawHelper *helper;
