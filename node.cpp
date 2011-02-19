@@ -44,6 +44,7 @@ void node::copy(node *p, node * parn) {
 	case nearest_scout:
 	case zebra:
 	case nearest_invest:
+	case nearest_calling:
 	case randm:
 	case north:
 	case last_move:
@@ -98,6 +99,7 @@ void node::mutate(void) {
 	switch (operation) {
 	case nearest_scout:
 	case nearest_invest:
+	case nearest_calling:
 	case zebra:
 	case randm:
 	case north:
@@ -151,6 +153,8 @@ vect node::evaluate(agent_info *the_indiv) {
 		return (the_indiv->nearest_scout);
 	case nearest_invest:
 		return (the_indiv->nearest_invest);
+	case nearest_calling:
+		return (the_indiv->nearest_calling);
 	case randm:
 		temp.random();
 		return temp;
@@ -263,6 +267,7 @@ int node::calc_size(int &size) {
 	case zebra:
 	case nearest_scout:
 	case nearest_invest:
+	case nearest_calling:
 	case randm:
 	case north:
 	case last_move:
@@ -308,6 +313,7 @@ node *node::get_point(int pn, int &current) {
 	case zebra:
 	case nearest_scout:
 	case nearest_invest:
+	case nearest_calling:
 	case randm:
 	case north:
 	case last_move:

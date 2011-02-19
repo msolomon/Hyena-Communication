@@ -12,6 +12,7 @@ enum ops {
 	zebra,
 	nearest_scout,
 	nearest_invest,
+	nearest_calling,
 	north,
 	randm,
 	last_move,
@@ -23,7 +24,7 @@ enum ops {
 	ifVectorZero
 };
 
-const int num_terms = 8;
+const int num_terms = 9;
 const int num_non_terms = 5;
 
 class node {

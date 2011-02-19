@@ -34,6 +34,40 @@ void environment::move(void) {
 		agents->invests[i].move();
 }
 
+//void environment::update_vectors(void){
+//	float magnitude, min_mag;
+//	vect temp;
+//	float direction, agentx, agenty;
+
+//	// set calling hyenas and if they call, set vectors toward zebra
+//	for(int i = 0; i < NUM_HYENAS; i++){
+//		temp.magnitude = distance_sq(agentx - ZEBRAX, agenty - ZEBRAY);
+//		if (temp.magnitude < CALLING_RANGE_SQ) { // min range to zebra
+//			temp.magnitude = sq_rt(temp.magnitude); // now calculate sqrt
+//			temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
+//			agents->scouts[i].set_calling(true);
+//		} else {
+//			temp.direction = 0;
+//			temp.magnitude = 0;
+//			agents->scouts[i].set_calling(false);
+//		}
+//		agents->scouts[i].set_zebra(temp);
+//	}
+
+//	// set nearest hyena vectors and set nearest calling hyena vectors
+//	bool already_set[NUM_HYENAS] = {};
+//	for(int i = 0; i < NUM_HYENAS /; i++){
+//		min_mag = INFINITY;
+//		agents->scouts[i].set_num_scouts(0);
+//		for(int j = 0; j < NUM_HYENAS; j++){
+
+//			magnitude = distance_sq(agentx - agents->scouts[j].getX(),
+//								 agenty - agents->scouts[j].getY());
+//			if(magnitude < min_mag &&)
+//		}
+//	}
+//}
+
 void environment::update_vectors(void) {
 	float magnitude, min_mag;
 	vect temp;
@@ -138,9 +172,9 @@ void environment::update_vectors(void) {
 		//find nearest investigator, count investigators/lions close enough
 		int num_invests = 0;
 		for (int j = 0; j < NUM_LIONS; j++) {
-			magnitude = distance(agentx - agents->invests[j].getX(),
+			magnitude = distance_sq(agentx - agents->invests[j].getX(),
 								 agenty - agents->invests[j].getY());
-			if (magnitude < LION_LION_RADIUS)
+			if (magnitude < LION_LION_RADIUS_SQ)
 				num_invests++;
 			if (magnitude < min_mag && i != j) {
 				min_mag = magnitude;
@@ -148,9 +182,9 @@ void environment::update_vectors(void) {
 						- agents->invests[j].getY()));
 			}
 		}
-		temp.magnitude = min_mag;
+		temp.magnitude = sq_rt(min_mag); // now take sqrt
 		temp.direction = direction;
-		agents->invests[i].set_nearest_invest(temp);
+		//agents->invests[i].set_nearest_invest(temp);
 		agents->invests[i].set_num_lions(num_invests);
 
 		// zebra
