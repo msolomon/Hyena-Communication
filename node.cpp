@@ -173,7 +173,6 @@ vect node::evaluate(agent_info *the_indiv) {
 	case sum:
 		temp = children[0]->evaluate(the_indiv);
 		temp1 = children[1]->evaluate(the_indiv);
-		// TODO: consider writing a += operator to replace this
 		return ((temp) + (temp1));
 	case iflteMAG:
 		temp = children[0]->evaluate(the_indiv);
@@ -190,8 +189,6 @@ vect node::evaluate(agent_info *the_indiv) {
 		else
 			return (children[3]->evaluate(the_indiv));
 	case ifVectorZero:
-//		cout << children[0];
-//		cout << the_indiv;
 		temp = children[0]->evaluate(the_indiv);
 		if (temp.direction == 0 && temp.magnitude == 0)
 			return (children[1]->evaluate(the_indiv));

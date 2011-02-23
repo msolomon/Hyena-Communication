@@ -10,13 +10,15 @@ const float PI = 3.141592654;
 const int X = 25;
 const int Y = 25;
 //const int HYENA_SEE_ZEBRA_RADIUS = X / 8;
-//const int HEAR_CALLING_RADIUS = X;
+const int HEAR_CALLING_RADIUS = X + Y;
 const int LION_ATTACK_RADIUS = 3;
 const int LION_LION_RADIUS = 5;
-const int LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;
 const int LION_HYENA_RADIUS = 5;
 //const int LION_SEES_ZEBRA = 5;
 //const int LION_NEAR_ZEBRA = 1;
+const int HEAR_CALLING_RADIUS_SQ = HEAR_CALLING_RADIUS * HEAR_CALLING_RADIUS;
+const int LION_ATTACK_RADIUS_SQ = LION_ATTACK_RADIUS * LION_ATTACK_RADIUS;
+const int LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;
 
 //const int INVESTIGATOR_RADIUS = 10;
 //const int SCOUT_RADIUS = 20;
@@ -34,7 +36,7 @@ const int NUM_LIONS = 2;
 const int TIME_STEPS = 50;
 const int NUM_TESTS = 1;
 const int TOURNAMENT_SIZE = 5;
-const int ITERATIONS = 51;
+const int ITERATIONS = 21;
 //const int TEAM_SIZE = 3;
 const int TRIALS = 1;
 const int GROW_DEPTH = 4;
@@ -74,14 +76,8 @@ inline float fastSqrt_2(const float x){
   return u.x;
 }
 
-inline float sq_rt(float a){
-    return sqrt(a);
-//	return fastSqrt_2(a);
-//	return a;
-}
-
 inline float distance(float x, float y){
-	return sq_rt(x * x + y * y);
+    return sqrt(x * x + y * y);
 }
 
 inline float distance_sq(float x, float y){
