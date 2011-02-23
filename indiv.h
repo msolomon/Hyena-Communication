@@ -35,6 +35,9 @@ public:
 	void set_nearestcalling(vect v) {
 		the_info.nearest_calling = v;
 	}
+	void set_mirrored(vect v){
+		the_info.mirrored = v;
+	}
 	void set_num_lions(int n) {
 		the_info.num_investigators = n;
 	}
@@ -48,6 +51,10 @@ public:
 	bool get_calling() {
 		return calling;
 	}
+	vect get_last_move(){
+		return the_info.last_move;
+	}
+
 	inline float getX(void) {
 		return x;
 	}

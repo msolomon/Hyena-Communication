@@ -13,6 +13,7 @@ enum ops {
 	nearest_scout,
 	nearest_invest,
 	nearest_calling,
+	mirror_nearest, // repeat the previous action of the nearest hyena
 	north,
 	randm,
 	last_move,
@@ -24,7 +25,7 @@ enum ops {
 	ifVectorZero
 };
 
-const int num_terms = 9;
+const int num_terms = 10;
 const int num_non_terms = 5;
 
 class node {

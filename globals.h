@@ -30,13 +30,13 @@ const float CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
 
 
 const int POP_SIZE = 80;
-const int NUM_HYENAS = 20;
-const int NUM_LIONS = 2;
+const char NUM_HYENAS = 20;
+const char NUM_LIONS = 2;
 //const int NUM_AGENTS = NUM_HYENAS + NUM_LIONS;
 const int TIME_STEPS = 50;
 const int NUM_TESTS = 1;
 const int TOURNAMENT_SIZE = 5;
-const int ITERATIONS = 21;
+const int ITERATIONS = 121;
 //const int TEAM_SIZE = 3;
 const int TRIALS = 1;
 const int GROW_DEPTH = 4;
@@ -50,11 +50,11 @@ typedef struct {
 	vect zebra;
 	vect nearest_scout;
 	vect nearest_invest;
-	vect nearest_edge;
 	vect last_move;
 	vect nearest_calling;
-	int num_investigators;
-	int num_scouts;
+	vect mirrored;
+	char num_investigators;
+	char num_scouts;
 } agent_info;
 
 enum agent_type {

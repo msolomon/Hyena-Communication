@@ -86,9 +86,11 @@ void environment::update_vectors(void){
 		temp.direction = atan2(agentx - agents->scouts[the_j].getX(),
 							   agenty - agents->scouts[the_j].getY());
 		agents->scouts[i].set_nearest_scout(temp);
+		agents->scouts[i].set_mirrored(agents->scouts[the_j].get_last_move());
 		// now set the other direction (j closest to i)
 		temp.direction = invert_direction(temp.direction);
 		agents->scouts[the_j].set_nearest_scout(temp);
+		agents->scouts[the_j].set_mirrored(agents->scouts[i].get_last_move());
 		already_set[the_j] = true;
 	}
 

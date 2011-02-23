@@ -32,13 +32,9 @@ void indiv::reset_fitness(void) {
 void indiv::reset(void) {
 	calling = false;
 	if (type == investigator) {
-		x = X / 2 + ((rand() % 20) / 10.0) - 1;
-		y = Y / 2 + ((rand() % 20) / 10.0) - 1;
+		x = X / 2.0 + ((float)rand() / (float)(RAND_MAX/2.0)) - 1;
+		y = Y / 2.0 + ((float)rand() / (float)(RAND_MAX/2.0)) - 1;
 	} else {
-		//         float ang = rand()%360;
-		//         float rad = X/2 + rand()%X;
-		//         x = X/2 + rad*sin(ang);
-		//         y = Y/2 + rad*cos(ang);
 		x = rand() % X;
 		y = rand() % Y;
 	}
