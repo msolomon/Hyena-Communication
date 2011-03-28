@@ -19,6 +19,7 @@ const int LION_HYENA_RADIUS = 5;
 const int HEAR_CALLING_RADIUS_SQ = HEAR_CALLING_RADIUS * HEAR_CALLING_RADIUS;
 const int LION_ATTACK_RADIUS_SQ = LION_ATTACK_RADIUS * LION_ATTACK_RADIUS;
 const int LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;
+const int LION_HYENA_RADIUS_SQ = LION_HYENA_RADIUS * LION_HYENA_RADIUS;
 
 //const int INVESTIGATOR_RADIUS = 10;
 //const int SCOUT_RADIUS = 20;
@@ -34,19 +35,19 @@ const float EAT_BONUS = 1.0;
 
 
 const int POP_SIZE = 80;
-const char NUM_HYENAS = 10;
+const char NUM_HYENAS = 20;
 const char NUM_LIONS = 2;
 //const int NUM_AGENTS = NUM_HYENAS + NUM_LIONS;
 const int TIME_STEPS = 50;
 const int NUM_TESTS = 1;
 const int TOURNAMENT_SIZE = 5;
-const int ITERATIONS = 10000;
+const int ITERATIONS = 3000;
 //const int TEAM_SIZE = 3;
 const int TRIALS = 1;
 const int GROW_DEPTH = 4;
-const int EVALUATE_EVERY = 100;
+const int EVALUATE_EVERY = 30;
 const bool DRAW = true;
-const int DRAW_MS = 50;
+const int DRAW_MS = 20;
 
 //const int INTEREST_PERCENT = 0;
 

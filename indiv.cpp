@@ -1,3 +1,4 @@
+#include <cmath>
 #include "indiv.h"
 
 void indiv::xOver(indiv *p2) {
@@ -98,7 +99,7 @@ void indiv::move(void) {
 	if (tree != NULL) {
 		v = tree->evaluate(&the_info);
 		if (v.magnitude > 1) // trying to move too far
-			v.magnitude = 1;
+			v.magnitude = fmod(v.magnitude, 1) + 1;
 		// this bit never gets reached b/c of the lion_move clause above
 		if (type == investigator && v.magnitude >= 0.5)
 			v.magnitude = 0.5;

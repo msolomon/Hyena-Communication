@@ -131,18 +131,18 @@ void environment::update_vectors(void){
 		int num_hyenas = 0;
 		agentx = agents->invests[i].getX(); //get scout x,y
 		agenty = agents->invests[i].getY();
-		min_mag = CALLING_RANGE; // TODO: maximum radius?
+		min_mag = CALLING_RANGE_SQ; // TODO: maximum radius?
 		for(int j = 0; j < NUM_HYENAS; j++){
 			magnitude = distance_sq(agentx - agents->scouts[j].getX(),
 									agenty - agents->scouts[j].getY());
-			if (magnitude < LION_HYENA_RADIUS)
+			if (magnitude < LION_HYENA_RADIUS_SQ)
 				num_hyenas++;
 			if(magnitude < min_mag){
 				min_mag = magnitude;
 				the_j = j;
 			}
 		}
-		if(min_mag < CALLING_RANGE){ // lion close enough to hyena
+		if(min_mag < CALLING_RANGE_SQ){ // lion close enough to hyena
 			temp.magnitude = sqrt(min_mag);
 			temp.direction = atan2(agentx - agents->scouts[the_j].getX(),
 								   agenty - agents->scouts[the_j].getY());
