@@ -27,22 +27,26 @@ const int ZEBRAX = X / 2;
 const int ZEBRAY = Y / 2;
 const float CALLING_RANGE = X / 4;
 const float CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
+// reward getting close enough to actually eat
+const float EAT_RADIUS = X / 16;
+const float EAT_RADIUS_SQ = EAT_RADIUS * EAT_RADIUS;
+const float EAT_BONUS = 1.0;
 
 
 const int POP_SIZE = 80;
-const char NUM_HYENAS = 20;
+const char NUM_HYENAS = 10;
 const char NUM_LIONS = 2;
 //const int NUM_AGENTS = NUM_HYENAS + NUM_LIONS;
 const int TIME_STEPS = 50;
 const int NUM_TESTS = 1;
 const int TOURNAMENT_SIZE = 5;
-const int ITERATIONS = 121;
+const int ITERATIONS = 10000;
 //const int TEAM_SIZE = 3;
 const int TRIALS = 1;
 const int GROW_DEPTH = 4;
-const int EVALUATE_EVERY = 3;
+const int EVALUATE_EVERY = 100;
 const bool DRAW = true;
-const int DRAW_MS = 30;
+const int DRAW_MS = 50;
 
 //const int INTEREST_PERCENT = 0;
 
@@ -51,8 +55,8 @@ typedef struct {
 	vect nearest_scout;
 	vect nearest_invest;
 	vect last_move;
-	vect nearest_calling;
 	vect mirrored;
+	vect nearest_calling;
 	char num_investigators;
 	char num_scouts;
 } agent_info;

@@ -8,16 +8,16 @@
 #include "globals.h"
 
 enum ops {
-	num_scouts,
 	zebra,
 	nearest_scout,
 	nearest_invest,
 	nearest_calling,
-	mirror_nearest, // repeat the previous action of the nearest hyena
 	north,
 	randm,
 	last_move,
 	constant,
+	num_scouts,
+	//mirror_nearest, // repeat the previous action of the nearest hyena
 	sum,
 	invert,
 	iflteMAG,
@@ -25,7 +25,7 @@ enum ops {
 	ifVectorZero
 };
 
-const int num_terms = 10;
+const int num_terms = 9;//10;
 const int num_non_terms = 5;
 
 class node {

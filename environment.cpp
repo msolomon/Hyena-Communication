@@ -16,6 +16,10 @@ void environment::evaluate(void) {
 		tempy = agents->scouts[i].getY();
 		radius = distance_sq(tempx - ZEBRAX, tempy - ZEBRAY); // distance squared
 		agents->scouts[i].changeFit(1.0 / (1.0 + radius)); // near zebra
+		radius = sqrt(radius);
+		if(radius <= EAT_RADIUS){
+			agents->scouts[i].changeFit(EAT_BONUS);
+		}
 		agents->scouts[i].inc_dist_to_zebra(radius);
 		for (int j = 0; j < NUM_LIONS; j++) {
 			radius = distance_sq(tempx - agents->invests[j].getX(),
@@ -46,6 +50,7 @@ void environment::update_vectors(void){
 	float magnitude, min_mag;
 	vect temp;
 	float agentx, agenty;
+	char num_calling = 0;
 
 	// set calling hyenas and if they call, set vectors toward zebra
 	for(int i = 0; i < NUM_HYENAS; i++){
@@ -56,6 +61,7 @@ void environment::update_vectors(void){
 			temp.magnitude = sqrt(temp.magnitude); // now calculate sqrt
 			temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
 			agents->scouts[i].set_calling(true);
+			num_calling++;
 		} else {
 			temp.direction = 0;
 			temp.magnitude = 0;
@@ -64,21 +70,20 @@ void environment::update_vectors(void){
 		agents->scouts[i].set_zebra(temp);
 	}
 
-	// set nearest hyena vectors
+	// set nearest hyena vectors (and # calling scouts)
 	bitset<NUM_HYENAS> already_set;
 	for(int i = 0; i < NUM_HYENAS; i++){
 		if(already_set[i]) continue;
 		agentx = agents->scouts[i].getX(); //get scout x,y
 		agenty = agents->scouts[i].getY();
 		min_mag = INFINITY;
-		agents->scouts[i].set_num_scouts(0);
+		agents->scouts[i].set_num_scouts(num_calling);
 		for(int j = i+1; j < NUM_HYENAS; j++){
 			magnitude = distance_sq(agentx - agents->scouts[j].getX(),
 									agenty - agents->scouts[j].getY());
 			if(magnitude < min_mag){
 				min_mag = magnitude;
 				the_j = j;
-				// TODO: where do I increment num_scouts?
 			}
 		}
 		// set the closest hyena

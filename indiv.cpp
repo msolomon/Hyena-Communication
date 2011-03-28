@@ -102,6 +102,7 @@ void indiv::move(void) {
 		// this bit never gets reached b/c of the lion_move clause above
 		if (type == investigator && v.magnitude >= 0.5)
 			v.magnitude = 0.5;
+
 		the_info.last_move.direction = v.direction;
 		the_info.last_move.magnitude = v.magnitude;
 
