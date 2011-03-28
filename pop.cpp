@@ -102,11 +102,11 @@ void pop::evolve(int t) {
 		calc_trial_percent(t * ITERATIONS + i);
 		calc_trial_percent_total(ITERATIONS * TRIALS - 1);
 		// only use one method of reproduction
-//		island_reproduce();
+		island_reproduce();
 //		team_reproduce();
 //		member_reproduce();
 //		OET1_reproduce();
-		oet_generational();
+//		oet_generational();
 //		save_data(i, t);
 		if (i % EVALUATE_EVERY == 0) {
 			int bestTeam;
@@ -186,27 +186,27 @@ void pop::island_reproduce(){
         the_pop[rs1]->mutate(i,scout);
         evaluate_team(rs1,0);
     }
-    //select investigators
-    for(int i=0; i < NUM_LIONS; i++){
-        pi1 = member_select(1,i,investigator);
-        do{
-            ri1 = member_select(-1,i,investigator);
-        }while(ri1 == pi1);
-        do{
-            pi2 = member_select(1,i,investigator);
-        }while(pi2 == pi1 || pi2 == ri1);
-        do{
-            ri2 = member_select(-1,i,investigator);
-        }while(ri2 == ri1 || ri2 == pi1 || ri2 == pi2);
+//    //select investigators
+//    for(int i=0; i < NUM_LIONS; i++){
+//        pi1 = member_select(1,i,investigator);
+//        do{
+//            ri1 = member_select(-1,i,investigator);
+//        }while(ri1 == pi1);
+//        do{
+//            pi2 = member_select(1,i,investigator);
+//        }while(pi2 == pi1 || pi2 == ri1);
+//        do{
+//            ri2 = member_select(-1,i,investigator);
+//        }while(ri2 == ri1 || ri2 == pi1 || ri2 == pi2);
 
-        the_pop[ri1]->copy(the_pop[pi1],i,investigator);  // investigator
-        the_pop[ri2]->copy(the_pop[pi2],i,investigator);  // investigator
-        the_pop[ri1]->calc_size();
-        the_pop[ri2]->calc_size();
-        the_pop[ri1]->xOver(the_pop[ri2],i,investigator);
-        the_pop[ri1]->mutate(i,investigator);
-        evaluate_team(ri1,0);
-    }
+//        the_pop[ri1]->copy(the_pop[pi1],i,investigator);  // investigator
+//        the_pop[ri2]->copy(the_pop[pi2],i,investigator);  // investigator
+//        the_pop[ri1]->calc_size();
+//        the_pop[ri2]->calc_size();
+//        the_pop[ri1]->xOver(the_pop[ri2],i,investigator);
+//        the_pop[ri1]->mutate(i,investigator);
+//        evaluate_team(ri1,0);
+//    }
 }
 
 /*
