@@ -24,8 +24,8 @@ const int LION_HYENA_RADIUS_SQ = LION_HYENA_RADIUS * LION_HYENA_RADIUS;
 //const int INVESTIGATOR_RADIUS = 10;
 //const int SCOUT_RADIUS = 20;
 
-const int ZEBRAX = X / 2;
-const int ZEBRAY = Y / 2;
+const float ZEBRAX = X / 2;
+const float ZEBRAY = Y / 2;
 const float CALLING_RANGE = X / 4;
 const float CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
 // reward getting close enough to actually eat

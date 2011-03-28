@@ -21,8 +21,8 @@ public:
 	DrawHelper();
 	void paint(QPainter *painter, QPaintEvent *event);
 	void updateGui();
-	QQueue<QPoint> hyenas[NUM_HYENAS];
-	QQueue<QPoint> lions[NUM_LIONS];
+	QQueue<QPointF> hyenas[NUM_HYENAS];
+	QQueue<QPointF> lions[NUM_LIONS];
 
 	QQueue<int> iter;
 	QQueue<int> step;
@@ -34,7 +34,7 @@ private:
 	QPen zebraPen;
 	QPen callRadPen;
 	QBrush backgroundBrush;
-	QPoint zebra;
+	QPointF zebra;
 	int timestep;
 	int it;
 

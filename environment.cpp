@@ -76,7 +76,7 @@ void environment::update_vectors(void){
 		if(already_set[i]) continue;
 		agentx = agents->scouts[i].getX(); //get scout x,y
 		agenty = agents->scouts[i].getY();
-		min_mag = INFINITY;
+		min_mag = (4*(X+Y)) * (4*(X+Y));
 		agents->scouts[i].set_num_scouts(num_calling);
 		for(int j = i+1; j < NUM_HYENAS; j++){
 			magnitude = distance_sq(agentx - agents->scouts[j].getX(),
@@ -324,13 +324,13 @@ void environment::draw(DrawHelper* helper, int itera) {
 
 	for (int i = 0; i < NUM_LIONS; i++) {
 		helper->lions[i].enqueue(
-								QPoint(agents->invests[i].getX(),
-										agents->invests[i].getY())
-								);
+					QPointF(agents->invests[i].getX(),
+							agents->invests[i].getY())
+					);
 	}
 
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		helper->hyenas[i].enqueue(QPoint(agents->scouts[i].getX(),
-										agents->scouts[i].getY()));
+		helper->hyenas[i].enqueue(QPointF(agents->scouts[i].getX(),
+										  agents->scouts[i].getY()));
 	}
 }
