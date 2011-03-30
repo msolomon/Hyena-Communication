@@ -67,21 +67,6 @@ enum agent_type {
 	hyena, lion
 };
 
-/* Thanks to N. Mundhenk of USC: <mundhenk@usc.edu>
-   Source: http://ilab.usc.edu/wiki/index.php/Fast_Square_Root
-*/
-inline float fastSqrt_2(const float x){
-    union{
-        int i;
-        float x;
-    } u;
-
-    u.x = x;
-    u.i = (1<<29) + (u.i >> 1) - (1<<22);
-
-  return u.x;
-}
-
 inline float distance(float x, float y){
     return sqrt(x * x + y * y);
 }

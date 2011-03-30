@@ -41,26 +41,28 @@ void node::copy(node *p, node * parn) {
 	the_const.magnitude = p->the_const.magnitude;
 	the_const.direction = p->the_const.direction;
 	switch (operation) {
-	case nearest_hyena:
+	// terminals
 	case zebra:
+	case nearest_hyena:
 	case nearest_lion:
 	case nearest_calling:
-	case mirror_nearest:
-	case randm:
 	case north:
+	case randm:
 	case last_move:
-	case num_hyenas:
 	case constant:
+	case num_hyenas:
+	case mirror_nearest:
 		return;
-	case invert:
-		children[0] = new node;
-		children[0]->copy(p->children[0], this);
-		return;
+	// non-terminals
 	case sum:
 		children[0] = new node;
 		children[0]->copy(p->children[0], this);
 		children[1] = new node;
 		children[1]->copy(p->children[1], this);
+		return;
+	case invert:
+		children[0] = new node;
+		children[0]->copy(p->children[0], this);
 		return;
 	case iflteMAG:
 	case iflteCLOCKWISE:
@@ -98,25 +100,27 @@ void node::clear(void) {
 
 void node::mutate(void) {
 	switch (operation) {
+	// terminals
+	case zebra:
 	case nearest_hyena:
 	case nearest_lion:
 	case nearest_calling:
-	case mirror_nearest:
-	case zebra:
-	case randm:
 	case north:
+	case randm:
 	case last_move:
-	case num_hyenas:
 	case constant:
+	case num_hyenas:
+	case mirror_nearest:
 		if (rand() % 100 < 10)
 			operation = ops(rand() % num_terms);
 		break;
-	case invert:
-		children[0]->mutate();
-		break;
+	// non-terminals
 	case sum:
 		children[0]->mutate();
 		children[1]->mutate();
+		break;
+	case invert:
+		children[0]->mutate();
 		break;
 	case iflteMAG:
 	case iflteCLOCKWISE:
@@ -145,10 +149,7 @@ vect node::evaluate(agent_info *the_indiv) {
 	}
 
 	switch (operation) {
-	case num_hyenas:
-		temp.direction = PI;
-		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
-		return temp;
+	// terminals
 	case zebra:
 		return (the_indiv-> zebra);
 	case nearest_hyena:
@@ -157,27 +158,32 @@ vect node::evaluate(agent_info *the_indiv) {
 		return (the_indiv->nearest_lion);
 	case nearest_calling:
 		return (the_indiv->nearest_calling);
-	case mirror_nearest:
-		return (the_indiv->mirrored);
-	case randm:
-		temp.random();
-		return temp;
 	case north:
 		temp.direction = PI;
 		temp.magnitude = 1;
 		return (temp);
+	case randm:
+		temp.random();
+		return temp;
 	case last_move:
 		return (the_indiv->last_move);
 	case constant:
 		return (the_const);
-	case invert:
-		temp = children[0]->evaluate(the_indiv);
-		temp.direction += 3.1417;
-		return (temp);
+	case num_hyenas:
+		temp.direction = PI;
+		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
+		return temp;
+	case mirror_nearest:
+		return (the_indiv->mirrored);
+	// non-terminals
 	case sum:
 		temp = children[0]->evaluate(the_indiv);
 		temp1 = children[1]->evaluate(the_indiv);
 		return ((temp) + (temp1));
+	case invert:
+		temp = children[0]->evaluate(the_indiv);
+		temp.direction += 3.1417;
+		return (temp);
 	case iflteMAG:
 		temp = children[0]->evaluate(the_indiv);
 		temp1 = children[1]->evaluate(the_indiv);
@@ -212,20 +218,20 @@ void node::grow(int max_d,int depth,node *pare){
     parent = pare;
     for(int i =0;i<4;i++)
         children[i] = NULL;
-    if(depth == max_d)
+    if(depth == max_d) // bottomed out, use terminals
         operation = ops(rand()%num_terms);
-    else{
+    else{ // haven't reached bottom, use non-terminals
         operation = ops(num_terms + rand()%num_non_terms);
         switch(operation){
-        case invert:
-            children[0] = new node;
-            children[0]->grow(max_d,depth+1,this);
-            break;
         case sum:
             children[0] = new node;
             children[0]->grow(max_d,depth+1,this);
             children[1] = new node;
             children[1]->grow(max_d,depth+1,this);
+            break;
+        case invert:
+            children[0] = new node;
+            children[0]->grow(max_d,depth+1,this);
             break;
         case iflteMAG:
         case iflteCLOCKWISE:
@@ -265,21 +271,24 @@ int node::calc_size(int &size) {
 	}
 	size++;
 	switch (operation) {
+	// terminals
 	case zebra:
 	case nearest_hyena:
 	case nearest_lion:
 	case nearest_calling:
-	case mirror_nearest:
-	case randm:
 	case north:
+	case randm:
 	case last_move:
 	case constant:
 	case num_hyenas:
-	case invert:
-		return (size);
+	case mirror_nearest:
+		return size;
+	// non-terminals
 	case sum:
 		children[0]->calc_size(size);
 		children[1]->calc_size(size);
+		return size;
+	case invert:
 		return size;
 	case iflteMAG:
 	case iflteCLOCKWISE:
@@ -312,24 +321,26 @@ node *node::get_point(int pn, int &current) {
 	if (pn == current)
 		return this;
 	switch (operation) {
+	// terminals
 	case zebra:
 	case nearest_hyena:
 	case nearest_lion:
 	case nearest_calling:
-	case mirror_nearest:
-	case randm:
 	case north:
+	case randm:
 	case last_move:
 	case constant:
 	case num_hyenas:
+	case mirror_nearest:
 		return this;
-	case invert:
-		return children[0]->get_point(pn, current);
+	// non-terminals
 	case sum:
 		answer = children[0]->get_point(pn, current);
 		if (current >= pn)
 			return answer;
 		return children[1]->get_point(pn, current);
+	case invert:
+		return children[0]->get_point(pn, current);
 	case iflteMAG:
 	case iflteCLOCKWISE:
 		for (int i = 0; i < 4; i++) {
