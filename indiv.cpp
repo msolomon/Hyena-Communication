@@ -31,7 +31,7 @@ void indiv::reset_fitness(void) {
 
 void indiv::reset(void) {
 	calling = false;
-	if (type == investigator) {
+	if (type == lion) {
 		x = X / 2.0 + ((float)rand() / (float)(RAND_MAX/2.0)) - 1;
 		y = Y / 2.0 + ((float)rand() / (float)(RAND_MAX/2.0)) - 1;
 	} else {
@@ -78,9 +78,9 @@ void indiv::rand_move() {
 }
 
 void indiv::lion_move(void) {
-	if (the_info.num_scouts > (the_info.num_investigators * 3)) {
-		x += sin(the_info.nearest_scout.direction);
-		y += cos(the_info.nearest_scout.direction);
+	if (the_info.num_hyenas > (the_info.num_lions * 3)) {
+		x += sin(the_info.nearest_hyena.direction);
+		y += cos(the_info.nearest_hyena.direction);
 	}
 	/*     else if(the_info.zebra.magnitude < LION_SEES_ZEBRA && the_info.zebra.magnitude > LION_NEAR_ZEBRA){
 	 x-=1.0*sin(the_info.zebra.direction);
@@ -91,7 +91,7 @@ void indiv::lion_move(void) {
 
 void indiv::move(void) {
 	vect v;
-	if (type == investigator) {
+	if (type == lion) {
 		lion_move();
 		return;
 	}
@@ -101,7 +101,7 @@ void indiv::move(void) {
 			v.magnitude -= (int)v.magnitude - 1;
 	}
 		// this bit never gets reached b/c of the lion_move clause above
-		if (type == investigator && v.magnitude >= 0.5)
+		if (type == lion && v.magnitude >= 0.5)
 			v.magnitude = 0.5;
 
 		the_info.last_move.direction = v.direction;

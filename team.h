@@ -20,12 +20,12 @@ public:
 	void generate(void);
 	void clear(void);
 	void reset_team(void);
-	float get_scout_fit(int i) {
-		return scout_fits[i];
+	float get_hyena_fit(int i) {
+		return hyena_fits[i];
 	}
-	float get_invest_fit(int i) {
-		return invest_fits[i];
-	}
+//	float get_invest_fit(int i) {
+//		return invest_fits[i];
+//	}
 	float get_avg_dist_to_zebra(void) {
 		return avg_dist_to_zebra;
 	}
@@ -34,10 +34,10 @@ public:
 	}
 	void reset_fitness(void);
 
-	indiv scouts[NUM_HYENAS];
-	indiv invests[NUM_LIONS];
-	float scout_fits[NUM_HYENAS];
-	float invest_fits[NUM_LIONS];
+	indiv hyenas[NUM_HYENAS];
+	indiv lions[NUM_LIONS];
+	float hyena_fits[NUM_HYENAS];
+//	float invest_fits[NUM_LIONS];
 	float avg_fit;
 	float avg_lion_attacks;
 	float avg_dist_to_zebra;

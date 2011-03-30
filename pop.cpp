@@ -120,7 +120,7 @@ void pop::evolve(int t) {
 
 void pop::OET1_reproduce() {
 	int team_replace1, team_replace2;
-	int parent_scout, parent_investigator;
+	int parent_hyena;
 	int best = select_best_team(1);
 	do {
 		team_replace1 = tourn_select(-1);
@@ -130,29 +130,29 @@ void pop::OET1_reproduce() {
 	} while (team_replace1 == team_replace2 || team_replace2 == best);
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		// Piecewise construct two new teams to replace the poor teams 
-		do { // first parent's scout
-			parent_scout = member_select(1, i, scout);
-		} while (parent_scout == team_replace1 || parent_scout == team_replace2);
-		the_pop[team_replace1]->copy(the_pop[parent_scout], i, scout);
-		do { // second parent's scout
-			parent_scout = member_select(1, i, scout);
-		} while (parent_scout == team_replace1 || parent_scout == team_replace2);
-		the_pop[team_replace2]->copy(the_pop[parent_scout], i, scout);
+		do { // first parent's hyena
+			parent_hyena = member_select(1, i, hyena);
+		} while (parent_hyena == team_replace1 || parent_hyena == team_replace2);
+		the_pop[team_replace1]->copy(the_pop[parent_hyena], i, hyena);
+		do { // second parent's hyena
+			parent_hyena = member_select(1, i, hyena);
+		} while (parent_hyena == team_replace1 || parent_hyena == team_replace2);
+		the_pop[team_replace2]->copy(the_pop[parent_hyena], i, hyena);
 	}
-	for (int i = 0; i < NUM_LIONS; i++) {
-		do { // first parent's investigator
-			parent_investigator = member_select(1, i, investigator);
-		} while (parent_investigator == team_replace1 || parent_investigator
-				== team_replace2);
-		the_pop[team_replace1]->copy(the_pop[parent_investigator], i,
-				investigator);
-		do { // second parent's investigator
-			parent_investigator = member_select(1, i, investigator);
-		} while (parent_investigator == team_replace1 || parent_investigator
-				== team_replace2);
-		the_pop[team_replace2]->copy(the_pop[parent_investigator], i,
-				investigator);
-	}
+//	for (int i = 0; i < NUM_LIONS; i++) {
+//		do { // first parent's investigator
+//			parent_investigator = member_select(1, i, lion);
+//		} while (parent_investigator == team_replace1 || parent_investigator
+//				== team_replace2);
+//		the_pop[team_replace1]->copy(the_pop[parent_investigator], i,
+//				lion);
+//		do { // second parent's investigator
+//			parent_investigator = member_select(1, i, lion);
+//		} while (parent_investigator == team_replace1 || parent_investigator
+//				== team_replace2);
+//		the_pop[team_replace2]->copy(the_pop[parent_investigator], i,
+//				lion);
+//	}
 	the_pop[team_replace1]->calc_size();
 	the_pop[team_replace2]->calc_size();
 	//         the_pop[r1]->xOver(the_pop[r2]);
@@ -166,24 +166,24 @@ void pop::OET1_reproduce() {
 void pop::island_reproduce(){
     int ps1, pi1, rs1, ri1;
     int ps2, pi2, rs2, ri2;
-    // select scouts
+    // select hyenas
     for(int i =0; i < NUM_HYENAS;i++){
-        ps1 = member_select(1,i,scout);  //
+        ps1 = member_select(1,i,hyena);  //
         do{
-            rs1 = member_select(-1,i,scout);
+            rs1 = member_select(-1,i,hyena);
         }while(ps1 == rs1);
         do{
-            ps2 = member_select(1,i,scout);
+            ps2 = member_select(1,i,hyena);
         }while(ps2 == ps1 || ps2 == rs1);
         do{
-            rs2 = member_select(-1,i,scout);
+            rs2 = member_select(-1,i,hyena);
         }while(rs2 == rs1 || rs2 == ps1 || rs2 == ps2);
-        the_pop[rs1]->copy(the_pop[ps1],i,scout);  // scout
-        the_pop[rs2]->copy(the_pop[ps2],i,scout);  // scout
+        the_pop[rs1]->copy(the_pop[ps1],i,hyena);  // hyena
+        the_pop[rs2]->copy(the_pop[ps2],i,hyena);  // hyena
         the_pop[rs1]->calc_size();
         the_pop[rs2]->calc_size();
-        the_pop[rs1]->xOver(the_pop[rs2],i,scout);
-        the_pop[rs1]->mutate(i,scout);
+        the_pop[rs1]->xOver(the_pop[rs2],i,hyena);
+        the_pop[rs1]->mutate(i,hyena);
         evaluate_team(rs1,0);
     }
 //    //select investigators
@@ -258,21 +258,21 @@ void pop::oet_generational() {
 
 	for (int i = POP_SIZE / 2; i < POP_SIZE; i = i + 2) {
 		// all-star
-		int parent_scout, parent_investigator;
+		int parent_hyena;
 		for (int j = 0; j < NUM_HYENAS; j++) {
 			// Piecewise construct two new teams to replace the poor teams 
-			parent_scout = member_select(1, j, scout);
-			temp.the_pop[i]->copy(the_pop[parent_scout], j, scout);
-			parent_scout = member_select(1, j, scout);
-			temp.the_pop[i + 1]->copy(the_pop[parent_scout], j, scout);
+			parent_hyena = member_select(1, j, hyena);
+			temp.the_pop[i]->copy(the_pop[parent_hyena], j, hyena);
+			parent_hyena = member_select(1, j, hyena);
+			temp.the_pop[i + 1]->copy(the_pop[parent_hyena], j, hyena);
 		}
-		for (int j = 0; j < NUM_LIONS; j++) {
-			parent_investigator = member_select(1, j, investigator);
-			temp.the_pop[i]->copy(the_pop[parent_investigator], j, investigator);
-			parent_investigator = member_select(1, j, investigator);
-			temp.the_pop[i + 1]->copy(the_pop[parent_investigator], j,
-					investigator);
-		}
+//		for (int j = 0; j < NUM_LIONS; j++) {
+//			parent_investigator = member_select(1, j, lion);
+//			temp.the_pop[i]->copy(the_pop[parent_investigator], j, lion);
+//			parent_investigator = member_select(1, j, lion);
+//			temp.the_pop[i + 1]->copy(the_pop[parent_investigator], j,
+//					lion);
+//		}
 		temp.the_pop[i]->calc_size();
 		temp.the_pop[i + 1]->calc_size();
 		temp.the_pop[i]->xOver(temp.the_pop[i + 1]);
@@ -321,16 +321,16 @@ int pop::member_select(int c, int member, agent_type t) {
 	float current_fit;
 	float best_fit;
 	best = rand() % POP_SIZE;
-	if (t == scout) // scout
-		best_fit = the_pop[best]->get_scout_fit(member);
-	if (t == investigator) // investigator
-		best_fit = the_pop[best]->get_invest_fit(member);
+	if (t == hyena)
+		best_fit = the_pop[best]->get_hyena_fit(member);
+//	if (t == lion) // investigator
+//		best_fit = the_pop[best]->get_invest_fit(member);
 	for (int i = 1; i < TOURNAMENT_SIZE; i++) {
 		current = rand() % POP_SIZE;
-		if (t == scout) // scout
-			current_fit = the_pop[current]->get_scout_fit(member);
-		if (t == investigator) // scout
-			current_fit = the_pop[current]->get_invest_fit(member);
+		if (t == hyena) // hyena
+			current_fit = the_pop[current]->get_hyena_fit(member);
+//		if (t == lion) // lion
+//			current_fit = the_pop[current]->get_invest_fit(member);
 		if (c == 1) {
 			if (current_fit > best_fit) {
 				best_fit = current_fit;

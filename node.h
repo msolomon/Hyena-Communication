@@ -9,14 +9,14 @@
 
 enum ops {
 	zebra,
-	nearest_scout,
-	nearest_invest,
+	nearest_hyena,
+	nearest_lion,
 	nearest_calling,
 	north,
 	randm,
 	last_move,
 	constant,
-	num_scouts,
+	num_hyenas,
 	mirror_nearest, // repeat the previous action of the nearest hyena
 	sum,
 	invert,

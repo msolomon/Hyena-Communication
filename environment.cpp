@@ -12,21 +12,21 @@ void environment::evaluate(void) {
 	float tempx, tempy;
 	float radius;
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		tempx = agents->scouts[i].getX();
-		tempy = agents->scouts[i].getY();
+		tempx = agents->hyenas[i].getX();
+		tempy = agents->hyenas[i].getY();
 		radius = distance_sq(tempx - ZEBRAX, tempy - ZEBRAY); // distance squared
-		agents->scouts[i].changeFit(1.0 / (1.0 + radius)); // near zebra
+		agents->hyenas[i].changeFit(1.0 / (1.0 + radius)); // near zebra
 		radius = sqrt(radius);
 		if(radius <= EAT_RADIUS){
-			agents->scouts[i].changeFit(EAT_BONUS);
+			agents->hyenas[i].changeFit(EAT_BONUS);
 		}
-		agents->scouts[i].inc_dist_to_zebra(radius);
+		agents->hyenas[i].inc_dist_to_zebra(radius);
 		for (int j = 0; j < NUM_LIONS; j++) {
-			radius = distance_sq(tempx - agents->invests[j].getX(),
-							  tempy - agents->invests[j].getY());
-			if (radius < LION_ATTACK_RADIUS_SQ) { // not too close to lions/investigators
-					  agents->scouts[i].changeFit(3*(sqrt(radius)-LION_ATTACK_RADIUS)); // near lion
-				agents->scouts[i].inc_lion_attacks();
+			radius = distance_sq(tempx - agents->lions[j].getX(),
+							  tempy - agents->lions[j].getY());
+			if (radius < LION_ATTACK_RADIUS_SQ) { // not too close to lions
+					  agents->hyenas[i].changeFit(3*(sqrt(radius)-LION_ATTACK_RADIUS)); // near lion
+				agents->hyenas[i].inc_lion_attacks();
 			}
 		}
 	}
@@ -35,9 +35,9 @@ void environment::evaluate(void) {
 
 void environment::move(void) {
 	for (int i = 0; i < NUM_HYENAS; i++)
-		agents->scouts[i].move();
+		agents->hyenas[i].move();
 	for (int i = 0; i < NUM_LIONS; i++)
-		agents->invests[i].move();
+		agents->lions[i].move();
 }
 
 float invert_direction(float d){
@@ -54,33 +54,33 @@ void environment::update_vectors(void){
 
 	// set calling hyenas and if they call, set vectors toward zebra
 	for(int i = 0; i < NUM_HYENAS; i++){
-		agentx = agents->scouts[i].getX(); //get scout x,y
-		agenty = agents->scouts[i].getY();
+		agentx = agents->hyenas[i].getX(); //get hyena x,y
+		agenty = agents->hyenas[i].getY();
 		temp.magnitude = distance_sq(agentx - ZEBRAX, agenty - ZEBRAY);
 		if (temp.magnitude < CALLING_RANGE_SQ) { // min range to zebra
 			temp.magnitude = sqrt(temp.magnitude); // now calculate sqrt
 			temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
-			agents->scouts[i].set_calling(true);
+			agents->hyenas[i].set_calling(true);
 			num_calling++;
 		} else {
 			temp.direction = 0;
 			temp.magnitude = 0;
-			agents->scouts[i].set_calling(false);
+			agents->hyenas[i].set_calling(false);
 		}
-		agents->scouts[i].set_zebra(temp);
+		agents->hyenas[i].set_zebra(temp);
 	}
 
 	// set nearest hyena vectors (and # calling scouts)
 	bitset<NUM_HYENAS> already_set;
 	for(int i = 0; i < NUM_HYENAS; i++){
 		if(already_set[i]) continue;
-		agentx = agents->scouts[i].getX(); //get scout x,y
-		agenty = agents->scouts[i].getY();
+		agentx = agents->hyenas[i].getX(); //get hyena x,y
+		agenty = agents->hyenas[i].getY();
 		min_mag = (4*(X+Y)) * (4*(X+Y));
-		agents->scouts[i].set_num_scouts(num_calling);
+		agents->hyenas[i].set_num_hyenas(num_calling);
 		for(int j = i+1; j < NUM_HYENAS; j++){
-			magnitude = distance_sq(agentx - agents->scouts[j].getX(),
-									agenty - agents->scouts[j].getY());
+			magnitude = distance_sq(agentx - agents->hyenas[j].getX(),
+									agenty - agents->hyenas[j].getY());
 			if(magnitude < min_mag){
 				min_mag = magnitude;
 				the_j = j;
@@ -88,26 +88,26 @@ void environment::update_vectors(void){
 		}
 		// set the closest hyena
 		temp.magnitude = sqrt(min_mag);
-		temp.direction = atan2(agentx - agents->scouts[the_j].getX(),
-							   agenty - agents->scouts[the_j].getY());
-		agents->scouts[i].set_nearest_scout(temp);
-		agents->scouts[i].set_mirrored(agents->scouts[the_j].get_last_move());
+		temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
+							   agenty - agents->hyenas[the_j].getY());
+		agents->hyenas[i].set_nearest_hyena(temp);
+		agents->hyenas[i].set_mirrored(agents->hyenas[the_j].get_last_move());
 		// now set the other direction (j closest to i)
 		temp.direction = invert_direction(temp.direction);
-		agents->scouts[the_j].set_nearest_scout(temp);
-		agents->scouts[the_j].set_mirrored(agents->scouts[i].get_last_move());
+		agents->hyenas[the_j].set_nearest_hyena(temp);
+		agents->hyenas[the_j].set_mirrored(agents->hyenas[i].get_last_move());
 		already_set[the_j] = true;
 	}
 
 	// find nearest calling scout
 	for(int i = 0; i < NUM_HYENAS; i++){
-		agentx = agents->scouts[i].getX(); //get scout x,y
-		agenty = agents->scouts[i].getY();
+		agentx = agents->hyenas[i].getX(); //get hyena x,y
+		agenty = agents->hyenas[i].getY();
 		min_mag = HEAR_CALLING_RADIUS_SQ;
 		for(int j = 0; j < NUM_HYENAS; j++){
-			if(agents->scouts[j].get_calling() && i != j){
-				magnitude = distance_sq(agentx - agents->scouts[j].getX(),
-										agenty - agents->scouts[j].getY());
+			if(agents->hyenas[j].get_calling() && i != j){
+				magnitude = distance_sq(agentx - agents->hyenas[j].getX(),
+										agenty - agents->hyenas[j].getY());
 				if(magnitude < min_mag){
 					min_mag = magnitude;
 					the_j = j;
@@ -119,22 +119,22 @@ void environment::update_vectors(void){
 			temp.direction = 0;
 		} else {
 			temp.magnitude = sqrt(min_mag);
-			temp.direction = atan2(agentx - agents->scouts[the_j].getX(),
-								   agenty - agents->scouts[the_j].getY());
+			temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
+								   agenty - agents->hyenas[the_j].getY());
 		}
-		agents->scouts[i].set_nearestcalling(temp);
+		agents->hyenas[i].set_nearestcalling(temp);
 	}
 
 	// lions
 	// get closest hyena and vice versa, count nearby lions
 	for(int i = 0; i < NUM_LIONS; i++){
 		int num_hyenas = 0;
-		agentx = agents->invests[i].getX(); //get scout x,y
-		agenty = agents->invests[i].getY();
+		agentx = agents->lions[i].getX(); //get hyena x,y
+		agenty = agents->lions[i].getY();
 		min_mag = CALLING_RANGE_SQ; // TODO: maximum radius?
 		for(int j = 0; j < NUM_HYENAS; j++){
-			magnitude = distance_sq(agentx - agents->scouts[j].getX(),
-									agenty - agents->scouts[j].getY());
+			magnitude = distance_sq(agentx - agents->hyenas[j].getX(),
+									agenty - agents->hyenas[j].getY());
 			if (magnitude < LION_HYENA_RADIUS_SQ)
 				num_hyenas++;
 			if(magnitude < min_mag){
@@ -144,19 +144,19 @@ void environment::update_vectors(void){
 		}
 		if(min_mag < CALLING_RANGE_SQ){ // lion close enough to hyena
 			temp.magnitude = sqrt(min_mag);
-			temp.direction = atan2(agentx - agents->scouts[the_j].getX(),
-								   agenty - agents->scouts[the_j].getY());
+			temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
+								   agenty - agents->hyenas[the_j].getY());
 		}
 		else {
 			temp.magnitude = 0;
 			temp.direction = 0;
 		}
 		// lion -> hyena
-		agents->invests[i].set_nearest_scout(temp);
-		agents->invests[i].set_num_hyenas(num_hyenas);
+		agents->lions[i].set_nearest_hyena(temp);
+		agents->lions[i].set_num_hyenas(num_hyenas);
 		// hyena -> lion
 		temp.direction = invert_direction(temp.direction);
-		agents->scouts[the_j].set_nearest_invest(temp);
+		agents->hyenas[the_j].set_nearest_lion(temp);
 
 
 		//find nearest lion. commented out: count lions close enough
@@ -164,8 +164,8 @@ void environment::update_vectors(void){
 //		min_mag = LION_LION_RADIUS_SQ;
 		for (int j = 0; j < NUM_LIONS; j++) {
 			if(i == j) continue;
-			magnitude = distance_sq(agentx - agents->invests[j].getX(),
-									agenty - agents->invests[j].getY());
+			magnitude = distance_sq(agentx - agents->lions[j].getX(),
+									agenty - agents->lions[j].getY());
 			if (magnitude < LION_LION_RADIUS_SQ)
 				num_lions++;
 //			if (magnitude < min_mag) {
@@ -176,12 +176,12 @@ void environment::update_vectors(void){
 //		temp.magnitude = sqrt(min_mag); // now take sqrt
 //		temp.direction = direction;
 		//agents->invests[i].set_nearest_invest(temp);
-		agents->invests[i].set_num_lions(num_lions);
+		agents->lions[i].set_num_lions(num_lions);
 
 		// lion -> zebra
 		temp.magnitude = sqrt(distance_sq(agentx - ZEBRAX, agenty - ZEBRAY));
 		temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
-		agents->invests[i].set_zebra(temp);
+		agents->lions[i].set_zebra(temp);
 	}
 
 
@@ -324,13 +324,13 @@ void environment::draw(DrawHelper* helper, int itera) {
 
 	for (int i = 0; i < NUM_LIONS; i++) {
 		helper->lions[i].enqueue(
-					QPointF(agents->invests[i].getX(),
-							agents->invests[i].getY())
+					QPointF(agents->lions[i].getX(),
+							agents->lions[i].getY())
 					);
 	}
 
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		helper->hyenas[i].enqueue(QPointF(agents->scouts[i].getX(),
-										  agents->scouts[i].getY()));
+		helper->hyenas[i].enqueue(QPointF(agents->hyenas[i].getX(),
+										  agents->hyenas[i].getY()));
 	}
 }

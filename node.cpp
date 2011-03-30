@@ -41,15 +41,15 @@ void node::copy(node *p, node * parn) {
 	the_const.magnitude = p->the_const.magnitude;
 	the_const.direction = p->the_const.direction;
 	switch (operation) {
-	case nearest_scout:
+	case nearest_hyena:
 	case zebra:
-	case nearest_invest:
+	case nearest_lion:
 	case nearest_calling:
 	case mirror_nearest:
 	case randm:
 	case north:
 	case last_move:
-	case num_scouts:
+	case num_hyenas:
 	case constant:
 		return;
 	case invert:
@@ -98,15 +98,15 @@ void node::clear(void) {
 
 void node::mutate(void) {
 	switch (operation) {
-	case nearest_scout:
-	case nearest_invest:
+	case nearest_hyena:
+	case nearest_lion:
 	case nearest_calling:
 	case mirror_nearest:
 	case zebra:
 	case randm:
 	case north:
 	case last_move:
-	case num_scouts:
+	case num_hyenas:
 	case constant:
 		if (rand() % 100 < 10)
 			operation = ops(rand() % num_terms);
@@ -145,16 +145,16 @@ vect node::evaluate(agent_info *the_indiv) {
 	}
 
 	switch (operation) {
-	case num_scouts:
+	case num_hyenas:
 		temp.direction = PI;
-		temp.magnitude = the_indiv->num_scouts; // only magnitude matters
+		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
 		return temp;
 	case zebra:
 		return (the_indiv-> zebra);
-	case nearest_scout:
-		return (the_indiv->nearest_scout);
-	case nearest_invest:
-		return (the_indiv->nearest_invest);
+	case nearest_hyena:
+		return (the_indiv->nearest_hyena);
+	case nearest_lion:
+		return (the_indiv->nearest_lion);
 	case nearest_calling:
 		return (the_indiv->nearest_calling);
 	case mirror_nearest:
@@ -266,15 +266,15 @@ int node::calc_size(int &size) {
 	size++;
 	switch (operation) {
 	case zebra:
-	case nearest_scout:
-	case nearest_invest:
+	case nearest_hyena:
+	case nearest_lion:
 	case nearest_calling:
 	case mirror_nearest:
 	case randm:
 	case north:
 	case last_move:
 	case constant:
-	case num_scouts:
+	case num_hyenas:
 	case invert:
 		return (size);
 	case sum:
@@ -313,15 +313,15 @@ node *node::get_point(int pn, int &current) {
 		return this;
 	switch (operation) {
 	case zebra:
-	case nearest_scout:
-	case nearest_invest:
+	case nearest_hyena:
+	case nearest_lion:
 	case nearest_calling:
 	case mirror_nearest:
 	case randm:
 	case north:
 	case last_move:
 	case constant:
-	case num_scouts:
+	case num_hyenas:
 		return this;
 	case invert:
 		return children[0]->get_point(pn, current);

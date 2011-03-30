@@ -17,17 +17,14 @@ public:
 	}
 	indiv(void);
 
-	void set_nearest_scout(vect v) {
-		the_info.nearest_scout = v;
+	void set_nearest_hyena(vect v) {
+		the_info.nearest_hyena = v;
 	}
-	void set_nearest_invest(vect v) {
-		the_info.nearest_invest = v;
+	void set_nearest_lion(vect v) {
+		the_info.nearest_lion = v;
 	}
-	void inc_num_scouts(void) {
-		the_info.num_scouts++;
-	}
-	void set_num_scouts(int s) {
-		the_info.num_scouts = s;
+	void inc_num_hyenas(void) {
+		the_info.num_hyenas++;
 	}
 	void set_zebra(vect v) {
 		the_info.zebra = v;
@@ -39,10 +36,10 @@ public:
 		the_info.mirrored = v;
 	}
 	void set_num_lions(int n) {
-		the_info.num_investigators = n;
+		the_info.num_lions = n;
 	}
 	void set_num_hyenas(int n) {
-		the_info.num_scouts = n;
+		the_info.num_hyenas = n;
 	}
 	void set_calling(bool b) {
 		calling = b;
