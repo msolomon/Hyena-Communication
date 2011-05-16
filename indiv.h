@@ -102,12 +102,13 @@ public:
 	}
 
 	void xOver(indiv*);
+
+	node *tree;
 private:
 	float x;
 	float y;
 	int size;
 	agent_info the_info;
-	node *tree;
 	float fitness;
 	float avg_dist_to_zebra;
 	int lion_attacks;

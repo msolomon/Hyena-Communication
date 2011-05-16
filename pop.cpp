@@ -114,8 +114,11 @@ void pop::evolve(int t) {
 			evaluate_team(bestTeam, 1, i);
 		}
 	}
-//	if (t + 1 == TRIALS)
+	if (t + 1 == TRIALS){
+
+		cout << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL).toStdString() << endl;
 //		write_fitnesses();
+	}
 }
 
 void pop::OET1_reproduce() {

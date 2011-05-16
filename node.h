@@ -5,6 +5,8 @@
 #include <fstream>
 #include <cstdlib>
 
+#include <QString>
+
 #include "globals.h"
 
 enum ops {
@@ -46,6 +48,7 @@ public:
 	int find_child(node *);
 	void set_child(int c2, node *);
 	node *get_point(int, int &);
+	QString graphviz(node *);
 private:
 	node *children[4];
 	ops operation;

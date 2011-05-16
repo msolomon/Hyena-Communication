@@ -17,9 +17,11 @@ void environment::evaluate(void) {
 		radius = distance_sq(tempx - ZEBRAX, tempy - ZEBRAY); // distance squared
 		agents->hyenas[i].changeFit(1.0 / (1.0 + radius)); // near zebra
 		radius = sqrt(radius);
-		if(radius <= EAT_RADIUS){
+		 // bonus for getting close enough to 'eat'
+		if(EAT_BONUS_ACTIVE && radius <= EAT_RADIUS){
 			agents->hyenas[i].changeFit(EAT_BONUS);
 		}
+
 		agents->hyenas[i].inc_dist_to_zebra(radius);
 		for (int j = 0; j < NUM_LIONS; j++) {
 			radius = distance_sq(tempx - agents->lions[j].getX(),

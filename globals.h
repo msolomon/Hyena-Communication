@@ -10,7 +10,7 @@ const float PI = 3.141592654;
 const int X = 25;
 const int Y = 25;
 //const int HYENA_SEE_ZEBRA_RADIUS = X / 8;
-const int HEAR_CALLING_RADIUS = X + Y;
+const int HEAR_CALLING_RADIUS = X * Y * X * Y;
 const int LION_ATTACK_RADIUS = 3;
 const int LION_LION_RADIUS = 5;
 const int LION_HYENA_RADIUS = 5;
@@ -29,11 +29,12 @@ const float ZEBRAY = Y / 2;
 const float CALLING_RANGE = X / 4;
 const float CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
 
+
 // reward getting close enough to actually eat
 const float EAT_RADIUS = X / 16;
 const float EAT_RADIUS_SQ = EAT_RADIUS * EAT_RADIUS;
 const float EAT_BONUS = 1.0;
-
+const bool EAT_BONUS_ACTIVE = false;
 
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
@@ -42,7 +43,7 @@ const char NUM_LIONS = 2;
 const int TIME_STEPS = 50;
 const int NUM_TESTS = 1;
 const int TOURNAMENT_SIZE = 5;
-const int ITERATIONS = 3000;
+const int ITERATIONS = 1500;
 //const int TEAM_SIZE = 3;
 const int TRIALS = 1;
 const int GROW_DEPTH = 4;

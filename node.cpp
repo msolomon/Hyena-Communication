@@ -1,5 +1,9 @@
 #include "node.h"
 
+// do fast string building for graphviz output
+#define QT_USE_FAST_CONCATENATION
+#define QT_USE_FAST_OPERATOR_PLUS
+
 using namespace std;
 
 void node::set_child(int c, node *child) {
@@ -363,4 +367,108 @@ node *node::get_point(int pn, int &current) {
 		error.close();
 	}
 	return this; // error
+}
+
+QString node::graphviz(node *parent){
+	QString output;
+	if(parent == NULL){
+		output = QString("digraph hyena {\n") +
+				 "splines=true\nepsilon=0\nmclimit=100.0\n" +
+				 output.number((int)NULL) + " [label=root]\n";
+	} else if(this == NULL){
+		return output;
+	}
+	output += output.number((long) this) + " [label="; // use address as id
+
+	switch (operation) {
+	// terminals
+	case zebra:
+		output += "zebra, shape=plaintext]\n";
+		break;
+	case nearest_hyena:
+		output += "nearest_hyena, shape=plaintext]\n";
+		break;
+	case nearest_lion:
+		output += "nearest_lion, shape=plaintext]\n";
+		break;
+	case nearest_calling:
+		output += "nearest_calling, shape=plaintext]\n";
+		break;
+	case north:
+		output += "north, shape=plaintext]\n";
+		break;
+	case randm:
+		output += "randm, shape=plaintext]\n";
+		break;
+	case last_move:
+		output += "last_move, shape=plaintext]\n";
+		break;
+	case constant:
+		output += "constant, shape=plaintext]\n";
+		break;
+	case num_hyenas:
+		output += "num_hyenas, shape=plaintext]\n";
+		break;
+	case mirror_nearest:
+		output += "mirror_nearest, shape=plaintext]\n";
+		break;
+
+	// non-terminals
+	case sum:
+		output += "sum, shape=plaintext]\n";
+		for (int i = 0; i < 4; i++) {
+			output += children[i]->graphviz(this);
+		}
+		break;
+	case invert:
+		output += "invert, shape=plaintext]\n";
+		for (int i = 0; i < 4; i++) {
+			output += children[i]->graphviz(this);
+		}
+		break;
+	case iflteMAG:
+		output += "iflteMAG, shape=plaintext]\n";
+		for (int i = 0; i < 4; i++) {
+			output += children[i]->graphviz(this);
+		}
+		break;
+	case iflteCLOCKWISE:
+		output += "iflteCLOCKWISE, shape=plaintext]\n";
+		for (int i = 0; i < 4; i++) {
+			output += children[i]->graphviz(this);
+		}
+		break;
+	case ifVectorZero:
+		output += "ifVectorZero, shape=plaintext]\n";
+		for (int i = 0; i < 4; i++) {
+			output += children[i]->graphviz(this);
+		}
+		break;
+	default:
+		ofstream error;
+		error.open("error.txt");
+		error << "error in graphviz" << endl;
+		error.close();
+	}
+
+	//		cout << "--" << output.toStdString()  << "--" << endl;
+	QString label;
+	switch(operation){
+	case constant:
+//		label += ", label=\"(" + label.number(the_const.direction)
+//				 + ", " + label.number(the_const.magnitude) + ")\"";
+		break;
+	default:
+		break;
+	}
+
+	output += output.number((long) parent) +
+			  "->" + output.number((long) this) + " [dir=back"
+			  + label + "]\n";
+
+
+	if(parent == NULL){
+		output += QString("}\n");
+	}
+	return output;
 }
