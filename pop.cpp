@@ -167,8 +167,8 @@ void pop::OET1_reproduce() {
 }
 
 void pop::island_reproduce(){
-    int ps1, pi1, rs1, ri1;
-    int ps2, pi2, rs2, ri2;
+    int ps1, rs1;
+    int ps2, rs2;
     // select hyenas
     for(int i =0; i < NUM_HYENAS;i++){
         ps1 = member_select(1,i,hyena);  //
