@@ -19,7 +19,6 @@ void team::reset_fitness(void) {
 		hyenas[i].reset_fitness();
 	}
 	for (int i = 0; i < NUM_LIONS; i++) {
-//		invest_fits[i] = 0;
 		lions[i].reset_fitness();
 	}
 }

@@ -8,6 +8,28 @@ pop::pop(){
     }
 }
 
+void pop::save_data(int iteration, int trial){
+	// iteration average fitnesses
+	float avg_fit = 0;
+	for (int i = 0; i < POP_SIZE; i++) {
+		avg_fit += the_pop[i]->get_avg_fit();
+	}
+	data[trial][iteration][0] = avg_fit / POP_SIZE;
+
+    //// Best team information
+    // average distance to zebra
+    data[trial][iteration][1] = the_pop[pop_bestteam]->get_avg_dist_to_zebra();
+    // average number of lion attacks
+    data[trial][iteration][2] = the_pop[pop_bestteam]->get_avg_lion_attacks();
+    // average fitness on best team
+    data[trial][iteration][3] = the_pop[pop_bestteam]->get_avg_fit();
+
+    //// Best team individual fitnesses
+    for(int i = 0; i < NUM_HYENAS; i++){
+        data[trial][iteration][i + 4] = the_pop[pop_bestteam]->get_hyena_fit(i);
+    }
+}
+
 //void pop::save_data(int g, int trial) {
 //	float avg_fit = 0;
 //	for (int i = 0; i < POP_SIZE; i++) {
@@ -29,6 +51,27 @@ pop::pop(){
 //	pop_bestteam = best;
 //	data[4][g] = the_pop[pop_bestteam]->get_avg_fit();
 //}
+
+void pop::write_data(){
+	ofstream f;
+	f.open("data.txt");
+	// trials
+	for(int i = 0; i < TRIALS; i++){
+		f << i + 1 << "\n";
+		// iterations
+		for(int j = 0; j < ITERATIONS; j++){
+			f << j + 1 << "\t";
+			// hyena fitnesses plus 4 attributes at the beginning
+			for(int k = 0; k < NUM_HYENAS + 4; k++){
+				f << data[i][j][k] << "\t";
+			}
+			f << "\n";
+		}
+		f << "\n";
+	}
+	f.flush();
+	f.close();
+}
 
 //void pop::write_fitnesses(void) {
 //	ofstream fit;
@@ -89,7 +132,7 @@ void pop::evolve_repeat(){
 	}
 }
 
-void pop::evolve(int t) {
+void pop::evolve(int trial) {
 	for (int i = 0; i < POP_SIZE; i++) {
 		evaluate_team(i, 0);
 	}
@@ -99,7 +142,7 @@ void pop::evolve(int t) {
 		calc_iter_total(QString::number(ITERATIONS));
 		calc_iter_percent(i);
 		calc_iter_percent_total(ITERATIONS - 1);
-		calc_trial_percent(t * ITERATIONS + i);
+		calc_trial_percent(trial * ITERATIONS + i);
 		calc_trial_percent_total(ITERATIONS * TRIALS - 1);
 		// only use one method of reproduction
 		island_reproduce();
@@ -107,16 +150,17 @@ void pop::evolve(int t) {
 //		member_reproduce();
 //		OET1_reproduce();
 //		oet_generational();
-//		save_data(i, t);
+		pop_bestteam = select_best_team(1);
+		save_data(i, trial);
+
 		if (i % EVALUATE_EVERY == 0) {
-			int bestTeam;
-			bestTeam = select_best_team(1);
-			evaluate_team(bestTeam, 1, i);
+			evaluate_team(pop_bestteam, 1, i);
 		}
 	}
-	if (t + 1 == TRIALS){
+	if (trial + 1 == TRIALS){
 
 		cout << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL).toStdString() << endl;
+		write_data();
 //		write_fitnesses();
 	}
 }
@@ -171,7 +215,7 @@ void pop::island_reproduce(){
     int ps2, rs2;
     // select hyenas
     for(int i =0; i < NUM_HYENAS;i++){
-        ps1 = member_select(1,i,hyena);  //
+        ps1 = member_select(1,i,hyena);
         do{
             rs1 = member_select(-1,i,hyena);
         }while(ps1 == rs1);

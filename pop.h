@@ -21,6 +21,8 @@ public:
         // TODO: fix TEAM_SIZE and re-enable calls to write_fitnesses and save_data
 //	void write_fitnesses(void);
 //	void save_data(int, int);
+	void write_data();
+	void save_data(int, int);
 	void evolve_repeat();
 	void evolve(int);
 	void evaluate_agent(int, int, int);
@@ -38,6 +40,8 @@ private:
 	environment ENV;
 	team *the_pop[POP_SIZE];
 //        float data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
+	// data. all team fitnesses plus 4 iteration attributes (avg. and soforth)
+	float data[TRIALS][ITERATIONS][NUM_HYENAS + 4];
 	float pop_bestfitness;
 	int pop_bestteam;
 	DrawHelper *helper;
