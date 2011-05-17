@@ -256,7 +256,7 @@
           </sizepolicy>
          </property>
          <property name="title">
-          <string>Iteration Percent Displayed</string>
+          <string>Trial Percent Displayed</string>
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>

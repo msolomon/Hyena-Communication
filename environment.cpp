@@ -78,7 +78,7 @@ void environment::update_vectors(void){
 		if(already_set[i]) continue;
 		agentx = agents->hyenas[i].getX(); //get hyena x,y
 		agenty = agents->hyenas[i].getY();
-		min_mag = (4*(X+Y)) * (4*(X+Y));
+		min_mag = HYENA_HYENA_RADIUS_SQ;
 		agents->hyenas[i].set_num_hyenas(num_calling);
 		for(int j = i+1; j < NUM_HYENAS; j++){
 			magnitude = distance_sq(agentx - agents->hyenas[j].getX(),
@@ -88,10 +88,16 @@ void environment::update_vectors(void){
 				the_j = j;
 			}
 		}
-		// set the closest hyena
+		// if out of range, zero vector
+		if(min_mag == HYENA_HYENA_RADIUS_SQ){
+			temp.magnitude = 0;
+			temp.direction = 0;
+			agents->hyenas[i].set_nearest_hyena(temp);
+		} else { // set to nearest hyena
 		temp.magnitude = sqrt(min_mag);
 		temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
 							   agenty - agents->hyenas[the_j].getY());
+		// set the closest hyena
 		agents->hyenas[i].set_nearest_hyena(temp);
 		agents->hyenas[i].set_mirrored(agents->hyenas[the_j].get_last_move());
 		// now set the other direction (j closest to i)
@@ -99,6 +105,7 @@ void environment::update_vectors(void){
 		agents->hyenas[the_j].set_nearest_hyena(temp);
 		agents->hyenas[the_j].set_mirrored(agents->hyenas[i].get_last_move());
 		already_set[the_j] = true;
+		}
 	}
 
 	// find nearest calling scout
@@ -133,7 +140,7 @@ void environment::update_vectors(void){
 		int num_hyenas = 0;
 		agentx = agents->lions[i].getX(); //get hyena x,y
 		agenty = agents->lions[i].getY();
-		min_mag = CALLING_RANGE_SQ; // TODO: maximum radius?
+		min_mag = LION_HYENA_RADIUS;
 		for(int j = 0; j < NUM_HYENAS; j++){
 			magnitude = distance_sq(agentx - agents->hyenas[j].getX(),
 									agenty - agents->hyenas[j].getY());
@@ -144,7 +151,7 @@ void environment::update_vectors(void){
 				the_j = j;
 			}
 		}
-		if(min_mag < CALLING_RANGE_SQ){ // lion close enough to hyena
+		if(min_mag < LION_HYENA_RADIUS){ // lion close enough to hyena
 			temp.magnitude = sqrt(min_mag);
 			temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
 								   agenty - agents->hyenas[the_j].getY());
