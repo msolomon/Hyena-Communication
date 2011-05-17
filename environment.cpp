@@ -168,23 +168,15 @@ void environment::update_vectors(void){
 		agents->hyenas[the_j].set_nearest_lion(temp);
 
 
-		//find nearest lion. commented out: count lions close enough
+		//find nearest lion.
 		int num_lions = 1; // count self
-//		min_mag = LION_LION_RADIUS_SQ;
 		for (int j = 0; j < NUM_LIONS; j++) {
 			if(i == j) continue;
 			magnitude = distance_sq(agentx - agents->lions[j].getX(),
 									agenty - agents->lions[j].getY());
 			if (magnitude < LION_LION_RADIUS_SQ)
 				num_lions++;
-//			if (magnitude < min_mag) {
-//				min_mag = magnitude;
-//				the_j = j;
-//			}
 		}
-//		temp.magnitude = sqrt(min_mag); // now take sqrt
-//		temp.direction = direction;
-		//agents->invests[i].set_nearest_invest(temp);
 		agents->lions[i].set_num_lions(num_lions);
 
 		// lion -> zebra
@@ -324,9 +316,6 @@ void environment::update_vectors(void){
 //		agents->invests[i].set_zebra(temp);
 //	}
 //}
-
-environment::environment(void) {
-}
 
 void environment::draw(DrawHelper* helper, int itera) {
 	helper->iter.enqueue(itera);
