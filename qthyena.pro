@@ -15,7 +15,8 @@ HEADERS += qthyena.h \
     indiv.h \
     pop.h \
     widget.h \
-    drawhelper.h
+    drawhelper.h \
+    playback.h
     
 SOURCES += qthyena.cpp \
     environment.cpp \
@@ -27,9 +28,11 @@ SOURCES += qthyena.cpp \
     vect.cpp \
     widget.cpp \
     globals.cpp \
-    drawhelper.cpp
+    drawhelper.cpp \
+    playback.cpp
     
-FORMS += qthyena.ui
+FORMS += qthyena.ui \
+    playback.ui
 
 RESOURCES += 
 

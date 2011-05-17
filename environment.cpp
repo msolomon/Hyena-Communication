@@ -1,5 +1,5 @@
 #include <bitset>
-
+#include <QStringList>
 #include "environment.h"
 
 using namespace std;
@@ -319,16 +319,24 @@ void environment::update_vectors(void){
 
 void environment::draw(DrawHelper* helper, int itera) {
 	helper->iter.enqueue(itera);
-
+	QStringList list;
 	for (int i = 0; i < NUM_LIONS; i++) {
-		helper->lions[i].enqueue(
-					QPointF(agents->lions[i].getX(),
-							agents->lions[i].getY())
-					);
+		QPointF p = QPointF(agents->lions[i].getX(),
+							agents->lions[i].getY());
+		list.append(QString("%1,%2").arg(p.x()).arg(p.y()));
+		helper->lions[i].enqueue(p);
 	}
+	list.append("\n");
 
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		helper->hyenas[i].enqueue(QPointF(agents->hyenas[i].getX(),
-										  agents->hyenas[i].getY()));
+		QPointF p = QPointF(agents->hyenas[i].getX(),
+							agents->hyenas[i].getY());
+		list.append(QString("%1,%2").arg(p.x()).arg(p.y()));
+		helper->hyenas[i].enqueue(p);
 	}
+	list.append("\n");
+	ofstream f;
+	f.open("video.txt", ios_base::app);
+	f << list.join("\t").toStdString();
+	f.close();
 }

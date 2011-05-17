@@ -51,3 +51,8 @@ void qthyena::connectAll(){
 			ui.calc_iter_percent, SLOT(setMaximum(int)));
 }
 
+
+void qthyena::on_but_playback_clicked()
+{
+	pb.show();
+}

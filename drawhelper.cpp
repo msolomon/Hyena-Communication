@@ -8,8 +8,8 @@ DrawHelper::DrawHelper() {
 
 	zebra = QPointF(ZEBRAX, ZEBRAY);
 
-	hyenaPen = QPen(QBrush(hyenaColor), .5, Qt::SolidLine, Qt::RoundCap);
-	lionPen = QPen(QBrush(lionColor), 1, Qt::SolidLine, Qt::RoundCap);
+	hyenaPen = QPen(QBrush(hyenaColor), .8, Qt::SolidLine, Qt::RoundCap);
+	lionPen = QPen(QBrush(lionColor), 1.5, Qt::SolidLine, Qt::RoundCap);
 	// 2 * b/c width is twice the radius
 	lionRadPen = QPen(QBrush(lionColor), 2*LION_ATTACK_RADIUS, Qt::SolidLine, Qt::RoundCap);
 	zebraPen = QPen(QBrush(zebraColor), 2*EAT_RADIUS, Qt::SolidLine, Qt::RoundCap);
@@ -19,6 +19,9 @@ DrawHelper::DrawHelper() {
 	it = -1;
 }
 
+#include <iostream>
+using namespace std;
+
 void DrawHelper::updateGui(){
 
 	disp_timestep(QString::number(timestep + 1));
@@ -27,8 +30,8 @@ void DrawHelper::updateGui(){
 
 	disp_timestep_total(QString::number(total_steps));
 
-	int curr_iteration = iter.dequeue();
-	disp_iteration(QString::number(curr_iteration + EVALUATE_EVERY));
+	int curr_iteration = iter.dequeue() + 1;
+	disp_iteration(QString::number(curr_iteration));
 	disp_iteration_total(QString::number(ITERATIONS));
 
 	if(it == -1)
@@ -38,15 +41,16 @@ void DrawHelper::updateGui(){
 		disp_trial(QString::number(it + 1));
 	}
 
-	const int full_trial = (ITERATIONS) * total_steps * 2 - EVALUATE_EVERY;
-	int this_it = curr_iteration * total_steps * 2 + timestep * EVALUATE_EVERY;
+	const int full_trial = (ITERATIONS) * total_steps;
+	int this_it = curr_iteration * total_steps + timestep;
+	cout << full_trial << " " << this_it << endl;
 	disp_iter_percent(this_it);
 	disp_iter_percent_total(full_trial);
-	disp_trial_percent((it * full_trial) + this_it);
+	disp_trial_percent(this_it);
 	disp_trial_percent_total(full_trial * TRIALS);
 
 	timestep++;
-	timestep = timestep % (total_steps * 2);
+	timestep = timestep % (total_steps);
 }
 
 void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {

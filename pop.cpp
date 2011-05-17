@@ -112,7 +112,7 @@ void pop::evaluate_team(int member, int flag, int iteration) {
 	for (int tests = 0; tests < NUM_TESTS; tests++) {
 		the_pop[member]->reset_team();
 		for (int g = 0; g < TIME_STEPS; g++) {
-			if(flag) ENV.draw(helper, iteration);
+			//if(flag) ENV.draw(helper, iteration);
 			ENV.update_vectors();
 			if (flag) {
 				ENV.draw(helper, iteration);
@@ -136,6 +136,13 @@ void pop::evolve(int trial) {
 	for (int i = 0; i < POP_SIZE; i++) {
 		evaluate_team(i, 0);
 	}
+	ofstream f;
+	if(trial == 0)
+		f.open("video.txt");
+	f.open("video.txt", ios_base::app);
+	f << "Trial " << trial+1 << "\n";
+	f.close();
+
 	for (int i = 0; i < ITERATIONS; i++) {
 		// update the GUI
 		calc_iter(QString::number(i+1));
@@ -153,7 +160,10 @@ void pop::evolve(int trial) {
 		pop_bestteam = select_best_team(1);
 		save_data(i, trial);
 
-		if (i % EVALUATE_EVERY == 0) {
+		if (i % EVALUATE_EVERY == (EVALUATE_EVERY - 1)) {
+			f.open("video.txt", ios_base::app);
+			f << "Iteration " << i + 1 << "\n";
+			f.close();
 			evaluate_team(pop_bestteam, 1, i);
 		}
 	}

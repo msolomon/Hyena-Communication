@@ -133,6 +133,11 @@ void node::mutate(void) {
 		children[2]->mutate();
 		children[3]->mutate();
 		break;
+	case ifVectorZero:
+		children[0]->mutate();
+		children[1]->mutate();
+		children[2]->mutate();
+		break;
 	default:
 		ofstream error;
 		error.open("error.txt", ios_base::app);
