@@ -10,7 +10,7 @@ const float PI = 3.141592654;
 
 const int X = 32;
 const int Y = 32;
-const int HEAR_CALLING_RADIUS = sqrt(INT_MAX);
+const double HEAR_CALLING_RADIUS = sqrt(INT_MAX);
 const int LION_ATTACK_RADIUS = 3;
 const int LION_LION_RADIUS = 5;
 const int LION_HYENA_RADIUS = 5; // both ways
@@ -46,7 +46,8 @@ const int ITERATIONS = 2000;
 const int TRIALS = 2;
 const int GROW_DEPTH = 4;
 const int EVALUATE_EVERY = 30;
-const bool DRAW = true;
+const bool GUI = true;
+const bool DRAW = true; // if false, videos are unavailable
 const int DRAW_MS = 30;
 
 typedef struct {

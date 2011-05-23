@@ -18,7 +18,10 @@ void Widget::playVideo(){
 	if(!helper.lions[0].isEmpty()){
 		repaint();
 		QTimer::singleShot(playback_ms, this, SLOT(playVideo()));
+	} else{
+		donePlayingBack();
 	}
+
 }
 
 void Widget::animate() {

@@ -10,9 +10,6 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	QApplication app(argc, argv);
-	qthyena ui;
-
 	int seed = int(time(NULL));
 	//    seed = 1206369581;
 	ofstream outseed;
@@ -21,7 +18,16 @@ int main(int argc, char *argv[]) {
 	outseed.close();
 	srand(seed);
 
-	ui.show();
-
-	return app.exec();
+	if(GUI){
+		QApplication app(argc, argv);
+		qthyena ui;
+		ui.show();
+		return app.exec();
+	} else{
+		pop p;
+		DrawHelper h;
+		p.generate(&h);
+		p.evolve_repeat();
+		return 0;
+	}
 }

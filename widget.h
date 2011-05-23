@@ -29,6 +29,10 @@ public slots:
 	void runTrial();
 	void animate();
 	void playVideo();
+
+signals:
+	void donePlayingBack();
+
 signals:
 	void resized(int);
 

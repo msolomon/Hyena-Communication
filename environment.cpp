@@ -49,7 +49,8 @@ float invert_direction(float d){
 
 void environment::update_vectors(void){
 	int the_j;
-	float magnitude, min_mag;
+	float magnitude;
+	double min_mag;
 	vect temp;
 	float agentx, agenty;
 	char num_calling = 0;

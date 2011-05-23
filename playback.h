@@ -31,6 +31,8 @@ private slots:
 	void on_but_play_clicked();
 	void on_combo_iterations_currentIndexChanged(const QString &arg1);
 	void on_spin_fps_valueChanged(int arg1);
+	void on_check_sequence_toggled(bool checked);
+	void advance_video();
 };
 
 #endif // PLAYBACK_H

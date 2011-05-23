@@ -142,6 +142,7 @@ void pop::evolve(int trial) {
 	f.open(fname.c_str());
 	//f << "Trial " << trial+1 << "\n";
 	f.close();
+	cout << "Trial " << trial + 1 << " of " << TRIALS << endl;
 	ENV.fname = fname;
 
 	for (int i = 0; i < ITERATIONS; i++) {
@@ -165,6 +166,8 @@ void pop::evolve(int trial) {
 			f.open(fname.c_str(), ios_base::app);
 			f << "Iteration " << i + 1 << "\n";
 			f.close();
+			cout << "Iteration " << i + 1 << " of " << ITERATIONS <<
+					" (" << (i+1)/ITERATIONS * 100 << "% of trial)" << endl;
 			evaluate_team(pop_bestteam, 1, i);
 		}
 	}

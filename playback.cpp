@@ -92,3 +92,23 @@ void Playback::on_spin_fps_valueChanged(int fps)
 {
 	ui->widget->playback_ms = 1000 / fps;
 }
+
+void Playback::advance_video(){
+	int idx = ui->combo_iterations->currentIndex();
+	// stop after the last one (don't loop back to beginning)
+	if(idx == ui->combo_iterations->count() - 1){
+		return;
+	}
+
+	ui->combo_iterations->setCurrentIndex(idx + 1);
+}
+
+void Playback::on_check_sequence_toggled(bool checked)
+{
+	if(checked){
+		connect(ui->widget, SIGNAL(donePlayingBack()),
+				this, SLOT(advance_video()));
+	} else{
+		disconnect(ui->widget, SIGNAL(donePlayingBack()), 0, 0);
+	}
+}
