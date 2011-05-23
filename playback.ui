@@ -29,10 +29,10 @@
      <item>
       <widget class="QLineEdit" name="txt_file">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="readOnly">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
       </widget>
      </item>
