@@ -8,7 +8,7 @@ void Widget::runTrial(){
       p.generate(&helper);
 	  connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
       if(DRAW){
-		  timer.start(DRAW_MS);
+		  timer.start(playback_ms);
       }
       QtConcurrent::run(&p, &pop::evolve_repeat);
 }

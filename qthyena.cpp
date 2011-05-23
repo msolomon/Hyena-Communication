@@ -56,3 +56,11 @@ void qthyena::on_but_playback_clicked()
 {
 	pb.show();
 }
+
+void qthyena::on_spinBox_valueChanged(int fps)
+{
+	int ms = 1000 / fps;
+	ui.widget->playback_ms = ms;
+	ui.widget->timer.stop();
+	ui.widget->timer.start(ms);
+}

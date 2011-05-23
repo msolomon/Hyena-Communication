@@ -48,7 +48,6 @@ const int GROW_DEPTH = 4;
 const int EVALUATE_EVERY = 30;
 const bool GUI = true;
 const bool DRAW = true; // if false, videos are unavailable
-const int DRAW_MS = 30;
 
 typedef struct {
 	vect zebra;

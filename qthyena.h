@@ -16,6 +16,8 @@ public:
 private slots:
     void on_but_playback_clicked();
 
+	void on_spinBox_valueChanged(int arg1);
+
 private:
     Ui::qthyenaClass ui;
 	Playback::Playback pb;

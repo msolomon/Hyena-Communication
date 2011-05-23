@@ -24,6 +24,7 @@ public:
 	DrawHelper helper;
 	pop p;
 	int playback_ms;
+	QTimer timer;
 
 public slots:
 	void runTrial();
@@ -40,8 +41,6 @@ protected:
 	void paintEvent(QPaintEvent *event);
 	void resizeEvent(QResizeEvent *event);
 
-private:
-	QTimer timer;
 };
 
 #endif
