@@ -23,6 +23,7 @@ public:
 	Widget(QWidget *parent);
 	DrawHelper helper;
 	pop p;
+	int playback_ms;
 
 public slots:
 	void runTrial();

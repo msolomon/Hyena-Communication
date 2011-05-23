@@ -82,3 +82,13 @@ void Playback::parse_video(){
 		ui->combo_iterations->addItems(hyenas.keys());
 	} else return;
 }
+
+void Playback::on_combo_iterations_currentIndexChanged(const QString &arg1)
+{
+	on_but_play_clicked();
+}
+
+void Playback::on_spin_fps_valueChanged(int fps)
+{
+	ui->widget->playback_ms = 1000 / fps;
+}
