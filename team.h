@@ -12,11 +12,11 @@ public:
 	}
 	void calc_size();
 	void mutate();
-	void mutate(int, agent_type);
+	void mutate(int);
 	void xOver(team *);
-	void xOver(team *, int, agent_type);
+	void xOver(team *, int);
 	void copy(team *);
-	void copy(team *, int, agent_type);
+	void copy(team *, int);
 	void generate(void);
 	void clear(void);
 	void reset_team(void);

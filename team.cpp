@@ -57,22 +57,13 @@ void team::copy(team *p2) {
 	avg_fit = p2->avg_fit;
 }
 
-void team::copy(team *p2, int i, agent_type t) {
-	if (t == hyena) {
-		hyenas[i] = (p2->hyenas[i]);
-		hyena_fits[i] = p2->hyena_fits[i];
-	}
-	if (t == lion) {
-		lions[i] = (p2->lions[i]);
-//		invest_fits[i] = p2->invest_fits[i];
-	}
+void team::copy(team *p2, int i) {
+	hyenas[i] = (p2->hyenas[i]);
+	hyena_fits[i] = p2->hyena_fits[i];
 }
 
-void team::xOver(team *p2, int i, agent_type t) {
-	if (t == hyena)
-		hyenas[i].xOver(&(p2->hyenas[i]));
-	if (t == lion)
-		lions[i].xOver(&(p2->lions[i]));
+void team::xOver(team *p2, int i) {
+	hyenas[i].xOver(&(p2->hyenas[i]));
 }
 
 void team::xOver(team *p2) {
@@ -96,11 +87,8 @@ void team::mutate(void) {
 		lions[i].mutate();
 }
 
-void team::mutate(int member, agent_type t) {
-	if (t == hyena)
-		hyenas[member].mutate();
-	if (t == lion)
-		lions[member].mutate();
+void team::mutate(int member) {
+	hyenas[member].mutate();
 }
 
 float team::calc_avg_fit(void) {

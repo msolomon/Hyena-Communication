@@ -14,9 +14,7 @@ public:
 	void generate(DrawHelper*);
 	void generate();
 	void run();
-	int select_best(int, agent_type);
 	int select_best_team(int);
-	int tourn_select(int, agent_type);
 	int tourn_select(int);
         // TODO: fix TEAM_SIZE and re-enable calls to write_fitnesses and save_data
 //	void write_fitnesses(void);
@@ -33,7 +31,7 @@ public:
 	void island_reproduce();
 	void OET1_reproduce();
 	void oet_generational();
-	int member_select(int, int, agent_type);
+	int member_select(int, int);
 private:
 	//     float fitnesses_scouts[POP_SIZE];
 	//    float fitnesses_investigators[POP_SIZE];
