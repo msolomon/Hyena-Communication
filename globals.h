@@ -43,11 +43,11 @@ const int TIME_STEPS = 50;
 const int NUM_TESTS = 1;
 const int TOURNAMENT_SIZE = 5;
 const int ITERATIONS = 120;
-const int TRIALS = 1;
+const int TRIALS = 2;
 const int GROW_DEPTH = 4;
 const int EVALUATE_EVERY = 30;
 const bool DRAW = true;
-const int DRAW_MS = 20;
+const int DRAW_MS = 30;
 
 typedef struct {
 	vect zebra;

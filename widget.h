@@ -27,7 +27,7 @@ public:
 public slots:
 	void runTrial();
 	void animate();
-
+	void playVideo();
 signals:
 	void resized(int);
 

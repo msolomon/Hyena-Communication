@@ -5,11 +5,19 @@ Widget::Widget(QWidget *parent) : QWidget(parent){
 
 void Widget::runTrial(){
       p.generate(&helper);
+	  connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
       if(DRAW){
           timer.start(DRAW_MS);
       }
-      connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
       QtConcurrent::run(&p, &pop::evolve_repeat);
+}
+
+void Widget::playVideo(){
+	// abusing recursion a bit, but it works
+	if(!helper.lions[0].isEmpty()){
+		repaint();
+		QTimer::singleShot(DRAW_MS, this, SLOT(playVideo()));
+	}
 }
 
 void Widget::animate() {

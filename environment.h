@@ -5,6 +5,7 @@
 #include <QPointer>
 
 #include <cmath>
+#include <string>
 
 #include "team.h"
 #include "drawhelper.h"
@@ -18,6 +19,7 @@ public:
 	void move(void);
 	void evaluate();
 	void set_up(team *);
+	std::string fname;
 private:
 	team *agents;
 };

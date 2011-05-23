@@ -19,8 +19,8 @@ DrawHelper::DrawHelper() {
 	it = -1;
 }
 
-#include <iostream>
-using namespace std;
+//#include <iostream>
+//using namespace std;
 
 void DrawHelper::updateGui(){
 
@@ -43,7 +43,7 @@ void DrawHelper::updateGui(){
 
 	const int full_trial = (ITERATIONS) * total_steps;
 	int this_it = curr_iteration * total_steps + timestep;
-	cout << full_trial << " " << this_it << endl;
+	// cout << full_trial << " " << this_it << endl;
 	disp_iter_percent(this_it);
 	disp_iter_percent_total(full_trial);
 	disp_trial_percent(this_it);

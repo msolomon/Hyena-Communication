@@ -1,4 +1,5 @@
 #include "pop.h"
+#include <QString>
 
 using namespace std;
 
@@ -60,10 +61,10 @@ void pop::write_data(){
 		f << i + 1 << "\n";
 		// iterations
 		for(int j = 0; j < ITERATIONS; j++){
-			f << j + 1 << "\t";
+			f << j + 1 << " ";
 			// hyena fitnesses plus 4 attributes at the beginning
 			for(int k = 0; k < NUM_HYENAS + 4; k++){
-				f << data[i][j][k] << "\t";
+				f << data[i][j][k] << " ";
 			}
 			f << "\n";
 		}
@@ -136,12 +137,12 @@ void pop::evolve(int trial) {
 	for (int i = 0; i < POP_SIZE; i++) {
 		evaluate_team(i, 0);
 	}
+	string fname = QString("trial_%1_video.txt").arg(trial+1).toStdString();
 	ofstream f;
-	if(trial == 0)
-		f.open("video.txt");
-	f.open("video.txt", ios_base::app);
-	f << "Trial " << trial+1 << "\n";
+	f.open(fname.c_str());
+	//f << "Trial " << trial+1 << "\n";
 	f.close();
+	ENV.fname = fname;
 
 	for (int i = 0; i < ITERATIONS; i++) {
 		// update the GUI
@@ -161,7 +162,7 @@ void pop::evolve(int trial) {
 		save_data(i, trial);
 
 		if (i % EVALUATE_EVERY == (EVALUATE_EVERY - 1)) {
-			f.open("video.txt", ios_base::app);
+			f.open(fname.c_str(), ios_base::app);
 			f << "Iteration " << i + 1 << "\n";
 			f.close();
 			evaluate_team(pop_bestteam, 1, i);

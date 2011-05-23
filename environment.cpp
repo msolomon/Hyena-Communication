@@ -320,10 +320,11 @@ void environment::update_vectors(void){
 void environment::draw(DrawHelper* helper, int itera) {
 	helper->iter.enqueue(itera);
 	QStringList list;
+
 	for (int i = 0; i < NUM_LIONS; i++) {
 		QPointF p = QPointF(agents->lions[i].getX(),
 							agents->lions[i].getY());
-		list.append(QString("%1,%2").arg(p.x()).arg(p.y()));
+		list.append(QString("%1 %2").arg(p.x()).arg(p.y()));
 		helper->lions[i].enqueue(p);
 	}
 	list.append("\n");
@@ -331,12 +332,12 @@ void environment::draw(DrawHelper* helper, int itera) {
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		QPointF p = QPointF(agents->hyenas[i].getX(),
 							agents->hyenas[i].getY());
-		list.append(QString("%1,%2").arg(p.x()).arg(p.y()));
+		list.append(QString("%1 %2").arg(p.x()).arg(p.y()));
 		helper->hyenas[i].enqueue(p);
 	}
 	list.append("\n");
 	ofstream f;
-	f.open("video.txt", ios_base::app);
-	f << list.join("\t").toStdString();
+	f.open(fname.c_str(), ios_base::app);
+	f << list.join(" ").toStdString();
 	f.close();
 }

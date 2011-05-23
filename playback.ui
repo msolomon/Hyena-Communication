@@ -28,6 +28,9 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QLineEdit" name="txt_file">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="readOnly">
         <bool>false</bool>
        </property>
@@ -48,7 +51,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="spin_iteration"/>
+      <widget class="QComboBox" name="combo_iterations"/>
      </item>
      <item>
       <widget class="QPushButton" name="but_play">
@@ -56,16 +59,6 @@
         <string>Play</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Play Speed</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QSpinBox" name="spin_speed"/>
      </item>
      <item>
       <spacer name="verticalSpacer">
