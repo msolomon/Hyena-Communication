@@ -30,7 +30,7 @@ public:
 	void member_reproduce();
 	void island_reproduce();
 	void OET1_reproduce();
-	void oet_generational();
+	void all_generational();
 	int member_select(int, int);
 private:
 	//     float fitnesses_scouts[POP_SIZE];

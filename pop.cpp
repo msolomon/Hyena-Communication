@@ -259,12 +259,16 @@ void pop::member_reproduce() {
 }
 */
 
-void pop::oet_generational() {
+void pop::all_generational(){
 	pop temp;
-	temp.generate();
-	for (int i = 0; i < POP_SIZE; i = i + 2) {
+	temp.generate();  // generate a new population.
+	int bound; // determines how to split the new population between island and team
+	bound = POP_SIZE;       // team approach
+	bound = 0;                      // island approach
+	bound = POP_SIZE/2;   // OET approach,  POP_SIZE should always be even
+	for (int i = 0; i < bound; i = i + 2) {
 		int p1, p2;
-		// select teams    
+		// select teams
 		p1 = tourn_select(1);
 		do {
 			p2 = tourn_select(1);
@@ -280,11 +284,11 @@ void pop::oet_generational() {
 		temp.evaluate_team(i + 1, 0);
 	}
 
-	for (int i = POP_SIZE / 2; i < POP_SIZE; i = i + 2) {
+	for (int i = bound; i < POP_SIZE; i = i + 2) {
 		// all-star
 		int parent_hyena;
 		for (int j = 0; j < NUM_HYENAS; j++) {
-			// Piecewise construct two new teams to replace the poor teams 
+			// Piecewise construct new teams, ignoring previous associations – island model
 			parent_hyena = member_select(1, j);
 			temp.the_pop[i]->copy(the_pop[parent_hyena], j);
 			parent_hyena = member_select(1, j);
@@ -299,14 +303,10 @@ void pop::oet_generational() {
 		temp.evaluate_team(i + 1, 0);
 	}
 
-	for (int i = 0; i < POP_SIZE; i++) {
-		// copy back to pop
-		the_pop[i]->clear();
-		the_pop[i]->copy(temp.the_pop[i]);
-		temp.the_pop[i]->clear();
-		delete temp.the_pop[i];
+	for(int i = 0; i < POP_SIZE; i++){
+			// copy back to pop
+			the_pop[i]->copy(temp.the_pop[i]);
 	}
-
 }
 
 void pop::team_reproduce() {
