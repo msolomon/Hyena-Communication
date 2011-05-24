@@ -46,8 +46,6 @@ void DrawHelper::updateGui(){
 	// cout << full_trial << " " << this_it << endl;
 	disp_iter_percent(this_it);
 	disp_iter_percent_total(full_trial);
-	disp_trial_percent(this_it);
-	disp_trial_percent_total(full_trial * TRIALS);
 
 	timestep++;
 	timestep = timestep % (total_steps);

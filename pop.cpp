@@ -54,7 +54,7 @@ void pop::save_data(int iteration){
 //}
 
 void pop::write_data(int trial){
-	QString fname = QString("data_%1.txt").arg(trial+1);
+	QString fname = QString(DATA_TEMPLATE).arg(trial+1);
 	ofstream f;
 	f.open(fname.toStdString().c_str());
 	// iterations
@@ -132,7 +132,7 @@ void pop::evolve(int trial) {
 	for (int i = 0; i < POP_SIZE; i++) {
 		evaluate_team(i, 0);
 	}
-	string fname = QString("video_%1.txt").arg(trial+1).toStdString();
+	string fname = QString(VIDEO_TEMPLATE).arg(trial+1).toStdString();
 	ofstream f;
 	f.open(fname.c_str());
 	//f << "Trial " << trial+1 << "\n";
@@ -169,9 +169,10 @@ void pop::evolve(int trial) {
 
 	write_data(trial); // one file per trial
 
-	if (trial + 1 == TRIALS){
-		cout << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL).toStdString() << endl;
-	}
+	// graphviz output of a hyena's tree
+//	if (trial + 1 == TRIALS){
+//		cout << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL).toStdString() << endl;
+//	}
 }
 
 void pop::OET1_reproduce() {

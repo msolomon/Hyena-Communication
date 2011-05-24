@@ -35,11 +35,6 @@ void qthyena::connectAll(){
 	connect(&ui.widget->helper, SIGNAL(disp_iter_percent_total(int)),
 			ui.disp_iter_percent, SLOT(setMaximum(int)));
 
-	connect(&ui.widget->helper, SIGNAL(disp_trial_percent(int)),
-			ui.disp_total_percent, SLOT(setValue(int)));
-	connect(&ui.widget->helper, SIGNAL(disp_trial_percent_total(int)),
-			ui.disp_total_percent, SLOT(setMaximum(int)));
-
 	connect(&ui.widget->p, SIGNAL(calc_trial_percent(int)),
 			ui.calc_trial_percent, SLOT(setValue(int)));
 	connect(&ui.widget->p, SIGNAL(calc_trial_percent_total(int)),
