@@ -18,9 +18,6 @@ void team::reset_fitness(void) {
 		hyena_fits[i] = 0;
 		hyenas[i].reset_fitness();
 	}
-	for (int i = 0; i < NUM_LIONS; i++) {
-		lions[i].reset_fitness();
-	}
 }
 
 void team::clear(void) {
@@ -36,7 +33,6 @@ void team::generate(void) {
 		hyenas[i].set_type(hyena);
 	}
 	for (int i = 0; i < NUM_LIONS; i++) {
-		lions[i].grow();
 		lions[i].set_type(lion);
 	}
 }
@@ -48,12 +44,12 @@ void team::copy(team *p2) {
 		hyenas[i].set_type(hyena);
 		hyena_fits[i] = p2->hyena_fits[i];
 	}
-	for (int i = 0; i < NUM_LIONS; i++) {
-		lions[i].clear();
-//		invest_fits[i] = p2->invest_fits[i];
-		lions[i] = (p2->lions[i]);
-		lions[i].set_type(lion);
-	}
+//	for (int i = 0; i < NUM_LIONS; i++) {
+//		lions[i].clear();
+////		invest_fits[i] = p2->invest_fits[i];
+//		lions[i] = (p2->lions[i]);
+//		lions[i].set_type(lion);
+//	}
 	avg_fit = p2->avg_fit;
 }
 
@@ -69,22 +65,16 @@ void team::xOver(team *p2, int i) {
 void team::xOver(team *p2) {
 	for (int i = 0; i < NUM_HYENAS; i++)
 		hyenas[i].xOver(&(p2->hyenas[i]));
-	for (int i = 0; i < NUM_LIONS; i++)
-		lions[i].xOver(&(p2->lions[i]));
 }
 
 void team::calc_size(void) {
 	for (int i = 0; i < NUM_HYENAS; i++)
 		hyenas[i].calc_size();
-	for (int i = 0; i < NUM_LIONS; i++)
-		lions[i].calc_size();
 }
 
 void team::mutate(void) {
 	for (int i = 0; i < NUM_HYENAS; i++)
 		hyenas[i].mutate();
-	for (int i = 0; i < NUM_LIONS; i++)
-		lions[i].mutate();
 }
 
 void team::mutate(int member) {
@@ -101,10 +91,6 @@ float team::calc_avg_fit(void) {
 		avg_dist_to_zebra += hyenas[i].get_avg_dist_to_zebra();
 		avg_lion_attacks += hyenas[i].get_lion_attacks();
 	}
-//	for (int i = 0; i < NUM_LIONS; i++) {
-//		invest_fits[i] = lions[i].get_fitness();
-//		avg_fit += invest_fits[i];
-//	}
 	avg_lion_attacks /= NUM_HYENAS;
 	avg_dist_to_zebra /= NUM_HYENAS;
 	return avg_fit;

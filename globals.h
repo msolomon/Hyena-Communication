@@ -11,13 +11,13 @@ const float PI = 3.141592654;
 const int X = 32;
 const int Y = 32;
 const double HEAR_CALLING_RADIUS = sqrt(INT_MAX);
-const int LION_ATTACK_RADIUS = 3;
+const float LION_ATTACK_RADIUS = 2.5;
 const int LION_LION_RADIUS = 5;
 const int LION_HYENA_RADIUS = 5; // both ways
 const int HYENA_HYENA_RADIUS = 10;
 
 const int HEAR_CALLING_RADIUS_SQ = HEAR_CALLING_RADIUS * HEAR_CALLING_RADIUS;
-const int LION_ATTACK_RADIUS_SQ = LION_ATTACK_RADIUS * LION_ATTACK_RADIUS;
+const float LION_ATTACK_RADIUS_SQ = LION_ATTACK_RADIUS * LION_ATTACK_RADIUS;
 const int LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;
 const int LION_HYENA_RADIUS_SQ = LION_HYENA_RADIUS * LION_HYENA_RADIUS;
 const int HYENA_HYENA_RADIUS_SQ = HYENA_HYENA_RADIUS * HYENA_HYENA_RADIUS;
@@ -42,8 +42,8 @@ const char NUM_LIONS = 2;
 const int TIME_STEPS = 50;
 const int NUM_TESTS = 1;
 const int TOURNAMENT_SIZE = 5;
-const int ITERATIONS = 2000;
-const int TRIALS = 2;
+const int ITERATIONS = 60;
+const int TRIALS = 5;
 const int GROW_DEPTH = 4;
 const int EVALUATE_EVERY = 30;
 const bool GUI = true;
@@ -64,8 +64,8 @@ enum agent_type {
 	hyena, lion
 };
 
-inline float distance(float x, float y){
-    return sqrt(x * x + y * y);
+inline float dist(float x, float y){
+	return sqrt((x * x) + (y * y));
 }
 
 inline float distance_sq(float x, float y){

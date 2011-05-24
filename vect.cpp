@@ -21,7 +21,7 @@ vect vect::operator+(const vect v2) const {
 	x += sin(v2.direction) * v2.magnitude;
 	y += cos(v2.direction) * v2.magnitude;
 
-	answer.magnitude = distance(x, y);
+	answer.magnitude = dist(x, y);
 	answer.direction = atan2(x, y);
 	return answer;
 }

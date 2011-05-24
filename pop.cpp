@@ -9,25 +9,25 @@ pop::pop(){
     }
 }
 
-void pop::save_data(int iteration, int trial){
+void pop::save_data(int iteration){
 	// iteration average fitnesses
 	float avg_fit = 0;
 	for (int i = 0; i < POP_SIZE; i++) {
 		avg_fit += the_pop[i]->get_avg_fit();
 	}
-	data[trial][iteration][0] = avg_fit / POP_SIZE;
+	data[iteration][0] = avg_fit / POP_SIZE;
 
     //// Best team information
     // average distance to zebra
-    data[trial][iteration][1] = the_pop[pop_bestteam]->get_avg_dist_to_zebra();
+	data[iteration][1] = the_pop[pop_bestteam]->get_avg_dist_to_zebra();
     // average number of lion attacks
-    data[trial][iteration][2] = the_pop[pop_bestteam]->get_avg_lion_attacks();
+	data[iteration][2] = the_pop[pop_bestteam]->get_avg_lion_attacks();
     // average fitness on best team
-    data[trial][iteration][3] = the_pop[pop_bestteam]->get_avg_fit();
+	data[iteration][3] = the_pop[pop_bestteam]->get_avg_fit();
 
     //// Best team individual fitnesses
     for(int i = 0; i < NUM_HYENAS; i++){
-        data[trial][iteration][i + 4] = the_pop[pop_bestteam]->get_hyena_fit(i);
+		data[iteration][i + 4] = the_pop[pop_bestteam]->get_hyena_fit(i);
     }
 }
 
@@ -53,24 +53,19 @@ void pop::save_data(int iteration, int trial){
 //	data[4][g] = the_pop[pop_bestteam]->get_avg_fit();
 //}
 
-void pop::write_data(){
+void pop::write_data(int trial){
+	QString fname = QString("data_%1.txt").arg(trial+1);
 	ofstream f;
-	f.open("data.txt");
-	// trials
-	for(int i = 0; i < TRIALS; i++){
-		f << i + 1 << "\n";
-		// iterations
-		for(int j = 0; j < ITERATIONS; j++){
-			f << j + 1 << " ";
-			// hyena fitnesses plus 4 attributes at the beginning
-			for(int k = 0; k < NUM_HYENAS + 4; k++){
-				f << data[i][j][k] << " ";
-			}
-			f << "\n";
+	f.open(fname.toStdString().c_str());
+	// iterations
+	for(int j = 0; j < ITERATIONS; j++){
+		f << j + 1 << " ";
+		// hyena fitnesses plus 4 attributes at the beginning
+		for(int k = 0; k < NUM_HYENAS + 4; k++){
+			f << data[j][k] << " ";
 		}
 		f << "\n";
 	}
-	f.flush();
 	f.close();
 }
 
@@ -137,7 +132,7 @@ void pop::evolve(int trial) {
 	for (int i = 0; i < POP_SIZE; i++) {
 		evaluate_team(i, 0);
 	}
-	string fname = QString("trial_%1_video.txt").arg(trial+1).toStdString();
+	string fname = QString("video_%1.txt").arg(trial+1).toStdString();
 	ofstream f;
 	f.open(fname.c_str());
 	//f << "Trial " << trial+1 << "\n";
@@ -160,22 +155,22 @@ void pop::evolve(int trial) {
 //		OET1_reproduce();
 //		oet_generational();
 		pop_bestteam = select_best_team(1);
-		save_data(i, trial);
+		save_data(i);
 
 		if (i % EVALUATE_EVERY == (EVALUATE_EVERY - 1)) {
 			f.open(fname.c_str(), ios_base::app);
 			f << "Iteration " << i + 1 << "\n";
 			f.close();
 			cout << "Iteration " << i + 1 << " of " << ITERATIONS <<
-					" (" << (i+1)/ITERATIONS * 100 << "% of trial)" << endl;
+					" (" << (i+1)/(float)ITERATIONS * 100 << "% of trial)" << endl;
 			evaluate_team(pop_bestteam, 1, i);
 		}
 	}
-	if (trial + 1 == TRIALS){
 
+	write_data(trial); // one file per trial
+
+	if (trial + 1 == TRIALS){
 		cout << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL).toStdString() << endl;
-		write_data();
-//		write_fitnesses();
 	}
 }
 

@@ -23,9 +23,6 @@ public:
 	float get_hyena_fit(int i) {
 		return hyena_fits[i];
 	}
-//	float get_invest_fit(int i) {
-//		return invest_fits[i];
-//	}
 	float get_avg_dist_to_zebra(void) {
 		return avg_dist_to_zebra;
 	}
@@ -37,7 +34,6 @@ public:
 	indiv hyenas[NUM_HYENAS];
 	indiv lions[NUM_LIONS];
 	float hyena_fits[NUM_HYENAS];
-//	float invest_fits[NUM_LIONS];
 	float avg_fit;
 	float avg_lion_attacks;
 	float avg_dist_to_zebra;
