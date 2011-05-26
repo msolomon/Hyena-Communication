@@ -270,8 +270,8 @@ void pop::all_generational(){
 	temp.generate();  // generate a new population.
 	int bound; // determines how to split the new population between island and team
 //	bound = POP_SIZE;       // team approach
-	bound = 0;                      // island approach
-//	bound = POP_SIZE/2;   // OET approach,  POP_SIZE should always be even
+//	bound = 0;                      // island approach
+	bound = POP_SIZE/2;   // OET approach,  POP_SIZE should always be even
 	for (int i = 0; i < bound; i = i + 2) {
 		int p1, p2;
 		// select teams

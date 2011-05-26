@@ -118,7 +118,7 @@ void environment::update_vectors(void){
 				}
 			}
 		}
-		if (min_mag == (float)HEAR_CALLING_RADIUS_SQ) { // if nearest was too far away
+		if (min_mag == (double)HEAR_CALLING_RADIUS_SQ) { // if nearest was too far away
 			temp.direction = 0;
 			temp.magnitude = 0;
 		} else {
@@ -138,7 +138,7 @@ void environment::update_vectors(void){
 				the_j = j;
 			}
 		}
-		if(min_mag != (float)LION_HYENA_RADIUS_SQ){
+		if(min_mag != (double)LION_HYENA_RADIUS_SQ){
 			temp.magnitude = sqrt(magnitude);
 			temp.direction = atan2(agentx - agents->lions[the_j].getX(),
 								   agenty - agents->lions[the_j].getY());
