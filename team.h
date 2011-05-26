@@ -6,6 +6,7 @@
 
 class team {
 public:
+	team();
 	float calc_avg_fit();
 	float get_avg_fit() {
 		return this->avg_fit;

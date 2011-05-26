@@ -86,15 +86,17 @@ void pop::write_data(int trial){
 
 void pop::generate(DrawHelper *h) {
 	helper = h;
-	pop::generate();
+	generate();
 }
 
 void pop::generate(void) {
 	for (int i = 0; i < POP_SIZE; i++) {
-		if(the_pop[i] != NULL)
+		if(the_pop[i] != NULL){
+			the_pop[i]->clear();
 			delete the_pop[i];
-		the_pop[i] = new team;
-		the_pop[i]->generate();
+		}
+		the_pop[i] = new team();
+//		the_pop[i]->generate();
 	}
 }
 
@@ -149,11 +151,11 @@ void pop::evolve(int trial) {
 		calc_trial_percent(trial * ITERATIONS + i);
 		calc_trial_percent_total(ITERATIONS * TRIALS - 1);
 		// only use one method of reproduction
-		island_reproduce();
+//		island_reproduce();
 //		team_reproduce();
 //		member_reproduce();
 //		OET1_reproduce();
-//		oet_generational();
+		all_generational();
 		pop_bestteam = select_best_team(1);
 		save_data(i);
 
@@ -263,9 +265,9 @@ void pop::all_generational(){
 	pop temp;
 	temp.generate();  // generate a new population.
 	int bound; // determines how to split the new population between island and team
-	bound = POP_SIZE;       // team approach
+//	bound = POP_SIZE;       // team approach
 	bound = 0;                      // island approach
-	bound = POP_SIZE/2;   // OET approach,  POP_SIZE should always be even
+//	bound = POP_SIZE/2;   // OET approach,  POP_SIZE should always be even
 	for (int i = 0; i < bound; i = i + 2) {
 		int p1, p2;
 		// select teams
@@ -303,9 +305,13 @@ void pop::all_generational(){
 		temp.evaluate_team(i + 1, 0);
 	}
 
-	for(int i = 0; i < POP_SIZE; i++){
-			// copy back to pop
-			the_pop[i]->copy(temp.the_pop[i]);
+	for (int i = 0; i < POP_SIZE; i++) {
+		// copy back to pop
+		the_pop[i]->clear();
+		//delete the_pop[i];
+		the_pop[i]->copy(temp.the_pop[i]);
+		temp.the_pop[i]->clear();
+		delete temp.the_pop[i];
 	}
 }
 

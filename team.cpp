@@ -1,5 +1,15 @@
 #include "team.h"
 
+team::team(){
+	for (int i = 0; i < NUM_HYENAS; i++) {
+		hyenas[i].grow();
+		hyenas[i].set_type(hyena);
+	}
+	for (int i = 0; i < NUM_LIONS; i++) {
+		lions[i].set_type(lion);
+	}
+}
+
 void team::reset_team(void) {
 
 	for (int i = 0; i < NUM_HYENAS; i++) {
@@ -23,12 +33,11 @@ void team::reset_fitness(void) {
 void team::clear(void) {
 	for (int i = 0; i < NUM_HYENAS; i++)
 		hyenas[i].clear();
-	for (int i = 0; i < NUM_LIONS; i++)
-		lions[i].clear();
 }
 
 void team::generate(void) {
 	for (int i = 0; i < NUM_HYENAS; i++) {
+		hyenas[i].clear();
 		hyenas[i].grow();
 		hyenas[i].set_type(hyena);
 	}

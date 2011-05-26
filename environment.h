@@ -22,6 +22,7 @@ public:
 	std::string fname;
 private:
 	team *agents;
+	vect zerovect;
 };
 
 #endif

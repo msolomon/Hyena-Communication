@@ -7,9 +7,9 @@
 #include "limits.h"
 
 //// Common settings
-const int ITERATIONS = 60;
-const int TRIALS = 5;
-const bool GUI = true;
+const int ITERATIONS = 5;
+const int TRIALS = 1;
+const bool GUI = false;
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
 const char NUM_LIONS = 2;
@@ -22,7 +22,7 @@ const char* const DATA_TEMPLATE = "data_%1.txt";
 //// Constants
 const int TOURNAMENT_SIZE = 5;
 const int GROW_DEPTH = 4;
-const int EVALUATE_EVERY = 30;
+const int EVALUATE_EVERY = 5;
 const bool DRAW = true; // if false, videos are unavailable
 const float PI = 3.141592654;
 const int X = 32;

@@ -6,6 +6,13 @@
 
 using namespace std;
 
+node::node(){
+	operation = ops(rand() % num_terms);
+	for(int i=0; i < 4; i++){
+		children[i] = NULL;
+	}
+}
+
 void node::set_child(int c, node *child) {
 	children[c] = child;
 }
@@ -39,9 +46,7 @@ void node::copy(node *p, node * parn) {
 		return;
 	operation = p->operation;
 	parent = parn;
-	for (int i = 0; i < 4; i++) {
-		children[i] = NULL;
-	}
+	clear();
 	the_const.magnitude = p->the_const.magnitude;
 	the_const.direction = p->the_const.direction;
 	switch (operation) {
@@ -59,25 +64,25 @@ void node::copy(node *p, node * parn) {
 		return;
 	// non-terminals
 	case sum:
-		children[0] = new node;
+		children[0] = new node();
 		children[0]->copy(p->children[0], this);
-		children[1] = new node;
+		children[1] = new node();
 		children[1]->copy(p->children[1], this);
 		return;
 	case invert:
-		children[0] = new node;
+		children[0] = new node();
 		children[0]->copy(p->children[0], this);
 		return;
 	case iflteMAG:
 	case iflteCLOCKWISE:
 		for (int i = 0; i < 4; i++) {
-			children[i] = new node;
+			children[i] = new node();
 			children[i]->copy(p->children[i], this);
 		}
 		return;
 	case ifVectorZero:
 		for (int i = 0; i < 3; i++) {
-			children[i] = new node;
+			children[i] = new node();
 			children[i]->copy(p->children[i], this);
 		}
 		return;
@@ -92,14 +97,45 @@ void node::copy(node *p, node * parn) {
 void node::clear(void) {
 	if(this == NULL)
 		return;
-	int count = 4;
-	if (operation && operation == ifVectorZero)
-		count = 3;
-	for (int i = 0; i < count; i++)
-		if (children[i] != NULL) {
-			children[i]->clear();
-			delete children[i];
-		}
+	int num = 0;
+	switch (operation) {
+	// terminals
+	case zebra:
+	case nearest_hyena:
+	case nearest_lion:
+	case nearest_calling:
+	case north:
+	case randm:
+	case last_move:
+	case constant:
+	case num_hyenas:
+	case mirror_nearest:
+		break;
+	// non-terminals
+	case sum:
+		num = 2;
+		break;
+	case invert:
+		num = 1;
+		break;
+	case iflteMAG:
+	case iflteCLOCKWISE:
+		num = 4;
+		break;
+	case ifVectorZero:
+		num = 3;
+		break;
+	default:
+		ofstream error;
+		error.open("error.txt", ios_base::app);
+		error << "error in clear: " << operation << endl;
+		error.close();
+		return;
+	}
+	for(int i = 0; i < num; i++){
+		children[i]->clear();
+		delete children[i];
+	}
 }
 
 void node::mutate(void) {
@@ -225,41 +261,45 @@ vect node::evaluate(agent_info *the_indiv) {
 void node::grow(int max_d,int depth,node *pare){
     the_const.random();
     parent = pare;
-    for(int i =0;i<4;i++)
-        children[i] = NULL;
     if(depth == max_d) // bottomed out, use terminals
         operation = ops(rand()%num_terms);
     else{ // haven't reached bottom, use non-terminals
         operation = ops(num_terms + rand()%num_non_terms);
         switch(operation){
         case sum:
-            children[0] = new node;
+			children[0] = new node();
             children[0]->grow(max_d,depth+1,this);
-            children[1] = new node;
+			children[1] = new node();
             children[1]->grow(max_d,depth+1,this);
+			children[2] = NULL;
+			children[3] = NULL;
             break;
         case invert:
-            children[0] = new node;
+			children[0] = new node();
             children[0]->grow(max_d,depth+1,this);
+			children[1] = NULL;
+			children[2] = NULL;
+			children[3] = NULL;
             break;
         case iflteMAG:
         case iflteCLOCKWISE:
-            children[0] = new node;
+			children[0] = new node();
             children[0]->grow(max_d,depth+1,this);
-            children[1] = new node;
+			children[1] = new node();
             children[1]->grow(max_d,depth+1,this);
-            children[2] = new node;
+			children[2] = new node();
             children[2]->grow(max_d,depth+1,this);
-            children[3] = new node;
+			children[3] = new node();
             children[3]->grow(max_d,depth+1,this);
             break;
         case ifVectorZero:
-            children[0] = new node;
+			children[0] = new node();
             children[0]->grow(max_d,depth+1,this);
-            children[1] = new node;
+			children[1] = new node();
             children[1]->grow(max_d,depth+1,this);
-            children[2] = new node;
+			children[2] = new node();
             children[2]->grow(max_d,depth+1,this);
+			children[3] = NULL;
             break;
         default:
             ofstream error;
@@ -318,10 +358,6 @@ int node::calc_size(int &size) {
 		error.close();
 		return size;
 	}
-}
-
-node::node(void) {
-	operation = ops(rand() % num_terms);
 }
 
 node *node::get_point(int pn, int &current) {

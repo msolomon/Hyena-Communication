@@ -23,30 +23,29 @@ DrawHelper::DrawHelper() {
 //using namespace std;
 
 void DrawHelper::updateGui(){
-
 	disp_timestep(QString::number(timestep + 1));
 
 	const int total_steps = TIME_STEPS * NUM_TESTS;
+	if(!iter.isEmpty()){
+		disp_timestep_total(QString::number(total_steps));
 
-	disp_timestep_total(QString::number(total_steps));
+		int curr_iteration = iter.dequeue() + 1;
+		disp_iteration(QString::number(curr_iteration));
+		disp_iteration_total(QString::number(ITERATIONS));
 
-	int curr_iteration = iter.dequeue() + 1;
-	disp_iteration(QString::number(curr_iteration));
-	disp_iteration_total(QString::number(ITERATIONS));
+		if(it == -1)
+			disp_trial_total(QString::number(TRIALS));
+		if(curr_iteration == 0 && timestep == 0){
+			it++;
+			disp_trial(QString::number(it + 1));
+		}
 
-	if(it == -1)
-		disp_trial_total(QString::number(TRIALS));
-	if(curr_iteration == 0 && timestep == 0){
-		it++;
-		disp_trial(QString::number(it + 1));
+		const int full_trial = (ITERATIONS) * total_steps;
+		int this_it = curr_iteration * total_steps + timestep;
+		// cout << full_trial << " " << this_it << endl;
+		disp_iter_percent(this_it);
+		disp_iter_percent_total(full_trial);
 	}
-
-	const int full_trial = (ITERATIONS) * total_steps;
-	int this_it = curr_iteration * total_steps + timestep;
-	// cout << full_trial << " " << this_it << endl;
-	disp_iter_percent(this_it);
-	disp_iter_percent_total(full_trial);
-
 	timestep++;
 	timestep = timestep % (total_steps);
 }

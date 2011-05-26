@@ -46,16 +46,17 @@ indiv &indiv::operator=(const indiv &source) {
 	the_info = source.the_info;
 	fitness = source.fitness;
 	size = source.size;
-	if(tree != NULL)
-		clear();
+	if(tree != NULL){
+		clear(); // this also deletes tree
+	}
 	tree = new node;
 	tree->copy(source.tree,NULL);
 	return *this;
 }
 
 void indiv::grow(void) {
-	x = X / 2;
-	y = Y / 2;
+	x = X / 2.0;
+	y = Y / 2.0;
 	fitness = 0.0;
 	tree = new node;
 	tree->grow(GROW_DEPTH, 0, NULL);
@@ -74,7 +75,6 @@ void indiv::mutate(void) {
 void indiv::rand_move() {
 	//   x+=((rand()%3-1)/50.0);
 	//   y+=((rand()%3-1)/50.0);
-	;
 }
 
 void indiv::lion_move(void) {
@@ -95,11 +95,9 @@ void indiv::move(void) {
 		lion_move();
 		return;
 	}
-	if (tree != NULL) {
-		v = tree->evaluate(&the_info);
-		if (v.magnitude > 1){ // trying to move too far
-			v.magnitude -= (int)v.magnitude - 1;
-	}
+	v = tree->evaluate(&the_info);
+	if (v.magnitude > 1){ // trying to move too far
+		v.magnitude -= (int)v.magnitude - 1;
 		// this bit never gets reached b/c of the lion_move clause above
 		if (type == lion && v.magnitude >= 0.5)
 			v.magnitude = 0.5;
@@ -113,9 +111,5 @@ void indiv::move(void) {
 }
 
 indiv::indiv(void) {
-	//  grow();
-	//     connect(timer, SIGNAL(timeout()), openGL, SLOT(animate()));
-	//indiv* a = this;
-	//connect(a, SIGNAL(draw()), win, SLOT(animate()));
 }
 

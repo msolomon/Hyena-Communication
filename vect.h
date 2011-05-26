@@ -10,8 +10,9 @@ public:
 	void random(void);
 	float direction;
 	float magnitude;
-	vect operator=(const vect);
-	vect operator+(const vect) const;
+	vect& operator=(const vect&);
+	vect& operator+=(const vect&);
+	const vect operator+(const vect&) const;
 private:
 };
 

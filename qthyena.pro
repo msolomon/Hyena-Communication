@@ -5,6 +5,8 @@ TARGET = qthyena
 QT += core \
 #    opengl \
     gui
+
+CONFIG += qt debug
     
 HEADERS += qthyena.h \
     globals.h \
