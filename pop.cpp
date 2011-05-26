@@ -128,6 +128,10 @@ void pop::evolve_repeat(){
 		calc_trial_total(QString::number(TRIALS));
 		evolve(i);
 	}
+	for(int i = 0; i < POP_SIZE; i++){
+		the_pop[i]->clear();
+		delete the_pop[i];
+	}
 }
 
 void pop::evolve(int trial) {
