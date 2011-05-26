@@ -3,13 +3,20 @@
 // do fast string building for graphviz output
 #define QT_USE_FAST_CONCATENATION
 #define QT_USE_FAST_OPERATOR_PLUS
+//#define children data.childs
+//#define the_const data.the_const
+
 
 using namespace std;
 
 node::node(){
-	operation = ops(rand() % num_terms);
+	operation = rand() % num_terms;
 	for(int i=0; i < 4; i++){
 		children[i] = NULL;
+	}
+	if(operation == constant){
+		the_const = new vect();
+		the_const->random();
 	}
 }
 
@@ -47,8 +54,6 @@ void node::copy(node *p, node * parn) {
 	operation = p->operation;
 	parent = parn;
 	clear();
-	the_const.magnitude = p->the_const.magnitude;
-	the_const.direction = p->the_const.direction;
 	switch (operation) {
 	// terminals
 	case zebra:
@@ -58,7 +63,15 @@ void node::copy(node *p, node * parn) {
 	case north:
 	case randm:
 	case last_move:
+		return;
 	case constant:
+		the_const = new vect();
+		if(parn->operation == constant){
+			the_const = parn->the_const;
+		} else{
+			the_const->random();
+		}
+		return;
 	case num_hyenas:
 	case mirror_nearest:
 		return;
@@ -107,7 +120,10 @@ void node::clear(void) {
 	case north:
 	case randm:
 	case last_move:
+		break;
 	case constant:
+		delete the_const;
+		break;
 	case num_hyenas:
 	case mirror_nearest:
 		break;
@@ -151,8 +167,13 @@ void node::mutate(void) {
 	case constant:
 	case num_hyenas:
 	case mirror_nearest:
-		if (rand() % 100 < 10)
-			operation = ops(rand() % num_terms);
+		if (rand() % 100 < 10){
+			operation = rand() % num_terms;
+			if(operation == constant){
+				the_const = new vect();
+				the_const->random();
+			}
+		}
 		break;
 	// non-terminals
 	case sum:
@@ -213,7 +234,7 @@ vect node::evaluate(agent_info *the_indiv) {
 	case last_move:
 		return (the_indiv->last_move);
 	case constant:
-		return (the_const);
+		return (*the_const);
 	case num_hyenas:
 		temp.direction = PI;
 		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
@@ -259,12 +280,16 @@ vect node::evaluate(agent_info *the_indiv) {
 }
 
 void node::grow(int max_d,int depth,node *pare){
-    the_const.random();
     parent = pare;
-    if(depth == max_d) // bottomed out, use terminals
-        operation = ops(rand()%num_terms);
+	if(depth == max_d){ // bottomed out, use terminals
+		operation = rand()%num_terms;
+		if(operation == constant){
+			the_const = new vect();
+			the_const->random();
+		}
+	}
     else{ // haven't reached bottom, use non-terminals
-        operation = ops(num_terms + rand()%num_non_terms);
+		operation = num_terms + rand()%num_non_terms;
         switch(operation){
         case sum:
 			children[0] = new node();
@@ -513,3 +538,5 @@ QString node::graphviz(node *parent){
 	}
 	return output;
 }
+//#undef children
+//#undef the_const
