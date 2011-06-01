@@ -6,7 +6,7 @@ QT += core \
 #    opengl \
     gui
 
-CONFIG += qt debug
+#CONFIG += debug
     
 HEADERS += qthyena.h \
     globals.h \

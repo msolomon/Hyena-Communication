@@ -57,14 +57,22 @@ void pop::write_data(int trial){
 	QString fname = QString(DATA_TEMPLATE).arg(trial+1);
 	ofstream f;
 	f.open(fname.toStdString().c_str());
+
+	// provide column labels
+	f << "trial avg_fit zeb_dist num_attacks best_fit ";
+	for(int i = 1; i < NUM_HYENAS; i++){
+		f << "H" << i << " ";
+	}
+	f << "H" << (int) NUM_HYENAS << "\n";
+
 	// iterations
 	for(int j = 0; j < ITERATIONS; j++){
 		f << j + 1 << " ";
 		// hyena fitnesses plus 4 attributes at the beginning
-		for(int k = 0; k < NUM_HYENAS + 4; k++){
+		for(int k = 0; k < NUM_HYENAS + 3; k++){
 			f << data[j][k] << " ";
 		}
-		f << "\n";
+		f << data[j][NUM_HYENAS + 3] << "\n";
 	}
 	f.close();
 }
@@ -141,7 +149,6 @@ void pop::evolve(int trial) {
 	string fname = QString(VIDEO_TEMPLATE).arg(trial+1).toStdString();
 	ofstream f;
 	f.open(fname.c_str());
-	//f << "Trial " << trial+1 << "\n";
 	f.close();
 	cout << "Trial " << trial + 1 << " of " << TRIALS << endl;
 	ENV.fname = fname;

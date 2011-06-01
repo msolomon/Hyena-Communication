@@ -88,7 +88,7 @@ void environment::update_vectors(void){
 			}
 		}
 		// if out of range, zero vector
-		if(min_mag == HYENA_HYENA_RADIUS_SQ){
+		if(min_mag == (double) HYENA_HYENA_RADIUS_SQ){
 			temp.direction = 0;
 			temp.magnitude = 0;
 			agents->hyenas[i].set_nearest_hyena(temp);
@@ -118,7 +118,7 @@ void environment::update_vectors(void){
 				}
 			}
 		}
-		if (min_mag == (double)HEAR_CALLING_RADIUS_SQ) { // if nearest was too far away
+		if (min_mag == (double) HEAR_CALLING_RADIUS_SQ) { // if nearest was too far away
 			temp.direction = 0;
 			temp.magnitude = 0;
 		} else {
