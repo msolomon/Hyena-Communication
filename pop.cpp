@@ -311,8 +311,6 @@ void pop::all_generational(){
 
 	for (int i = 0; i < POP_SIZE; i++) {
 		// copy back to pop
-		the_pop[i]->clear();
-		//delete the_pop[i];
 		the_pop[i]->copy(temp.the_pop[i]);
 		temp.the_pop[i]->clear();
 		delete temp.the_pop[i];

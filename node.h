@@ -49,10 +49,10 @@ const int num_non_terms = 5;
 
 class node;
 
-//typedef union{
-//	node *childs[4];
-//	vect *the_const;
-//} datastore;
+typedef union{
+	node **childs;
+	vect *the_const;
+} datastore;
 
 class node {
 public:
@@ -74,16 +74,17 @@ public:
 	node *get_point(int, int &);
 	QString graphviz(node *);
 private:
-//	datastore data;
+	datastore data;
 	ops operation;
-#define children data.childs
-#define the_const data.the_const
-#undef children
-#undef the_const
+//#define children data.childs[0]
+//#define the_const data.the_const
+//#undef children
+//#undef the_const
 //	node *children = data.childs;
 //	vect *the_const = data.the_const;
-	node *children[4];
-	vect *the_const;
+//	node *(*children[]);
+//	node **children;
+//	vect *the_const;
 	node *parent;
 	void replace(node*[], int index);
 };

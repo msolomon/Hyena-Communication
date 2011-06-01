@@ -166,7 +166,7 @@ void environment::update_vectors(void){
 				the_j = j;
 			}
 		}
-		if(min_mag < LION_HYENA_RADIUS_SQ){ // lion close enough to hyena
+		if(min_mag < (double)LION_HYENA_RADIUS_SQ){ // lion close enough to hyena
 			temp.magnitude = sqrt(min_mag);
 			temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
 								   agenty - agents->hyenas[the_j].getY());

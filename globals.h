@@ -7,7 +7,7 @@
 #include "limits.h"
 
 //// Common settings
-const int ITERATIONS = 300;
+const int ITERATIONS = 600;
 const int TRIALS = 1;
 const bool GUI = false;
 const int POP_SIZE = 80;
@@ -22,7 +22,7 @@ const char* const DATA_TEMPLATE = "data_%1.txt";
 //// Constants
 const int TOURNAMENT_SIZE = 5;
 const int GROW_DEPTH = 4;
-const int EVALUATE_EVERY = 5;
+const int EVALUATE_EVERY = 1;
 const bool DRAW = true; // if false, videos are unavailable
 const float PI = 3.141592654;
 const int X = 32;
@@ -34,6 +34,7 @@ const float LION_ATTACK_RADIUS = 3;
 const int LION_LION_RADIUS = 5;
 const int LION_HYENA_RADIUS = 5; // both ways
 const int HYENA_HYENA_RADIUS = 10;
+const int HYENA_LION_FEAR_RATIO = 3;
 // Squared versions of constants (for performance)
 const int HEAR_CALLING_RADIUS_SQ = INT_MAX;
 const float LION_ATTACK_RADIUS_SQ = LION_ATTACK_RADIUS * LION_ATTACK_RADIUS;

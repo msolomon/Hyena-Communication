@@ -3,21 +3,17 @@
 // do fast string building for graphviz output
 #define QT_USE_FAST_CONCATENATION
 #define QT_USE_FAST_OPERATOR_PLUS
-//#define children data.childs
-//#define the_const data.the_const
+#define children data.childs
+#define the_const data.the_const
 
 
 using namespace std;
 
 node::node(){
-	operation = rand() % num_terms;
-	for(int i=0; i < 4; i++){
-		children[i] = NULL;
-	}
-	if(operation == constant){
-		the_const = new vect();
-		the_const->random();
-	}
+//	for(int i=0; i < 4; i++){
+//		children[i] = NULL;
+//	}
+	operation = north; // just initializing; will be written over
 }
 
 void node::set_child(int c, node *child) {
@@ -28,21 +24,33 @@ int node::find_child(node *c) {
 	ofstream error;
 	if (operation < num_terms) {
 		error.open("error.txt", ios_base::app);
-		error << "error in find_child: terminal" << endl;
+		error << "error in find_child: terminal " << (int)operation << endl;
 		error.close();
 	}
-	int count; // number of children
-	if (operation == ifVectorZero)
-		count = 3;
-	else
-		count = 4;
-	for (int i = 0; i < count; i++) {
+	int num = 0;
+	switch (operation) {
+	// non-terminals
+	case sum:
+		num = 2;
+		break;
+	case invert:
+		num = 1;
+		break;
+	case iflteMAG:
+	case iflteCLOCKWISE:
+		num = 4;
+		break;
+	case ifVectorZero:
+		num = 3;
+		break;
+	}
+	for (int i = 0; i < num; i++) {
 		if (children[i] == c) {
 			return i;
 		}
 	}
 	error.open("error.txt", ios_base::app);
-	error << "error in find_child: child not found " << int(operation)
+	error << "error in find_child: child not found " << (int)operation
 			<< endl;
 	error.close();
 	return -1; // still an error
@@ -51,9 +59,9 @@ int node::find_child(node *c) {
 void node::copy(node *p, node * parn) {
 	if (!p)
 		return;
+	clear();
 	operation = p->operation;
 	parent = parn;
-	clear();
 	switch (operation) {
 	// terminals
 	case zebra:
@@ -66,34 +74,35 @@ void node::copy(node *p, node * parn) {
 		return;
 	case constant:
 		the_const = new vect();
-		if(parn->operation == constant){
-			the_const = parn->the_const;
-		} else{
-			the_const->random();
-		}
+		the_const->direction = p->the_const->direction;
+		the_const->magnitude = p->the_const->magnitude;
 		return;
 	case num_hyenas:
 	case mirror_nearest:
 		return;
 	// non-terminals
 	case sum:
+		children = new node*[2];
 		children[0] = new node();
 		children[0]->copy(p->children[0], this);
 		children[1] = new node();
 		children[1]->copy(p->children[1], this);
 		return;
 	case invert:
+		children = new node*[1];
 		children[0] = new node();
 		children[0]->copy(p->children[0], this);
 		return;
 	case iflteMAG:
 	case iflteCLOCKWISE:
+		children = new node*[4];
 		for (int i = 0; i < 4; i++) {
 			children[i] = new node();
 			children[i]->copy(p->children[i], this);
 		}
 		return;
 	case ifVectorZero:
+		children = new node*[3];
 		for (int i = 0; i < 3; i++) {
 			children[i] = new node();
 			children[i]->copy(p->children[i], this);
@@ -120,13 +129,13 @@ void node::clear(void) {
 	case north:
 	case randm:
 	case last_move:
-		break;
+		return;
 	case constant:
 		delete the_const;
-		break;
+		return;
 	case num_hyenas:
 	case mirror_nearest:
-		break;
+		return;
 	// non-terminals
 	case sum:
 		num = 2;
@@ -144,7 +153,7 @@ void node::clear(void) {
 	default:
 		ofstream error;
 		error.open("error.txt", ios_base::app);
-		error << "error in clear: " << operation << endl;
+		error << "error in clear: " << (int)operation << endl;
 		error.close();
 		return;
 	}
@@ -152,6 +161,7 @@ void node::clear(void) {
 		children[i]->clear();
 		delete children[i];
 	}
+	delete[] children;
 }
 
 void node::mutate(void) {
@@ -217,7 +227,7 @@ vect node::evaluate(agent_info *the_indiv) {
 	switch (operation) {
 	// terminals
 	case zebra:
-		return (the_indiv-> zebra);
+		return (the_indiv->zebra);
 	case nearest_hyena:
 		return (the_indiv->nearest_hyena);
 	case nearest_lion:
@@ -292,22 +302,20 @@ void node::grow(int max_d,int depth,node *pare){
 		operation = num_terms + rand()%num_non_terms;
         switch(operation){
         case sum:
+			children = new node*[2];
 			children[0] = new node();
             children[0]->grow(max_d,depth+1,this);
 			children[1] = new node();
             children[1]->grow(max_d,depth+1,this);
-			children[2] = NULL;
-			children[3] = NULL;
             break;
         case invert:
+			children = new node*[1];
 			children[0] = new node();
             children[0]->grow(max_d,depth+1,this);
-			children[1] = NULL;
-			children[2] = NULL;
-			children[3] = NULL;
             break;
         case iflteMAG:
         case iflteCLOCKWISE:
+			children = new node*[4];
 			children[0] = new node();
             children[0]->grow(max_d,depth+1,this);
 			children[1] = new node();
@@ -318,13 +326,13 @@ void node::grow(int max_d,int depth,node *pare){
             children[3]->grow(max_d,depth+1,this);
             break;
         case ifVectorZero:
+			children = new node*[3];
 			children[0] = new node();
             children[0]->grow(max_d,depth+1,this);
 			children[1] = new node();
             children[1]->grow(max_d,depth+1,this);
 			children[2] = new node();
             children[2]->grow(max_d,depth+1,this);
-			children[3] = NULL;
             break;
         default:
             ofstream error;
@@ -363,6 +371,7 @@ int node::calc_size(int &size) {
 		children[1]->calc_size(size);
 		return size;
 	case invert:
+		children[0]->calc_size(size);
 		return size;
 	case iflteMAG:
 	case iflteCLOCKWISE:
@@ -538,5 +547,5 @@ QString node::graphviz(node *parent){
 	}
 	return output;
 }
-//#undef children
-//#undef the_const
+#undef children
+#undef the_const

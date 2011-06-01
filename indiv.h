@@ -5,7 +5,6 @@
 
 #include "globals.h"
 #include "node.h"
-const float scale = 1.0;
 
 class indiv {
 public:
