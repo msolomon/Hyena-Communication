@@ -7,13 +7,13 @@
 #include "limits.h"
 
 //// Common settings
-const int ITERATIONS = 600;
+const int ITERATIONS = 300;
 const int TRIALS = 1;
 const bool GUI = false;
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
 const char NUM_LIONS = 2;
-const int TIME_STEPS = 50;
+const int TIME_STEPS = 100;
 const int NUM_TESTS = 1; // times to repeat tests to prevent luck
 // Use %1 for trial number
 const char* const VIDEO_TEMPLATE = "video_%1.txt";
@@ -23,7 +23,7 @@ const char* const DATA_TEMPLATE = "data_%1.txt";
 const int TOURNAMENT_SIZE = 5;
 const int GROW_DEPTH = 4;
 const int EVALUATE_EVERY = 1;
-const bool DRAW = true; // if false, videos are unavailable
+const bool DRAW = false; // if false, videos are unavailable
 const float PI = 3.141592654;
 const int X = 32;
 const int Y = 32;

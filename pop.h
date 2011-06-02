@@ -32,6 +32,7 @@ public:
 	void OET1_reproduce();
 	void all_generational();
 	int member_select(int, int);
+	qint64 trialstarttime;
 private:
 	//     float fitnesses_scouts[POP_SIZE];
 	//    float fitnesses_investigators[POP_SIZE];
@@ -39,7 +40,7 @@ private:
 	team *the_pop[POP_SIZE];
 //        float data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
 	// data. all team fitnesses plus 4 iteration attributes (avg. and soforth)
-	float data[ITERATIONS][NUM_HYENAS + 4];
+	float data[ITERATIONS][NUM_HYENAS + 5];
 	float pop_bestfitness;
 	int pop_bestteam;
 	DrawHelper *helper;

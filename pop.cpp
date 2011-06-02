@@ -10,24 +10,26 @@ pop::pop(){
 }
 
 void pop::save_data(int iteration){
+	// total ms from start
+	data[iteration][0] = QDateTime::currentMSecsSinceEpoch() - trialstarttime;
 	// iteration average fitnesses
 	float avg_fit = 0;
 	for (int i = 0; i < POP_SIZE; i++) {
 		avg_fit += the_pop[i]->get_avg_fit();
 	}
-	data[iteration][0] = avg_fit / POP_SIZE;
+	data[iteration][1] = avg_fit / POP_SIZE;
 
     //// Best team information
     // average distance to zebra
-	data[iteration][1] = the_pop[pop_bestteam]->get_avg_dist_to_zebra();
+	data[iteration][2] = the_pop[pop_bestteam]->get_avg_dist_to_zebra();
     // average number of lion attacks
-	data[iteration][2] = the_pop[pop_bestteam]->get_avg_lion_attacks();
+	data[iteration][3] = the_pop[pop_bestteam]->get_avg_lion_attacks();
     // average fitness on best team
-	data[iteration][3] = the_pop[pop_bestteam]->get_avg_fit();
+	data[iteration][4] = the_pop[pop_bestteam]->get_avg_fit();
 
     //// Best team individual fitnesses
     for(int i = 0; i < NUM_HYENAS; i++){
-		data[iteration][i + 4] = the_pop[pop_bestteam]->get_hyena_fit(i);
+		data[iteration][i + 5] = the_pop[pop_bestteam]->get_hyena_fit(i);
     }
 }
 
@@ -59,7 +61,7 @@ void pop::write_data(int trial){
 	f.open(fname.toStdString().c_str());
 
 	// provide column labels
-	f << "trial avg_fit zeb_dist num_attacks best_fit ";
+	f << "trial time avg_fit zeb_dist num_attacks best_fit ";
 	for(int i = 1; i < NUM_HYENAS; i++){
 		f << "H" << i << " ";
 	}
@@ -68,11 +70,11 @@ void pop::write_data(int trial){
 	// iterations
 	for(int j = 0; j < ITERATIONS; j++){
 		f << j + 1 << " ";
-		// hyena fitnesses plus 4 attributes at the beginning
-		for(int k = 0; k < NUM_HYENAS + 3; k++){
+		// hyena fitnesses plus 5 attributes at the beginning
+		for(int k = 0; k < NUM_HYENAS + 4; k++){
 			f << data[j][k] << " ";
 		}
-		f << data[j][NUM_HYENAS + 3] << "\n";
+		f << data[j][NUM_HYENAS + 4] << "\n";
 	}
 	f.close();
 }
@@ -132,6 +134,7 @@ void pop::evaluate_team(int member, int flag, int iteration) {
 
 void pop::evolve_repeat(){
 	for(int i = 0; i < TRIALS; i++){
+		trialstarttime = QDateTime::currentMSecsSinceEpoch();
 		calc_trial(QString::number(i+1));
 		calc_trial_total(QString::number(TRIALS));
 		evolve(i);
