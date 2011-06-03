@@ -1,0 +1,139 @@
+\documentclass{article}
+
+\title{Evolving Hyenas' Behaviors}
+\author{...}
+\date{...}
+
+% change to 1in margins
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+\usepackage{amsmath}
+
+
+\begin{document}
+\maketitle
+
+\section{Model}
+
+\subsection{Lion Behavior}
+
+The lions' behaviors are fixed.  Initially lions are placed randomly within 1 unit of the zebra.  Lions do not move unless forced out of position by a sufficient number of hyenas.  If the hyenas within 5 units of a lion outnumber the lions within that range by more than 3 to 1 the lion moves directly away from the nearest hyena.  E.g., for a given lion $L$ if there is one other lion (for a total of 2 lions) and 5 hyenas within 5 units of lion $L$ then lion $L$ will move directly away from the nearest hyena (which typically will force it away from the zebra).
+
+If a hyena ends its move too close to a lion then that hyena is penalized (see Section~\ref{sec:fitness} below).   This reperesents the potential of being injured by getting too close to a lion.
+
+\subsection{Hyena Behavior}
+
+Each hyena's behavior is determined by that hyena's control structure.  Each control structure is a vector expression tree representing a vector function.  Inputs to the function (e.g. leaves of the vector expression tree) represent environmental factors the hyena can `sense' (see Table~\ref{tab:hyenaInputs}.  For example, the hyenas can `sense' the distance and direction to the nearest other hyena and to the nearest other hyena that is `calling'.  The output of the vector function (also a vector) is the hyena's move for that timestep.  Note that the hyenas can only move a maximum distance of $0.5$ units in a single timestep.  If the returned movement vector is longer than $0.5$ the hyena moves a distance of $0.5$ in the given direction.  
+Each hyena's vector function is re-evaluated every timestep to determine the hyena's movement in that timestep.
+
+The functions used to evolve the hyenas' control structure are given in Table~\ref{tab:hyenaFunctions}.  Each function takes 2--4 vector inputs and returns a vector. 
+
+\subsubsection{Calling Behavior}
+
+If a hyena is within sensing range of the zebra, i.e. within 8 units of the zebra, then that hyena is considered to be `calling'.  This is a fixed behavior - hyenas automatically begin calling when within 8 units of the zebra.  Hyenas can `hear' the nearest calling hyena at unlimited distance (i.e. we assume that all hyenas begin and remain within hearing range of each other).  In addition each hyena knows how many hyenas, possibly including itself, are calling at any given time.  
+
+It is important to note that while the act of calling is fixed, the hyenas' response to hearing another hyena calling is purely evolved: hyenas may ignore calling, approach callers, avoid callers, etc.  Similarly the hyenas' response to the number of calling hyenas is purely evolved.
+
+Our hypothesis is that the hyenas will evolve several behaviors to take advantage of the calling:
+\begin{enumerate}
+    \item Using the calling to localize the zebra - hyenas can only sense the zebra at a limited range, hyenas outside of this range have no idea where the zebra is.  However, once one hyena is within range of the zebra its calling can be heard by another hyena.  Thus, we hypothesize that the hyenas will evolve to use calling to localize the zebra.
+\item Using calling to coordinate their `attack' - hyenas can only sense the next nearest hyena.  However, they can sense the number of calling hyenas.  We hypothesize that they will evolve to use the number of calling hyenas as a signal to trigger the `attack' on the lions.
+\end{enumerate}
+
+\begin{table}[t]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+Name			& Description & Maximum Range \\
+\hline
+\hline
+Nearest Hyena	& Vector to the nearest hyena & 10\\
+\hline
+Nearest Calling	& Vector to the nearest calling hyena & No maximum\\
+\hline
+Nearest Lion	& Vector to the nearest lion & 5 \\
+\hline
+Zebra			& Vector to the zebra & 8 \\
+\hline
+North			& North, magnitude 1 & No maximum \\
+\hline
+Num. Calling	& Vector whose magnitude is the number& No maximum \\
+				&  of currently calling hyenas and & \\
+				&  whose direction is always north & \\
+\hline
+Random			& Vector randomized every time step & No maximum \\
+\hline
+Last Move		& Vector used last time step & No maximum \\
+\hline
+Constant		& Vector randomized exactly once & No maximum \\
+\hline
+Mirror Nearest	& Vector used last time step & 10 \\
+				& by the nearest hyena & \\
+\hline
+
+\end{tabular}
+\caption{List of inputs to the hyenas' control structure.  These represent what the hyenas can `sense'.}
+\label{tab:hyenaInputs}
+\end{table}
+
+\begin{table}[t]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+Function			& Description	& Number \\
+					&				& of Inputs \\
+\hline
+\hline
+Sum					& Sums 2 input vectors & 2 \\
+\hline
+Invert				& Inverts a vector & 1 \\
+\hline
+LessThanMagnitude & Compares the \textit{magnitude} & 4 \\
+                  & of the first 2 input vectors.  & \\
+                  & Returns the 3rd vector & \\
+                  & if the 1st vector is smaller & \\
+                  & else returns the 4th vector & \\
+\hline
+LessThanClockwise & Compares the \textit{direction} of the & 4 \\
+                  & first 2 input vectors. Returns & \\
+                  & the 3rd vector if the 1st & \\
+                  & vector is smaller, otherwise & \\
+                  & returns the 4th vector & \\
+\hline 
+VectorZero			& If the first input has 0 for & 3 \\
+                  & direction and magnitude, & \\
+                  & return the 2nd vector, & \\
+                  & otherwise return the 3rd. & \\
+\hline
+\end{tabular}
+\caption{List of functions used in the hyenas' control structure. }
+\label{tab:hyenaFunctions}
+\end{table}
+
+
+\section{Fitness}~\label{sec:fitness}
+
+For the evolutionary step each hyena and each clan of hyenas is assigned a fitness. At each timestep a hyena is given a fitness based on its distance ($d$) to the zebra:
+\begin{equation}
+f_{zebra}(d) = \frac{1}{1+d}
+\end{equation}
+and its distance $d$ to \textit{each} lion:
+
+\begin{equation}
+f_{lion}(d) = \sum_{for\, each\, lion}{
+\begin{cases} 3(d-3) & \text{if $d<3$,}\\
+$0$ &\text{otherwise}
+\end{cases}
+}
+\end{equation}
+I.e. if the hyena is within 3 units of a lion it \textit{loses} fitness proportional to how close it is to the lion.  
+
+The total fitness of a hyena is the sum of its fitness at each timestep.  So, the best fitness is achieved by quickly getting close to the zebra without getting too close to the lion.
+
+The fitness of a hyena `clan' is simply the sum of the fitnesses of all members of the clan.  
+
+\end{document}

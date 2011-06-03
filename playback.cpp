@@ -12,7 +12,7 @@ using namespace std;
 
 Playback::Playback(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::Playback)
+	ui(new Ui::Playback)
 {
     ui->setupUi(this);
 }

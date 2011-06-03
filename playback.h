@@ -9,7 +9,7 @@
 #include <QPointF>
 
 namespace Ui {
-    class Playback;
+	class Playback;
 }
 
 class Playback : public QWidget
@@ -23,7 +23,7 @@ public:
 	QMap<QString, QQueue<QPointF> > lions;
 
 private:
-    Ui::Playback *ui;
+	Ui::Playback *ui;
 	void parse_video();
 
 private slots:

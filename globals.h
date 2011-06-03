@@ -8,7 +8,7 @@
 
 //// Common settings
 const int ITERATIONS = 300;
-const int TRIALS = 1;
+const int TRIALS = 10;
 const bool GUI = false;
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
