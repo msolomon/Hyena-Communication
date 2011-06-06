@@ -6,6 +6,7 @@
 debug/
 release/
 doxygen/
+prof/
 
 # file patterns
 /Makefile*
@@ -14,6 +15,16 @@ doxygen/
 /.kprof*
 /.graphViz*
 /massif*
+/video_*
+/data_*
+/moc_*
+/*.gv
+/*.aux
+/*.log
+/*.pdf
+/*.gz
+/*.backup
+/ui_*
 
 # files
 /seed.txt
