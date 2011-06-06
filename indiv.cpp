@@ -53,8 +53,10 @@ indiv &indiv::operator=(const indiv &source) {
 	fitness = source.fitness;
 	size = source.size;
 	clear(); // this deletes tree
-	tree = new node();
-	tree->copy(source.tree, NULL);
+	if(source.type == hyena){
+		tree = new node();
+		tree->copy(source.tree, NULL);
+	}
 	return *this;
 }
 

@@ -7,8 +7,7 @@
 #include "limits.h"
 
 //// Common settings
-const int ITERATIONS = 300;
-const int TRIALS = 10;
+const int ITERATIONS = 1;
 const bool GUI = false;
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
@@ -24,6 +23,7 @@ const int TOURNAMENT_SIZE = 5;
 const int GROW_DEPTH = 4;
 const int EVALUATE_EVERY = 1;
 const bool DRAW = false; // if false, videos are unavailable
+const int TRIALS = 6; // leaks memory; do via script
 const float PI = 3.141592654;
 const int X = 32;
 const int Y = 32;

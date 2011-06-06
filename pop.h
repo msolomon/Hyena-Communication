@@ -11,7 +11,6 @@ class pop: public QObject {
 	Q_OBJECT
 public:
 	pop();
-	void generate(DrawHelper*);
 	void generate();
 	void run();
 	int select_best_team(int);
@@ -33,6 +32,7 @@ public:
 	void all_generational();
 	int member_select(int, int);
 	qint64 trialstarttime;
+	DrawHelper *helper;
 private:
 	//     float fitnesses_scouts[POP_SIZE];
 	//    float fitnesses_investigators[POP_SIZE];
@@ -43,7 +43,6 @@ private:
 	float data[ITERATIONS][NUM_HYENAS + 5];
 	float pop_bestfitness;
 	int pop_bestteam;
-	DrawHelper *helper;
 
 signals:
 	void calc_iter(QString);

@@ -94,19 +94,15 @@ void pop::write_data(int trial){
 //	}
 //}
 
-void pop::generate(DrawHelper *h) {
-	helper = h;
-	generate();
-}
-
 void pop::generate(void) {
 	for (int i = 0; i < POP_SIZE; i++) {
-		if(the_pop[i] != NULL){
+		if(the_pop[i] == NULL)
+			the_pop[i] = new team();
+		else
 			the_pop[i]->clear();
-			delete the_pop[i];
-		}
-		the_pop[i] = new team();
-//		the_pop[i]->generate();
+//			delete the_pop[i];
+//		the_pop[i] = new team();
+		the_pop[i]->generate();
 	}
 }
 
@@ -134,10 +130,12 @@ void pop::evaluate_team(int member, int flag, int iteration) {
 
 void pop::evolve_repeat(){
 	for(int i = 0; i < TRIALS; i++){
-		trialstarttime = QDateTime::currentMSecsSinceEpoch();
+		generate();
 		calc_trial(QString::number(i+1));
 		calc_trial_total(QString::number(TRIALS));
+		trialstarttime = QDateTime::currentMSecsSinceEpoch();
 		evolve(i);
+//		exit(0);
 	}
 	for(int i = 0; i < POP_SIZE; i++){
 		the_pop[i]->clear();
@@ -169,7 +167,7 @@ void pop::evolve(int trial) {
 //		team_reproduce();
 //		member_reproduce();
 //		OET1_reproduce();
-		all_generational();
+//		all_generational();
 		pop_bestteam = select_best_team(1);
 		save_data(i);
 
@@ -321,6 +319,7 @@ void pop::all_generational(){
 
 	for (int i = 0; i < POP_SIZE; i++) {
 		// copy back to pop
+		the_pop[i]->clear();
 		the_pop[i]->copy(temp.the_pop[i]);
 		temp.the_pop[i]->clear();
 		delete temp.the_pop[i];

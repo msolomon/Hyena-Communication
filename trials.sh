@@ -8,12 +8,13 @@ fi
 
 hyenadir=`dirname $0`
 hyenadir=`pwd`/$hyenadir
+
 count=0
 until [ $count -ge $trials ]
 do
 	count=$(( $count + 1 ))
 	mkdir -p trials/$count
 	cd trials/$count
-	$hyenadir/qthyena&
+	$hyenadir/qthyena &
 	cd ../..
 done

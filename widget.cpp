@@ -5,12 +5,12 @@ Widget::Widget(QWidget *parent) : QWidget(parent){
 }
 
 void Widget::runTrial(){
-      p.generate(&helper);
-	  connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
-      if(DRAW){
-		  timer.start(playback_ms);
-      }
-      QtConcurrent::run(&p, &pop::evolve_repeat);
+	p.helper = &helper;
+	connect(&timer, SIGNAL(timeout()), this, SLOT(animate()));
+	if(DRAW){
+		timer.start(playback_ms);
+	}
+	QtConcurrent::run(&p, &pop::evolve_repeat);
 }
 
 void Widget::playVideo(){

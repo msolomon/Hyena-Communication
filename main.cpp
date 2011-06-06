@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
 	} else{
 		pop p;
 		DrawHelper h;
-		p.generate(&h);
+		p.helper = &h;
 		p.evolve_repeat();
 		return 0;
 	}

@@ -2,8 +2,9 @@
 
 team::team(){
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		hyenas[i].grow();
+//		hyenas[i].grow();
 		hyenas[i].set_type(hyena);
+		hyenas[i].tree = NULL;
 	}
 	for (int i = 0; i < NUM_LIONS; i++) {
 		lions[i].set_type(lion);
@@ -48,17 +49,9 @@ void team::generate(void) {
 
 void team::copy(team *p2) {
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		hyenas[i].clear();
 		hyenas[i] = (p2->hyenas[i]);
-		hyenas[i].set_type(hyena);
 		hyena_fits[i] = p2->hyena_fits[i];
 	}
-//	for (int i = 0; i < NUM_LIONS; i++) {
-//		lions[i].clear();
-////		invest_fits[i] = p2->invest_fits[i];
-//		lions[i] = (p2->lions[i]);
-//		lions[i].set_type(lion);
-//	}
 	avg_fit = p2->avg_fit;
 }
 
