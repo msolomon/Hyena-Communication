@@ -1,6 +1,7 @@
 #! /bin/sh
 
 ## Set up
+thisdir=`pwd`
 cores=1
 trials=1
 if [ $# -gt 0 ]
@@ -27,8 +28,10 @@ fi
 
 ## Ensure the project is compiled with current files
 echo "Building project..."
+cd $hyenadir
 qmake "CONFIG+=release"
 make -j$cores
+cd $thisdir
 # Copy globals.h over so we know what settings were used
 mkdir -p cores
 cp $hyenadir/globals.h cores/settings.txt
