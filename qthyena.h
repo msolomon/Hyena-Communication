@@ -20,7 +20,7 @@ private slots:
 
 private:
     Ui::qthyenaClass ui;
-	Playback::Playback pb;
+    Playback pb;
     void connectAll();
 
 };

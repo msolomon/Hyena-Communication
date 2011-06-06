@@ -21,6 +21,7 @@ public:
 	void write_data(int);
 	void save_data(int);
 	void evolve_repeat();
+	void evolve_repeat(int);
 	void evolve(int);
 	void evaluate_agent(int, int, int);
 	void evaluate_team(int, int, int);

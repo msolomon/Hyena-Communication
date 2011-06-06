@@ -129,12 +129,17 @@ void pop::evaluate_team(int member, int flag, int iteration) {
 }
 
 void pop::evolve_repeat(){
+	evolve_repeat(1);
+}
+
+void pop::evolve_repeat(int trial){
+	trial--;
 	for(int i = 0; i < TRIALS; i++){
 		generate();
-		calc_trial(QString::number(i+1));
-		calc_trial_total(QString::number(TRIALS));
+		calc_trial(QString::number(trial+i+1));
+		calc_trial_total(QString::number(TRIALS+trial));
 		trialstarttime = QDateTime::currentMSecsSinceEpoch();
-		evolve(i);
+		evolve(trial+i);
 //		exit(0);
 	}
 	for(int i = 0; i < POP_SIZE; i++){
@@ -151,7 +156,7 @@ void pop::evolve(int trial) {
 	ofstream f;
 	f.open(fname.c_str());
 	f.close();
-	cout << "Trial " << trial + 1 << " of " << TRIALS << endl;
+	cout << "Trial " << trial + 1 << " of " << trial+TRIALS << endl;
 	ENV.fname = fname;
 
 	for (int i = 0; i < ITERATIONS; i++) {

@@ -27,7 +27,10 @@ int main(int argc, char *argv[]) {
 		pop p;
 		DrawHelper h;
 		p.helper = &h;
-		p.evolve_repeat();
+		if(argc > 1)
+			p.evolve_repeat(atoi(argv[1]));
+		else
+			p.evolve_repeat();
 		return 0;
 	}
 }

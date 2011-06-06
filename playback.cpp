@@ -43,7 +43,7 @@ void Playback::on_but_play_clicked(){
 }
 
 void Playback::on_but_browse_clicked(){
-	QString::QString fd = QFileDialog::getOpenFileName(this, "Video to play...");
+	QString fd = QFileDialog::getOpenFileName(this, "Video to play...");
 	if(fd.length() > 0){
 		ui->txt_file->setText(fd);
 		lions.clear();
