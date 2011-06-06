@@ -168,11 +168,14 @@ void pop::evolve(int trial) {
 		calc_trial_percent(trial * ITERATIONS + i);
 		calc_trial_percent_total(ITERATIONS * TRIALS - 1);
 		// only use one method of reproduction
-//		island_reproduce();
+		if(ISLAND_STEADY)
+			island_reproduce();
 //		team_reproduce();
 //		member_reproduce();
 //		OET1_reproduce();
-//		all_generational();
+		if(TEAM_GENERATIONAL || ISLAND_GENERATIONAL ||
+		   OET_GENERATIONAL)
+			all_generational();
 		pop_bestteam = select_best_team(1);
 		save_data(i);
 
@@ -282,9 +285,12 @@ void pop::all_generational(){
 	pop temp;
 	temp.generate();  // generate a new population.
 	int bound; // determines how to split the new population between island and team
-//	bound = POP_SIZE;       // team approach
-//	bound = 0;                      // island approach
-	bound = POP_SIZE/2;   // OET approach,  POP_SIZE should always be even
+	if(TEAM_GENERATIONAL)
+		bound = POP_SIZE;       // team approach
+	if(ISLAND_GENERATIONAL)
+		bound = 0;                      // island approach
+	if(OET_GENERATIONAL)
+		bound = POP_SIZE/2;   // OET approach,  POP_SIZE should always be even
 	for (int i = 0; i < bound; i = i + 2) {
 		int p1, p2;
 		// select teams
