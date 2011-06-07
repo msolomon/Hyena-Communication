@@ -11,3 +11,6 @@ do
 	count=$(( $count + 1 ))
 	$hyenadir/qthyena $count
 done
+
+# now combine into one file
+$hyenadir/combiner.sh

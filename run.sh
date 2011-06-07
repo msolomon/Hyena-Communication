@@ -43,10 +43,6 @@ until [ $count -ge $cores ]
 do
 	count=$(( $count + 1 ))
 	mkdir -p cores/$count
-	if [ ! -e cores/$count/combiner.sh ]
-	then
-		ln -s $hyenadir/combiner.sh cores/$count/combiner.sh
-	fi
 	cd cores/$count
 	$hyenadir/trials.sh $trials &
 	cd ../..

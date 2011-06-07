@@ -7,7 +7,7 @@
 #include "limits.h"
 
 //// Common settings
-const int ITERATIONS = 1000;
+const int ITERATIONS = 1500;
 const bool GUI = false;
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
@@ -16,9 +16,9 @@ const int TIME_STEPS = 100;
 const int NUM_TESTS = 1; // times to repeat tests to prevent luck
 // Only pick one method below
 const bool TEAM_GENERATIONAL = false;
-const bool OET_GENERATIONAL = true;
+const bool OET_GENERATIONAL = false;
 const bool ISLAND_GENERATIONAL = false;
-const bool ISLAND_STEADY = false;
+const bool ISLAND_STEADY = true;
 
 // Use %1 for trial number
 const char* const VIDEO_TEMPLATE = "video_%1.txt";
