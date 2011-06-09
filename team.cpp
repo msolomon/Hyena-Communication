@@ -38,7 +38,6 @@ void team::clear(void) {
 
 void team::generate(void) {
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		hyenas[i].clear();
 		hyenas[i].grow();
 		hyenas[i].set_type(hyena);
 	}

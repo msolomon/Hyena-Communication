@@ -14,6 +14,7 @@ node::node(){
 //		children[i] = NULL;
 //	}
 	operation = north; // just initializing; will be written over
+	the_const = NULL;
 }
 
 void node::set_child(int c, node *child) {
@@ -177,7 +178,9 @@ void node::mutate(void) {
 	case constant:
 	case num_hyenas:
 	case mirror_nearest:
-		if (rand() % 100 < 10){
+		if (rand() % 100 < 10){ // 10% chance of change
+			if(operation == constant)
+				delete the_const;
 			operation = rand() % num_terms;
 			if(operation == constant){
 				the_const = new vect();

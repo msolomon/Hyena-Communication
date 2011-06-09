@@ -343,7 +343,8 @@ void environment::draw(DrawHelper* helper, int itera) {
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		QPointF p = QPointF(agents->hyenas[i].getX(),
 							agents->hyenas[i].getY());
-		list.append(QString("%1 %2").arg(p.x()).arg(p.y()));
+        list.append(QString("%1 %2").arg(p.x(), 0, 'g', 4)
+                    .arg(p.y(), 0, 'g', 4));
 		helper->hyenas[i].enqueue(p);
 	}
 	list.append("\n");

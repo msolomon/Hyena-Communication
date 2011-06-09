@@ -4,9 +4,12 @@
 using namespace std;
 
 pop::pop(){
-    for(int i = 0; i < POP_SIZE; i++){
-        the_pop[i] = NULL;
-    }
+}
+
+void pop::add_blank_nodes(){
+	for(int i = 0; i < POP_SIZE; i++){
+		the_pop[i] = new team();
+	}
 }
 
 void pop::save_data(int iteration){
@@ -96,12 +99,7 @@ void pop::write_data(int trial){
 
 void pop::generate(void) {
 	for (int i = 0; i < POP_SIZE; i++) {
-		if(the_pop[i] == NULL)
-			the_pop[i] = new team();
-		else
-			the_pop[i]->clear();
-//			delete the_pop[i];
-//		the_pop[i] = new team();
+		the_pop[i] = new team();
 		the_pop[i]->generate();
 	}
 }
@@ -179,13 +177,17 @@ void pop::evolve(int trial) {
 		pop_bestteam = select_best_team(1);
 		save_data(i);
 
-		if (i % EVALUATE_EVERY == (EVALUATE_EVERY - 1)) {
-			f.open(fname.c_str(), ios_base::app);
-			f << "Iteration " << i + 1 << "\n";
-			f.close();
-			cout << "Iteration " << i + 1 << " of " << ITERATIONS <<
-					" (" << (i+1)/(float)ITERATIONS * 100 << "% of trial)" << endl;
-			evaluate_team(pop_bestteam, 1, i);
+        if (i % EVALUATE_EVERY == (EVALUATE_EVERY - 1)) {
+            if(i % DRAW_EVERY == (DRAW_EVERY - 1)){
+                f.open(fname.c_str(), ios_base::app);
+                f << "Iteration " << i + 1 << "\n";
+                f.close();
+                cout << "Iteration " << i + 1 << " of " << ITERATIONS <<
+                        " (" << (i+1)/(float)ITERATIONS * 100 << "% of trial)" << endl;
+                evaluate_team(pop_bestteam, 1, i);
+            } else{
+                evaluate_team(pop_bestteam, 1, i);
+            }
 		}
 	}
 
@@ -283,7 +285,7 @@ void pop::member_reproduce() {
 
 void pop::all_generational(){
 	pop temp;
-	temp.generate();  // generate a new population.
+	temp.add_blank_nodes();
 	int bound; // determines how to split the new population between island and team
 	if(TEAM_GENERATIONAL)
 		bound = POP_SIZE;       // team approach
@@ -330,7 +332,6 @@ void pop::all_generational(){
 
 	for (int i = 0; i < POP_SIZE; i++) {
 		// copy back to pop
-		the_pop[i]->clear();
 		the_pop[i]->copy(temp.the_pop[i]);
 		temp.the_pop[i]->clear();
 		delete temp.the_pop[i];

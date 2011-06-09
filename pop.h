@@ -32,6 +32,7 @@ public:
 	void OET1_reproduce();
 	void all_generational();
 	int member_select(int, int);
+	void add_blank_nodes();
 	qint64 trialstarttime;
 	DrawHelper *helper;
 private:
