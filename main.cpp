@@ -3,6 +3,7 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
+#include <process.h>
 
 #include "qthyena.h"
 #include "globals.h"
@@ -10,10 +11,17 @@
 using namespace std;
 
 int main(int argc, char *argv[]) {
-	int seed = int(time(NULL));
+	int seed = int(time(NULL)) * _getpid() + clock();
 	//    seed = 1206369581;
 	ofstream outseed;
-	outseed.open("seed.txt");
+	if(argc > 1){
+		char *name = (char*) malloc(128 * sizeof(char));
+		sprintf(name, "seed_%s.txt", argv[1]);
+		outseed.open(name);
+		free(name);
+	} else{
+		outseed.open("seed.txt");
+	}
 	outseed << seed << endl;
 	outseed.close();
 	srand(seed);

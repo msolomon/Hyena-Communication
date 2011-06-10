@@ -7,7 +7,7 @@
 #include "limits.h"
 
 //// Common settings
-const int ITERATIONS = 2;
+const int ITERATIONS = 200;
 const bool GUI = false;
 const bool DRAW = false; // if false, videos are unavailable
 const int DRAW_EVERY = 5; // draw every X generations

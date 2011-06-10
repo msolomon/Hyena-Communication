@@ -331,6 +331,7 @@ void environment::update_vectors(void){
 void environment::draw(DrawHelper* helper, int itera) {
 	helper->iter.enqueue(itera);
 	QStringList list;
+	list.reserve(NUM_LIONS + NUM_HYENAS + 3);
 
 	for (int i = 0; i < NUM_LIONS; i++) {
 		QPointF p = QPointF(agents->lions[i].getX(),

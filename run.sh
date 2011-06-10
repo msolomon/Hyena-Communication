@@ -35,6 +35,8 @@ cd $thisdir
 # Copy globals.h over so we know what settings were used
 mkdir -p cores
 cp $hyenadir/globals.h cores/settings.txt
+# link copy script
+ln -s $hyenadir/corecombiner.sh corecombiner.sh
 
 ## Run the trials on each core
 echo "Beginning trials..."
