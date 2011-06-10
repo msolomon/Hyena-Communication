@@ -3,16 +3,21 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-#include <process.h>
 
 #include "qthyena.h"
 #include "globals.h"
+#ifdef _WIN32
+#include <process.h>
+#define getpid _getpid
+#else
+#include <sys/types.h>
+#endif
 
 using namespace std;
 unsigned long mix(unsigned long, unsigned long, unsigned long);
 
 int main(int argc, char *argv[]) {
-	unsigned long seed = mix(time(NULL), _getpid(), clock());
+	unsigned long seed = mix(time(NULL), getpid(), clock());
 	//    seed = 1206369581;
 	ofstream outseed;
 	if(argc > 1){
