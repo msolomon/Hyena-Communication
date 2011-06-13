@@ -29,6 +29,7 @@ public:
 
 private:
 	QPen hyenaPen;
+	QPen hmarkerPen;
 	QPen lionPen;
 	QPen lionRadPen;
 	QPen zebraPen;

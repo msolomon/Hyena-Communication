@@ -8,9 +8,6 @@
 
 //// Common settings
 const int ITERATIONS = 2000;
-const bool GUI = false;
-const bool DRAW = true; // if false, videos are unavailable
-const int DRAW_EVERY = 5; // draw every X generations
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
 const char NUM_LIONS = 2;
@@ -21,6 +18,12 @@ const bool TEAM_GENERATIONAL = false;
 const bool OET_GENERATIONAL = true;
 const bool ISLAND_GENERATIONAL = false;
 const bool ISLAND_STEADY = false;
+// GUI/Drawing settings
+const bool GUI = true;
+const bool DRAW = true; // if false, videos are unavailable
+const int DRAW_EVERY = 10; // draw every X generations
+const bool ANTIALIAS = true; // antialias GUI drawing
+const bool HYENA_MARKERS = true; // short line to ID different hyenas
 
 // Use %1 for trial number
 const char* const VIDEO_TEMPLATE = "video_%1.txt";
@@ -49,11 +52,11 @@ const int LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;
 const int LION_HYENA_RADIUS_SQ = LION_HYENA_RADIUS * LION_HYENA_RADIUS;
 const int HYENA_HYENA_RADIUS_SQ = HYENA_HYENA_RADIUS * HYENA_HYENA_RADIUS;
 // hyenas call when close to zebra
-const float CALLING_RANGE = X / 4;
+const float CALLING_RANGE = 8;
 const float CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
 // reward getting close enough to actually eat
 const bool EAT_BONUS_ACTIVE = false;
-const float EAT_RADIUS = X / 32;
+const float EAT_RADIUS = CALLING_RANGE / 8;
 const float EAT_RADIUS_SQ = EAT_RADIUS * EAT_RADIUS;
 const float EAT_BONUS = 1.0;
 
@@ -70,9 +73,12 @@ typedef struct {
 	char num_hyenas;
 } agent_info;
 
-enum agent_type {
-	hyena, lion
-};
+//enum agent_type {
+//	hyena, lion
+//};
+typedef bool agent_type;
+const agent_type hyena = true;
+const agent_type lion = false;
 
 // Global functions
 inline float dist(float x, float y){  // 'distance' is a built-in function

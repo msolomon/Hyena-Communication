@@ -72,7 +72,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Iteration</string>
+        <string>Generation</string>
        </property>
       </widget>
      </item>

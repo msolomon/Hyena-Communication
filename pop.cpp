@@ -186,7 +186,7 @@ void pop::evolve(int trial) {
                         " (" << (i+1)/(float)ITERATIONS * 100 << "% of trial)" << endl;
                 evaluate_team(pop_bestteam, 1, i);
             } else{
-                evaluate_team(pop_bestteam, 1, i);
+				evaluate_team(pop_bestteam, 0, i);
             }
 		}
 	}

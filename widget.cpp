@@ -35,7 +35,8 @@ void Widget::paintEvent(QPaintEvent *event) {
 	QPainter painter;
 	painter.begin(this);
 	painter.setWindow(0, 0, X, Y);
-	painter.setRenderHint(QPainter::Antialiasing);
+	if(ANTIALIAS)
+		painter.setRenderHint(QPainter::Antialiasing);
 	helper.paint(&painter, event);
 	painter.end();
 }

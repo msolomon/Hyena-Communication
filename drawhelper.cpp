@@ -1,14 +1,16 @@
 #include "drawhelper.h"
 
+const float hyenaSize = .8;
+
 DrawHelper::DrawHelper() {
-	backgroundBrush = QBrush(QColor(20, 155, 20));
+	backgroundBrush = QBrush(QColor(180, 240, 150));
 	QColor hyenaColor = QColor(139, 69, 19);
 	QColor lionColor = QColor(220, 220, 20);
 	QColor zebraColor = QColor(220, 20, 20);
 
 	zebra = QPointF(ZEBRAX, ZEBRAY);
-
-	hyenaPen = QPen(QBrush(hyenaColor), .8, Qt::SolidLine, Qt::RoundCap);
+	hyenaPen = QPen(QBrush(hyenaColor), hyenaSize, Qt::SolidLine, Qt::RoundCap);
+	hmarkerPen = QPen(QBrush(hyenaColor), .1, Qt::SolidLine, Qt::RoundCap);
 	lionPen = QPen(QBrush(lionColor), 1.5, Qt::SolidLine, Qt::RoundCap);
 	// 2 * b/c width is twice the radius
 	lionRadPen = QPen(QBrush(lionColor), 2*LION_ATTACK_RADIUS, Qt::SolidLine, Qt::RoundCap);
@@ -51,14 +53,18 @@ void DrawHelper::updateGui(){
 }
 
 void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
+	const float zebraOpacity = 1;
+	const float radiusOpacity = .3;
+	const float animalOpacity = .7;
 	painter->fillRect(event->rect(), backgroundBrush);
 
+	painter->setOpacity(zebraOpacity);
 	painter->setPen(zebraPen);
 	painter->drawPoint(zebra);
 	painter->setPen(callRadPen);
-	painter->setOpacity(.2);
+	painter->setOpacity(radiusOpacity);
 	painter->drawPoint(zebra);
-	painter->setOpacity(1);
+	painter->setOpacity(animalOpacity);
 
 
 	painter->setPen(lionPen);
@@ -68,9 +74,9 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 			painter->setPen(lionPen);
 			painter->drawPoint(l);
 			painter->setPen(lionRadPen);
-			painter->setOpacity(.2);
+			painter->setOpacity(radiusOpacity);
 			painter->drawPoint(l);
-			painter->setOpacity(1);
+			painter->setOpacity(animalOpacity);
 		}
 	}
 
@@ -78,6 +84,16 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		if(!hyenas[i].isEmpty()){
 			QPointF h = hyenas[i].dequeue();
+			if(HYENA_MARKERS){
+				const float increment = (360*16)/((float)NUM_HYENAS);
+				QRectF rect = QRectF(h.x()-hyenaSize,
+									 h.y()-hyenaSize,
+									 2*hyenaSize,
+									 2*hyenaSize);
+				painter->setPen(hmarkerPen);
+				painter->drawPie(rect, (i*increment), 0);
+				painter->setPen(hyenaPen);
+			}
 			painter->drawPoint(h);
 		}
 	}
