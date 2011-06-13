@@ -20,7 +20,7 @@ void pop::save_data(int iteration){
 	for (int i = 0; i < POP_SIZE; i++) {
 		avg_fit += the_pop[i]->get_avg_fit();
 	}
-	data[iteration][1] = avg_fit / POP_SIZE;
+    data[iteration][1] = avg_fit / POP_SIZE;
 
     //// Best team information
     // average distance to zebra
@@ -284,8 +284,8 @@ void pop::member_reproduce() {
 */
 
 void pop::all_generational(){
-	pop temp;
-	temp.add_blank_nodes();
+	pop *temp = new pop();
+	temp->add_blank_nodes();
 	int bound; // determines how to split the new population between island and team
 	if(TEAM_GENERATIONAL)
 		bound = POP_SIZE;       // team approach
@@ -300,15 +300,15 @@ void pop::all_generational(){
 		do {
 			p2 = tourn_select(1);
 		} while (p2 == p1);
-		temp.the_pop[i]->copy(the_pop[p1]);
-		temp.the_pop[i + 1]->copy(the_pop[p2]);
-		temp.the_pop[i]->calc_size();
-		temp.the_pop[i + 1]->calc_size();
-		temp.the_pop[i]->xOver(temp.the_pop[i + 1]);
-		temp.the_pop[i]->mutate();
-		temp.the_pop[i + 1]->mutate();
-		temp.evaluate_team(i, 0);
-		temp.evaluate_team(i + 1, 0);
+		temp->the_pop[i]->copy(the_pop[p1]);
+		temp->the_pop[i + 1]->copy(the_pop[p2]);
+		temp->the_pop[i]->calc_size();
+		temp->the_pop[i + 1]->calc_size();
+		temp->the_pop[i]->xOver(temp->the_pop[i + 1]);
+		temp->the_pop[i]->mutate();
+		temp->the_pop[i + 1]->mutate();
+		temp->evaluate_team(i, 0);
+		temp->evaluate_team(i + 1, 0);
 	}
 
 	for (int i = bound; i < POP_SIZE; i = i + 2) {
@@ -317,25 +317,27 @@ void pop::all_generational(){
 		for (int j = 0; j < NUM_HYENAS; j++) {
 			// Piecewise construct new teams, ignoring previous associations – island model
 			parent_hyena = member_select(1, j);
-			temp.the_pop[i]->copy(the_pop[parent_hyena], j);
+			temp->the_pop[i]->copy(the_pop[parent_hyena], j);
 			parent_hyena = member_select(1, j);
-			temp.the_pop[i + 1]->copy(the_pop[parent_hyena], j);
+			temp->the_pop[i + 1]->copy(the_pop[parent_hyena], j);
 		}
-		temp.the_pop[i]->calc_size();
-		temp.the_pop[i + 1]->calc_size();
-		temp.the_pop[i]->xOver(temp.the_pop[i + 1]);
-		temp.the_pop[i]->mutate();
-		temp.the_pop[i + 1]->mutate();
-		temp.evaluate_team(i, 0);
-		temp.evaluate_team(i + 1, 0);
+		temp->the_pop[i]->calc_size();
+		temp->the_pop[i + 1]->calc_size();
+		temp->the_pop[i]->xOver(temp->the_pop[i + 1]);
+		temp->the_pop[i]->mutate();
+		temp->the_pop[i + 1]->mutate();
+		temp->evaluate_team(i, 0);
+		temp->evaluate_team(i + 1, 0);
 	}
 
 	for (int i = 0; i < POP_SIZE; i++) {
-		// copy back to pop
-		the_pop[i]->copy(temp.the_pop[i]);
-		temp.the_pop[i]->clear();
-		delete temp.the_pop[i];
+		// delete the old team
+		the_pop[i]->clear();
+		delete the_pop[i];
+		// now point to the new team
+		the_pop[i] = (temp->the_pop[i]);
 	}
+	delete temp; // doesn't delete the new teams (this is good)
 }
 
 void pop::team_reproduce() {

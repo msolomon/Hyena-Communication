@@ -6,6 +6,8 @@
 
 #include "qthyena.h"
 #include "globals.h"
+
+// includes and definitions needed to get process id
 #ifdef _WIN32
 #include <process.h>
 #define getpid _getpid

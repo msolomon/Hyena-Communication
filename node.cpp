@@ -218,7 +218,7 @@ void node::mutate(void) {
 }
 
 vect node::evaluate(agent_info *the_indiv) {
-	vect temp, temp1;
+	vect temp;
 	if (this == NULL) {
 		ofstream error;
 		error.open("error.txt", ios_base::app);
@@ -256,24 +256,21 @@ vect node::evaluate(agent_info *the_indiv) {
 		return (the_indiv->mirrored);
 	// non-terminals
 	case sum:
-		temp = children[0]->evaluate(the_indiv);
-		temp1 = children[1]->evaluate(the_indiv);
-		return ((temp) + (temp1));
+		return children[0]->evaluate(the_indiv) +
+				children[1]->evaluate(the_indiv);
 	case invert:
 		temp = children[0]->evaluate(the_indiv);
 		temp.direction += 3.1417;
 		return (temp);
 	case iflteMAG:
-		temp = children[0]->evaluate(the_indiv);
-		temp1 = children[1]->evaluate(the_indiv);
-		if (temp.magnitude <= temp1.magnitude)
+		if (children[0]->evaluate(the_indiv).magnitude <=
+				children[1]->evaluate(the_indiv).magnitude)
 			return (children[2]->evaluate(the_indiv));
 		else
 			return (children[3]->evaluate(the_indiv));
 	case iflteCLOCKWISE:
-		temp = children[0]->evaluate(the_indiv);
-		temp1 = children[1]->evaluate(the_indiv);
-		if (temp.direction <= temp1.direction)
+		if (children[0]->evaluate(the_indiv).direction <=
+				children[1]->evaluate(the_indiv).direction)
 			return (children[2]->evaluate(the_indiv));
 		else
 			return (children[3]->evaluate(the_indiv));
