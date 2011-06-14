@@ -8,6 +8,42 @@ void environment::set_up(team *a) {
 	agents = a;
 }
 
+void environment::generate_positions(){
+	for(int i = 0; i < NUM_TESTS; i++){
+		for(int j = 0; j < NUM_LIONS; j++){
+			// place lions within 1 unit of zebra
+			lioncoord[i][j][0] = ZEBRAX +
+					((float)rand() / (float)(RAND_MAX/2.0)) - 1;
+			lioncoord[i][j][1] = ZEBRAY +
+					((float)rand() / (float)(RAND_MAX/2.0)) - 1;
+		}
+
+		for(int j = 0; j < NUM_HYENAS; j++){
+			float x, y;
+			x = y = 0;
+			while (distance_sq(x, y) < (
+					   (LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1)
+					   )){
+				x = rand() % X;
+				y = rand() % Y;
+			}
+			hyenacoord[i][j][0] = x;
+			hyenacoord[i][j][1] = y;
+		}
+	}
+}
+
+void environment::place_agents(int test){
+	for(int i = 0; i < NUM_LIONS; i++){
+		agents->lions[i].set_position(lioncoord[test][i][0],
+									  lioncoord[test][i][1]);
+	}
+	for(int i = 0; i < NUM_HYENAS; i++){
+		agents->hyenas[i].set_position(hyenacoord[test][i][0],
+									   hyenacoord[test][i][1]);
+	}
+}
+
 void environment::evaluate(void) {
 	float tempx, tempy;
 	float radius;
@@ -58,7 +94,12 @@ void environment::update_vectors(void){
 	// set calling hyenas and if they call, set vectors toward zebra
 	for(int i = 0; i < NUM_HYENAS; i++){
 		agentx = agents->hyenas[i].getX(); //get hyena x,y
+		if(agentx > 1000000)
+			i++;
 		agenty = agents->hyenas[i].getY();
+		if(agenty > 1000000)
+			i++;
+
 		temp.magnitude = distance_sq(agentx - ZEBRAX, agenty - ZEBRAY);
 		if (temp.magnitude < CALLING_RANGE_SQ) { // min range to zebra
 			temp.magnitude = sqrt(temp.magnitude); // now calculate sqrt

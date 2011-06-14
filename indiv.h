@@ -99,6 +99,10 @@ public:
 	int get_size(void) {
 		return size;
 	}
+	void set_position(float x_in, float y_in){
+		x = x_in;
+		y = y_in;
+	}
 
 	void xOver(indiv*);
 

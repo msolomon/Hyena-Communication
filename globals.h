@@ -7,7 +7,7 @@
 #include "limits.h"
 
 //// Common settings
-const int ITERATIONS = 2000;
+const int ITERATIONS = 5;
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
 const char NUM_LIONS = 2;
@@ -19,9 +19,9 @@ const bool OET_GENERATIONAL = true;
 const bool ISLAND_GENERATIONAL = false;
 const bool ISLAND_STEADY = false;
 // GUI/Drawing settings
-const bool GUI = true;
+const bool GUI = false;
 const bool DRAW = true; // if false, videos are unavailable
-const int DRAW_EVERY = 10; // draw every X generations
+const int DRAW_EVERY = 5; // draw every X generations
 const bool ANTIALIAS = true; // antialias GUI drawing
 const bool HYENA_MARKERS = true; // short line to ID different hyenas
 
@@ -32,10 +32,9 @@ const char* const DATA_TEMPLATE = "data_%1.txt";
 //// Constants
 const int TOURNAMENT_SIZE = 5;
 const int GROW_DEPTH = 4;
-const int EVALUATE_EVERY = 1;
 const int TRIALS = 1; // leaks memory; do via script
 const float PI = 3.141592654;
-const int X = 32;
+const int X = 32; // powers of 2 are best - int division elsewhere
 const int Y = 32;
 const float ZEBRAX = X / 2;
 const float ZEBRAY = Y / 2;

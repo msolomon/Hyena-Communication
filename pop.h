@@ -11,6 +11,7 @@ class pop: public QObject {
 	Q_OBJECT
 public:
 	pop();
+	~pop();
 	void generate();
 	void run();
 	int select_best_team(int);
@@ -24,8 +25,8 @@ public:
 	void evolve_repeat(int);
 	void evolve(int);
 	void evaluate_agent(int, int, int);
-	void evaluate_team(int, int, int);
-	void evaluate_team(int, int);
+	void evaluate_team(int);
+	void evaluate_team(team *);
 	void team_reproduce();
 	void member_reproduce();
 	void island_reproduce();
@@ -33,18 +34,20 @@ public:
 	void all_generational();
 	int member_select(int, int);
 	void add_blank_nodes();
+	void draw_best(int, int);
 	qint64 trialstarttime;
 	DrawHelper *helper;
+	environment *ENV;
 private:
 	//     float fitnesses_scouts[POP_SIZE];
 	//    float fitnesses_investigators[POP_SIZE];
-	environment ENV;
 	team *the_pop[POP_SIZE];
 //        float data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
-	// data. all team fitnesses plus 4 iteration attributes (avg. and soforth)
-	float data[ITERATIONS][NUM_HYENAS + 5];
+	// data. all team fitnesses plus 8 iteration attributes (avg. and soforth)
+	float data[ITERATIONS][NUM_HYENAS + 8];
 	float pop_bestfitness;
 	int pop_bestteam;
+	int pop_worstteam;
 
 signals:
 	void calc_iter(QString);

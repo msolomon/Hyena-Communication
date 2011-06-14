@@ -21,6 +21,12 @@ void team::reset_team(void) {
 	}
 }
 
+void team::reset_calling(){
+	for(int i = 0; i < NUM_HYENAS; i++){
+		hyenas[i].set_calling(false);
+	}
+}
+
 void team::reset_fitness(void) {
 	avg_fit = 0;
 	avg_lion_attacks = 0;

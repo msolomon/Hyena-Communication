@@ -20,9 +20,12 @@ public:
 	void evaluate();
 	void set_up(team *);
 	std::string fname;
+	void generate_positions();
+	void place_agents(int);
+	float hyenacoord[NUM_TESTS][NUM_HYENAS][2];
+	float lioncoord[NUM_TESTS][NUM_LIONS][2];
 private:
 	team *agents;
-	vect zerovect;
 };
 
 #endif
