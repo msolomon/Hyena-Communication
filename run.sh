@@ -30,6 +30,12 @@ fi
 echo "Building project..."
 cd $hyenadir
 qmake "CONFIG+=release"
+# Link in tcmalloc if it exists
+if [ -e "/usr/lib/libtcmalloc.so" ]
+then
+	echo Adding link to tcmalloc...
+	sed -i "s/-lpthread/-lpthread -ltcmalloc/" Makefile
+fi
 make -j$cores
 cd $thisdir
 # Copy globals.h over so we know what settings were used
