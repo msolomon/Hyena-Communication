@@ -7,7 +7,7 @@
 #include "limits.h"
 
 //// Common settings
-const int ITERATIONS = 1000;
+const int ITERATIONS = 100;
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
 const char NUM_LIONS = 2;
@@ -22,7 +22,7 @@ const bool ISLAND_STEADY = false;
 // GUI/Drawing settings
 const bool GUI = false;
 const bool DRAW = true; // if false, videos are unavailable
-const int DRAW_EVERY = 10; // draw every X generations
+const int DRAW_EVERY = 1; // draw every X generations
 const bool ANTIALIAS = true; // antialias GUI drawing
 const bool HYENA_MARKERS = true; // draw short line to ID different hyenas
 

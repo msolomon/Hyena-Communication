@@ -77,7 +77,7 @@ void pop::write_data(int trial){
 	f.open(fname.toStdString().c_str());
 
 	// provide column labels
-	f << "trial time avg_fit worst_zeb_dist worst_num_attacks worst_fit best_zeb_dist best_num_attacks best_fit ";
+	f << "trial gen time avg_fit worst_zeb_dist worst_num_attacks worst_fit best_zeb_dist best_num_attacks best_fit ";
 	for(int i = 1; i < NUM_HYENAS; i++){
 		f << "H" << i << " ";
 	}
@@ -85,7 +85,7 @@ void pop::write_data(int trial){
 
 	// iterations
 	for(int j = 0; j < ITERATIONS; j++){
-		f << j + 1 << " ";
+		f << trial + 1 << " " << j + 1 << " " ; // trial and generation
 		// hyena fitnesses plus 5 attributes at the beginning
 		for(int k = 0; k < NUM_HYENAS + 4; k++){
 			f << data[j][k] << " ";

@@ -20,14 +20,15 @@ void environment::generate_positions(){
 
 		for(int j = 0; j < NUM_HYENAS; j++){
 			float x, y;
-			x = y = 0;
+			x = ZEBRAX;
+			y = ZEBRAY;
 			if(START_OUTSIDE_ZEBRA){
-				while(distance_sq(x, y) < CALLING_RANGE_SQ){
+				while(distance_sq(ZEBRAX - x, ZEBRAY - y) < CALLING_RANGE_SQ){
 					x = (rand() / ((float)RAND_MAX / (float)(X)));
 					y = (rand() / ((float)RAND_MAX / (float)(Y)));
 				}
 			} else{ // start outside lion radius instead
-				while (distance_sq(x, y) < (
+				while (distance_sq(ZEBRAX - x, ZEBRAY - y) < (
 						   (LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1)
 						   )){
 					x = (rand() / ((float)RAND_MAX / (float)(X)));
