@@ -20,11 +20,12 @@ const ops last_move = 6;
 const ops constant = 7;
 const ops num_hyenas = 8;
 const ops mirror_nearest = 9; // repeat the previous action of the nearest hyena
-const ops sum = 10;
-const ops invert = 11;
-const ops iflteMAG = 12;
-const ops iflteCLOCKWISE = 13;
-const ops ifVectorZero = 14;
+const ops delta_fitness = 10;
+const ops sum = 11;
+const ops invert = 12;
+const ops iflteMAG = 13;
+const ops iflteCLOCKWISE = 14;
+const ops ifVectorZero = 15;
 
 //enum ops {
 //	zebra,
@@ -44,7 +45,7 @@ const ops ifVectorZero = 14;
 //	ifVectorZero
 //};
 
-const int num_terms = 10;
+const int num_terms = 11;
 const int num_non_terms = 5;
 
 class node;

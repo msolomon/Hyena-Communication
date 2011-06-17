@@ -219,10 +219,11 @@ void pop::evolve(int trial) {
 
 	write_data(trial); // one file per trial
 
-	// graphviz output of a hyena's tree
-//	if (trial + 1 == TRIALS){
-//		cout << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL).toStdString() << endl;
-//	}
+	// graphviz output of the first hyena in best team of last generation's tree
+	fname = QString(GRAPHVIZ_TEMPLATE).arg(trial+1).toStdString();
+	f.open(fname.c_str());
+	f << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL).toStdString() << endl;
+	f.close();
 }
 
 void pop::OET1_reproduce() {

@@ -21,11 +21,19 @@ void environment::generate_positions(){
 		for(int j = 0; j < NUM_HYENAS; j++){
 			float x, y;
 			x = y = 0;
-			while (distance_sq(x, y) < (
-					   (LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1)
-					   )){
-				x = rand() % X;
-				y = rand() % Y;
+			if(START_OUTSIDE_ZEBRA){
+				while(distance_sq(x, y) < CALLING_RANGE_SQ){
+					x = (rand() / ((float)RAND_MAX / (float)(X)));
+					y = (rand() / ((float)RAND_MAX / (float)(Y)));
+				}
+			} else{ // start outside lion radius instead
+				while (distance_sq(x, y) < (
+						   (LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1)
+						   )){
+					x = (rand() / ((float)RAND_MAX / (float)(X)));
+					y = (rand() / ((float)RAND_MAX / (float)(Y)));
+				}
+
 			}
 			hyenacoord[i][j][0] = x;
 			hyenacoord[i][j][1] = y;
@@ -94,11 +102,7 @@ void environment::update_vectors(void){
 	// set calling hyenas and if they call, set vectors toward zebra
 	for(int i = 0; i < NUM_HYENAS; i++){
 		agentx = agents->hyenas[i].getX(); //get hyena x,y
-		if(agentx > 1000000)
-			i++;
 		agenty = agents->hyenas[i].getY();
-		if(agenty > 1000000)
-			i++;
 
 		temp.magnitude = distance_sq(agentx - ZEBRAX, agenty - ZEBRAY);
 		if (temp.magnitude < CALLING_RANGE_SQ) { // min range to zebra
@@ -112,6 +116,9 @@ void environment::update_vectors(void){
 			agents->hyenas[i].set_calling(false);
 		}
 		agents->hyenas[i].set_zebra(temp);
+
+		// update last_fitness
+		agents->hyenas[i].record_last_fitness();
 	}
 
 	// set nearest hyena vectors (and # calling scouts)

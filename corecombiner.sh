@@ -1,8 +1,8 @@
 #! /bin/sh
-fnames=`find . -mindepth 1 -name 'data.txt'`
+fnames=`find . -mindepth 2 -name 'data.txt'`
 isfirst=true
 
-
+echo 'Combining data files...'
 for f in $fnames
 do
 	if $isfirst
@@ -13,3 +13,5 @@ do
 	echo "$f"
 	tail --lines=+2 "$f" >> data.txt
 done
+
+echo 'Done.'

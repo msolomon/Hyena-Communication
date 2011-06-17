@@ -5,11 +5,15 @@ trials=$1
 hyenadir=`dirname $0`
 #hyenadir=`pwd`/../../$hyenadir
 
+# Limit each trial to 2GB of memory and 1 hour CPU time
+ulimit -d 2097152 -t 7200
+
 count=0
 until [ $count -ge $trials ]
 do
 	count=$(( $count + 1 ))
-	$hyenadir/qthyena $count
+	# Run at lower priority
+	LD_PRELOAD="/usr/lib/libtcmalloc.so.0" nice -5 $hyenadir/qthyena $count
 done
 
 # now combine into one file

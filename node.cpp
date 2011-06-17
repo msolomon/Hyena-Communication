@@ -80,6 +80,7 @@ void node::copy(node *p, node * parn) {
 		return;
 	case num_hyenas:
 	case mirror_nearest:
+	case delta_fitness:
 		return;
 	// non-terminals
 	case sum:
@@ -136,6 +137,7 @@ void node::clear(void) {
 		return;
 	case num_hyenas:
 	case mirror_nearest:
+	case delta_fitness:
 		return;
 	// non-terminals
 	case sum:
@@ -178,7 +180,8 @@ void node::mutate(void) {
 	case constant:
 	case num_hyenas:
 	case mirror_nearest:
-		if (rand() % 100 < 10){ // 10% chance of change
+	case delta_fitness:
+		if (rand() % 100 < MUTATION_CHANCE){
 			if(operation == constant)
 				delete the_const;
 			operation = rand() % num_terms;
@@ -249,18 +252,22 @@ vect node::evaluate(agent_info *the_indiv) {
 	case constant:
 		return (*the_const);
 	case num_hyenas:
-		temp.direction = PI;
+		temp.direction = 0;
 		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
 		return temp;
 	case mirror_nearest:
 		return (the_indiv->mirrored);
+	case delta_fitness:
+		temp.direction = 0;
+		temp.magnitude = the_indiv->curr_fitness - the_indiv->last_fitness;
+		return temp;
 	// non-terminals
 	case sum:
 		return children[0]->evaluate(the_indiv) +
 				children[1]->evaluate(the_indiv);
 	case invert:
 		temp = children[0]->evaluate(the_indiv);
-		temp.direction += 3.1417;
+		temp.direction += PI;
 		return (temp);
 	case iflteMAG:
 		if (children[0]->evaluate(the_indiv).magnitude <=
@@ -276,7 +283,7 @@ vect node::evaluate(agent_info *the_indiv) {
 			return (children[3]->evaluate(the_indiv));
 	case ifVectorZero:
 		temp = children[0]->evaluate(the_indiv);
-		if (temp.direction == 0 && temp.magnitude == 0)
+		if (temp.magnitude == 0)
 			return (children[1]->evaluate(the_indiv));
 		else
 			return (children[2]->evaluate(the_indiv));
@@ -364,6 +371,7 @@ int node::calc_size(int &size) {
 	case constant:
 	case num_hyenas:
 	case mirror_nearest:
+	case delta_fitness:
 		return size;
 	// non-terminals
 	case sum:
@@ -411,6 +419,7 @@ node *node::get_point(int pn, int &current) {
 	case constant:
 	case num_hyenas:
 	case mirror_nearest:
+	case delta_fitness:
 		return this;
 	// non-terminals
 	case sum:
@@ -487,17 +496,20 @@ QString node::graphviz(node *parent){
 	case mirror_nearest:
 		output += "mirror_nearest, shape=plaintext]\n";
 		break;
+	case delta_fitness:
+		output += "delta_fitness, shape=plaintext]\n";
+		break;
 
 	// non-terminals
 	case sum:
 		output += "sum, shape=plaintext]\n";
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 2; i++) {
 			output += children[i]->graphviz(this);
 		}
 		break;
 	case invert:
 		output += "invert, shape=plaintext]\n";
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 1; i++) {
 			output += children[i]->graphviz(this);
 		}
 		break;
@@ -515,7 +527,7 @@ QString node::graphviz(node *parent){
 		break;
 	case ifVectorZero:
 		output += "ifVectorZero, shape=plaintext]\n";
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 3; i++) {
 			output += children[i]->graphviz(this);
 		}
 		break;

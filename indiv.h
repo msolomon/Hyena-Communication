@@ -43,6 +43,11 @@ public:
 	void set_calling(bool b) {
 		calling = b;
 	}
+	void record_last_fitness(){
+		the_info.last_fitness = the_info.curr_fitness;
+		the_info.curr_fitness = fitness;
+	}
+
 	//     void set_nearest_edge(vect v){the_info.nearest_edge = v;}
 	bool get_calling() {
 		return calling;
@@ -113,6 +118,7 @@ private:
 	int size;
 	agent_info the_info;
 	float fitness;
+	float last_fitness;
 	float avg_dist_to_zebra;
 	int lion_attacks;
 	agent_type type;

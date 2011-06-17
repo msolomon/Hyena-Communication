@@ -85,14 +85,18 @@ void indiv::rand_move() {
 
 void indiv::lion_move(void) {
 	if (the_info.num_hyenas > (the_info.num_lions * HYENA_LION_FEAR_RATIO)) {
-		x += sin(the_info.nearest_hyena.direction);
-		y += cos(the_info.nearest_hyena.direction);
+		float mag = tanh((the_info.num_hyenas /
+						  (the_info.num_lions * HYENA_LION_FEAR_RATIO)));
+		x += mag * sin(the_info.nearest_hyena.direction);
+		y += mag * cos(the_info.nearest_hyena.direction);
 	}
-	/*     else if(the_info.zebra.magnitude < LION_SEES_ZEBRA && the_info.zebra.magnitude > LION_NEAR_ZEBRA){
-	 x-=1.0*sin(the_info.zebra.direction);
-	 y-=1.0*cos(the_info.zebra.direction);
+	else if(the_info.zebra.magnitude < LION_SEES_ZEBRA &&
+			the_info.zebra.magnitude > LION_NEAR_ZEBRA){
+		float mag = 1.0 - (the_info.num_hyenas /
+				(the_info.num_lions * HYENA_LION_FEAR_RATIO));
+	 x -= mag * sin(the_info.zebra.direction);
+	 y -= mag * cos(the_info.zebra.direction);
 	 }
-	 */
 }
 
 void indiv::move(void) {
@@ -103,7 +107,7 @@ void indiv::move(void) {
 	}
 	v = tree->evaluate(&the_info);
 	if (v.magnitude > 1){ // trying to move too far
-		v.magnitude -= (int)v.magnitude - 1;
+		v.magnitude = 1;
 
 		the_info.last_move.direction = v.direction;
 		the_info.last_move.magnitude = v.magnitude;
