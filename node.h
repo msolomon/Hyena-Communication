@@ -64,16 +64,16 @@ public:
 	void clear(void);
 	void copy(node *, node *);
 	int calc_size(int &);
-	node *get_parent(void) {
-		return parent;
-	}
-	void set_parent(node *p) {
-		parent = p;
-	}
+//	node *get_parent(void) {
+//		return parent;
+//	}
+//	void set_parent(node *p) {
+//		parent = p;
+//	}
 	int find_child(node *);
 	void set_child(int c2, node *);
-	node *get_point(int, int &);
-	QString graphviz(node *);
+	node *get_point(int, int &, node *&);
+    QString graphviz(node *, QString);
 private:
 	datastore data;
 	ops operation;
@@ -86,7 +86,7 @@ private:
 //	node *(*children[]);
 //	node **children;
 //	vect *the_const;
-	node *parent;
+//	node *parent;
 	void replace(node*[], int index);
 };
 

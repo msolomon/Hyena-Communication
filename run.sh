@@ -52,6 +52,6 @@ do
 	count=$(( $count + 1 ))
 	mkdir -p cores/$count
 	cd cores/$count
-	$hyenadir/trials.sh $trials &
+	$hyenadir/trials.sh $trials $count &
 	cd ../..
 done

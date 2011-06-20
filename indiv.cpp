@@ -4,19 +4,20 @@ void indiv::xOver(indiv *p2) {
 	int point1 = rand() % size + 1;
 	int point2 = rand() % (p2->get_size() + 1);
 	int temp = 0;
-	node *xOver1 = tree->get_point(point1, temp);
+	node *tempP1 = NULL;
+	node *xOver1 = tree->get_point(point1, temp, tempP1);
 	temp = 0;
-	node *xOver2 = p2->tree->get_point(point2, temp);
-	node *tempP1, *tempP2;
+	node *tempP2 = NULL;
+	node *xOver2 = p2->tree->get_point(point2, temp, tempP2);
 	int c1, c2;
-	tempP1 = xOver1->get_parent();
-	tempP2 = xOver2->get_parent();
+//	tempP1 = xOver1->get_parent();
+//	tempP2 = xOver2->get_parent();
 	if (tempP1 != NULL) { // not root
 		if (tempP2 != NULL) { // not root
 			c1 = tempP1->find_child(xOver1);
 			c2 = tempP2->find_child(xOver2);
-			xOver1->set_parent(tempP2);
-			xOver2->set_parent(tempP1);
+//			xOver1->set_parent(tempP2);
+//			xOver2->set_parent(tempP1);
 			tempP2->set_child(c2, xOver1);
 			tempP1->set_child(c1, xOver2);
 		}
@@ -27,6 +28,7 @@ void indiv::reset_fitness(void) {
 	fitness = 0;
 	lion_attacks = 0;
 	avg_dist_to_zebra = 0;
+	the_info.curr_fitness = 0;
 }
 
 void indiv::reset(void) {

@@ -1,6 +1,7 @@
 #! /bin/sh
 echo $0
 trials=$1
+corenum=$2
 
 hyenadir=`dirname $0`
 #hyenadir=`pwd`/../../$hyenadir
@@ -14,7 +15,7 @@ until [ $count -ge $trials ]
 do
 	count=$(( $count + 1 ))
 	# Run at lower priority
-	nice -5 $hyenadir/qthyena $count
+	nice -5 $hyenadir/qthyena $(( $count * $corenum ))
 done
 
 # now combine into one file

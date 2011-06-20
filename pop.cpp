@@ -86,11 +86,11 @@ void pop::write_data(int trial){
 	// iterations
 	for(int j = 0; j < ITERATIONS; j++){
 		f << trial + 1 << " " << j + 1 << " " ; // trial and generation
-		// hyena fitnesses plus 5 attributes at the beginning
-		for(int k = 0; k < NUM_HYENAS + 4; k++){
+		// hyena fitnesses plus 8 attributes at the beginning
+		for(int k = 0; k < NUM_HYENAS + 7; k++){
 			f << data[j][k] << " ";
 		}
-		f << data[j][NUM_HYENAS + 4] << "\n";
+		f << data[j][NUM_HYENAS + 7] << "\n";
 	}
 	f.close();
 }
@@ -222,7 +222,7 @@ void pop::evolve(int trial) {
 	// graphviz output of the first hyena in best team of last generation's tree
 	fname = QString(GRAPHVIZ_TEMPLATE).arg(trial+1).toStdString();
 	f.open(fname.c_str());
-	f << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL).toStdString() << endl;
+    f << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL, "").toStdString() << endl;
 	f.close();
 }
 

@@ -62,7 +62,7 @@ void node::copy(node *p, node * parn) {
 		return;
 	clear();
 	operation = p->operation;
-	parent = parn;
+//	parent = parn;
 	switch (operation) {
 	// terminals
 	case zebra:
@@ -297,7 +297,7 @@ vect node::evaluate(agent_info *the_indiv) {
 }
 
 void node::grow(int max_d,int depth,node *pare){
-    parent = pare;
+//    parent = pare;
 	if(depth == max_d){ // bottomed out, use terminals
 		operation = rand()%num_terms;
 		if(operation == constant){
@@ -402,7 +402,7 @@ int node::calc_size(int &size) {
 	}
 }
 
-node *node::get_point(int pn, int &current) {
+node *node::get_point(int pn, int &current, node *&parent) {
 	current++;
 	node *answer;
 	if (pn == current)
@@ -423,23 +423,28 @@ node *node::get_point(int pn, int &current) {
 		return this;
 	// non-terminals
 	case sum:
-		answer = children[0]->get_point(pn, current);
+		parent = this;
+		answer = children[0]->get_point(pn, current, parent);
 		if (current >= pn)
 			return answer;
-		return children[1]->get_point(pn, current);
+		parent = this;
+		return children[1]->get_point(pn, current, parent);
 	case invert:
-		return children[0]->get_point(pn, current);
+		parent = this;
+		return children[0]->get_point(pn, current, parent);
 	case iflteMAG:
 	case iflteCLOCKWISE:
 		for (int i = 0; i < 4; i++) {
-			answer = children[i]->get_point(pn, current);
+			parent = this;
+			answer = children[i]->get_point(pn, current, parent);
 			if (current >= pn)
 				return answer;
 		}
 		return answer;
 	case ifVectorZero:
 		for (int i = 0; i < 3; i++) {
-			answer = children[i]->get_point(pn, current);
+			parent = this;
+			answer = children[i]->get_point(pn, current, parent);
 			if (current >= pn)
 				return answer;
 		}
@@ -453,7 +458,7 @@ node *node::get_point(int pn, int &current) {
 	return this; // error
 }
 
-QString node::graphviz(node *parent){
+QString node::graphviz(node *parent, QString extraLabel){
 	QString output;
 	if(parent == NULL){
 		output = QString("digraph hyena {\n") +
@@ -462,73 +467,75 @@ QString node::graphviz(node *parent){
 	} else if(this == NULL){
 		return output;
 	}
-	output += output.number((long) this) + " [label="; // use address as id
+	output += output.number((long long) this) + " [label=\""; // use address as id
+    output += extraLabel + " ";
 
 	switch (operation) {
 	// terminals
 	case zebra:
-		output += "zebra, shape=plaintext]\n";
+        output += "zebra\", shape=plaintext]\n";
 		break;
 	case nearest_hyena:
-		output += "nearest_hyena, shape=plaintext]\n";
+        output += "nearest_hyena\", shape=plaintext]\n";
 		break;
 	case nearest_lion:
-		output += "nearest_lion, shape=plaintext]\n";
+        output += "nearest_lion\", shape=plaintext]\n";
 		break;
 	case nearest_calling:
-		output += "nearest_calling, shape=plaintext]\n";
+        output += "nearest_calling\", shape=plaintext]\n";
 		break;
 	case north:
-		output += "north, shape=plaintext]\n";
+        output += "north\", shape=plaintext]\n";
 		break;
 	case randm:
-		output += "randm, shape=plaintext]\n";
+        output += "randm\", shape=plaintext]\n";
 		break;
 	case last_move:
-		output += "last_move, shape=plaintext]\n";
+        output += "last_move\", shape=plaintext]\n";
 		break;
 	case constant:
-		output += "constant, shape=plaintext]\n";
+        output += QString("constant (mag=%1 dir=%2)\", shape=plaintext]\n")
+                .arg(the_const->magnitude).arg(the_const->direction);
 		break;
 	case num_hyenas:
-		output += "num_hyenas, shape=plaintext]\n";
+        output += "num_hyenas\", shape=plaintext]\n";
 		break;
 	case mirror_nearest:
-		output += "mirror_nearest, shape=plaintext]\n";
+        output += "mirror_nearest\", shape=plaintext]\n";
 		break;
 	case delta_fitness:
-		output += "delta_fitness, shape=plaintext]\n";
+        output += "delta_fitness\", shape=plaintext]\n";
 		break;
 
 	// non-terminals
 	case sum:
-		output += "sum, shape=plaintext]\n";
+        output += "sum\", shape=plaintext]\n";
 		for (int i = 0; i < 2; i++) {
-			output += children[i]->graphviz(this);
+            output += children[i]->graphviz(this, QString::number(i));
 		}
 		break;
 	case invert:
-		output += "invert, shape=plaintext]\n";
+        output += "invert\", shape=plaintext]\n";
 		for (int i = 0; i < 1; i++) {
-			output += children[i]->graphviz(this);
+            output += children[i]->graphviz(this, QString::number(i));
 		}
 		break;
 	case iflteMAG:
-		output += "iflteMAG, shape=plaintext]\n";
+        output += "iflteMAG\", shape=plaintext]\n";
 		for (int i = 0; i < 4; i++) {
-			output += children[i]->graphviz(this);
+            output += children[i]->graphviz(this, QString::number(i));
 		}
 		break;
 	case iflteCLOCKWISE:
-		output += "iflteCLOCKWISE, shape=plaintext]\n";
+        output += "iflteCLOCKWISE\", shape=plaintext]\n";
 		for (int i = 0; i < 4; i++) {
-			output += children[i]->graphviz(this);
+            output += children[i]->graphviz(this, QString::number(i));
 		}
 		break;
 	case ifVectorZero:
-		output += "ifVectorZero, shape=plaintext]\n";
+        output += "ifVectorZero\", shape=plaintext]\n";
 		for (int i = 0; i < 3; i++) {
-			output += children[i]->graphviz(this);
+            output += children[i]->graphviz(this, QString::number(i));
 		}
 		break;
 	default:
@@ -538,21 +545,8 @@ QString node::graphviz(node *parent){
 		error.close();
 	}
 
-	//		cout << "--" << output.toStdString()  << "--" << endl;
-	QString label;
-	switch(operation){
-	case constant:
-//		label += ", label=\"(" + label.number(the_const.direction)
-//				 + ", " + label.number(the_const.magnitude) + ")\"";
-		break;
-	default:
-		break;
-	}
-
-	output += output.number((long) parent) +
-			  "->" + output.number((long) this) + " [dir=back"
-			  + label + "]\n";
-
+    output += output.number((long long) parent) +
+              "->" + output.number((long long) this) + " [dir=back]\n";
 
 	if(parent == NULL){
 		output += QString("}\n");
