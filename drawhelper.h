@@ -35,7 +35,7 @@ private:
 	QPen zebraPen;
 	QPen callRadPen;
 	QBrush backgroundBrush;
-	QPointF zebra;
+	QPointF zeb;
 	int timestep;
 	int it;
 

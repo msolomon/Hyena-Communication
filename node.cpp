@@ -22,12 +22,6 @@ void node::set_child(int c, node *child) {
 }
 
 int node::find_child(node *c) {
-	ofstream error;
-	if (operation < num_terms) {
-		error.open("error.txt", ios_base::app);
-		error << "error in find_child: terminal " << (int)operation << endl;
-		error.close();
-	}
 	int num = 0;
 	switch (operation) {
 	// non-terminals
@@ -44,12 +38,19 @@ int node::find_child(node *c) {
 	case ifVectorZero:
 		num = 3;
 		break;
+	default:
+		ofstream error;
+		error.open("error.txt", ios_base::app);
+		error << "error in find_child: terminal " << (int)operation << endl;
+		error.close();
+		return -1;
 	}
 	for (int i = 0; i < num; i++) {
 		if (children[i] == c) {
 			return i;
 		}
 	}
+	ofstream error;
 	error.open("error.txt", ios_base::app);
 	error << "error in find_child: child not found " << (int)operation
 			<< endl;
@@ -57,7 +58,7 @@ int node::find_child(node *c) {
 	return -1; // still an error
 }
 
-void node::copy(node *p, node * parn) {
+void node::copy(node *p) {
 	if (!p)
 		return;
 	clear();
@@ -78,7 +79,7 @@ void node::copy(node *p, node * parn) {
 		the_const->direction = p->the_const->direction;
 		the_const->magnitude = p->the_const->magnitude;
 		return;
-	case num_hyenas:
+	case number_hyenas:
 	case mirror_nearest:
 	case delta_fitness:
 		return;
@@ -86,28 +87,28 @@ void node::copy(node *p, node * parn) {
 	case sum:
 		children = new node*[2];
 		children[0] = new node();
-		children[0]->copy(p->children[0], this);
+		children[0]->copy(p->children[0]);
 		children[1] = new node();
-		children[1]->copy(p->children[1], this);
+		children[1]->copy(p->children[1]);
 		return;
 	case invert:
 		children = new node*[1];
 		children[0] = new node();
-		children[0]->copy(p->children[0], this);
+		children[0]->copy(p->children[0]);
 		return;
 	case iflteMAG:
 	case iflteCLOCKWISE:
 		children = new node*[4];
 		for (int i = 0; i < 4; i++) {
 			children[i] = new node();
-			children[i]->copy(p->children[i], this);
+			children[i]->copy(p->children[i]);
 		}
 		return;
 	case ifVectorZero:
 		children = new node*[3];
 		for (int i = 0; i < 3; i++) {
 			children[i] = new node();
-			children[i]->copy(p->children[i], this);
+			children[i]->copy(p->children[i]);
 		}
 		return;
 	default:
@@ -135,7 +136,7 @@ void node::clear(void) {
 	case constant:
 		delete the_const;
 		return;
-	case num_hyenas:
+	case number_hyenas:
 	case mirror_nearest:
 	case delta_fitness:
 		return;
@@ -178,13 +179,13 @@ void node::mutate(void) {
 	case randm:
 	case last_move:
 	case constant:
-	case num_hyenas:
+	case number_hyenas:
 	case mirror_nearest:
 	case delta_fitness:
 		if (rand() % 100 < MUTATION_CHANCE){
 			if(operation == constant)
 				delete the_const;
-			operation = rand() % num_terms;
+			operation = (ops) (rand() % NUM_TERMS);
 			if(operation == constant){
 				the_const = new vect();
 				the_const->random();
@@ -233,55 +234,71 @@ vect node::evaluate(agent_info *the_indiv) {
 	switch (operation) {
 	// terminals
 	case zebra:
+		the_indiv->uses[zebra]++;
 		return (the_indiv->zebra);
 	case nearest_hyena:
+		the_indiv->uses[nearest_hyena]++;
 		return (the_indiv->nearest_hyena);
 	case nearest_lion:
+		the_indiv->uses[nearest_lion]++;
 		return (the_indiv->nearest_lion);
 	case nearest_calling:
+		the_indiv->uses[nearest_calling]++;
 		return (the_indiv->nearest_calling);
 	case north:
+		the_indiv->uses[north]++;
 		temp.direction = PI;
 		temp.magnitude = 1;
 		return (temp);
 	case randm:
+		the_indiv->uses[randm]++;
 		temp.random();
 		return temp;
 	case last_move:
+		the_indiv->uses[last_move]++;
 		return (the_indiv->last_move);
 	case constant:
+		the_indiv->uses[constant]++;
 		return (*the_const);
-	case num_hyenas:
+	case number_hyenas:
+		the_indiv->uses[number_hyenas]++;
 		temp.direction = 0;
 		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
 		return temp;
 	case mirror_nearest:
+		the_indiv->uses[mirror_nearest]++;
 		return (the_indiv->mirrored);
 	case delta_fitness:
+		the_indiv->uses[delta_fitness]++;
 		temp.direction = 0;
 		temp.magnitude = the_indiv->curr_fitness - the_indiv->last_fitness;
 		return temp;
 	// non-terminals
 	case sum:
+		the_indiv->uses[sum]++;
 		return children[0]->evaluate(the_indiv) +
 				children[1]->evaluate(the_indiv);
 	case invert:
+		the_indiv->uses[invert]++;
 		temp = children[0]->evaluate(the_indiv);
 		temp.direction += PI;
 		return (temp);
 	case iflteMAG:
+		the_indiv->uses[iflteMAG]++;
 		if (children[0]->evaluate(the_indiv).magnitude <=
 				children[1]->evaluate(the_indiv).magnitude)
 			return (children[2]->evaluate(the_indiv));
 		else
 			return (children[3]->evaluate(the_indiv));
 	case iflteCLOCKWISE:
+		the_indiv->uses[iflteCLOCKWISE]++;
 		if (children[0]->evaluate(the_indiv).direction <=
 				children[1]->evaluate(the_indiv).direction)
 			return (children[2]->evaluate(the_indiv));
 		else
 			return (children[3]->evaluate(the_indiv));
 	case ifVectorZero:
+		the_indiv->uses[ifVectorZero]++;
 		temp = children[0]->evaluate(the_indiv);
 		if (temp.magnitude == 0)
 			return (children[1]->evaluate(the_indiv));
@@ -296,50 +313,70 @@ vect node::evaluate(agent_info *the_indiv) {
 	}
 }
 
-void node::grow(int max_d,int depth,node *pare){
+void node::grow(int max_d, int depth){
 //    parent = pare;
 	if(depth == max_d){ // bottomed out, use terminals
-		operation = rand()%num_terms;
+		operation = (ops) (rand() % NUM_TERMS);
 		if(operation == constant){
 			the_const = new vect();
 			the_const->random();
 		}
 	}
-    else{ // haven't reached bottom, use non-terminals
-		operation = num_terms + rand()%num_non_terms;
+	else{ // haven't reached bottom, use FULL or GROW algo. as appropriate
+		if(FULL){
+			operation = (ops) (NUM_TERMS + rand() % NUM_NON_TERMS);
+		} else{
+			operation = (ops) (rand() % (NUM_TERMS + NUM_NON_TERMS));
+		}
         switch(operation){
+		// terminals
+		case zebra:
+		case nearest_hyena:
+		case nearest_lion:
+		case nearest_calling:
+		case north:
+		case randm:
+		case last_move:
+		case constant:
+			the_const = new vect();
+			the_const->random();
+			break;
+		case number_hyenas:
+		case mirror_nearest:
+		case delta_fitness:
+			break;
         case sum:
 			children = new node*[2];
 			children[0] = new node();
-            children[0]->grow(max_d,depth+1,this);
+			children[0]->grow(max_d,depth+1);
 			children[1] = new node();
-            children[1]->grow(max_d,depth+1,this);
+			children[1]->grow(max_d,depth+1);
             break;
         case invert:
 			children = new node*[1];
 			children[0] = new node();
-            children[0]->grow(max_d,depth+1,this);
+			children[0]->grow(max_d,depth+1);
             break;
         case iflteMAG:
         case iflteCLOCKWISE:
 			children = new node*[4];
 			children[0] = new node();
-            children[0]->grow(max_d,depth+1,this);
+			children[0]->grow(max_d,depth+1);
 			children[1] = new node();
-            children[1]->grow(max_d,depth+1,this);
+			children[1]->grow(max_d,depth+1);
 			children[2] = new node();
-            children[2]->grow(max_d,depth+1,this);
+			children[2]->grow(max_d,depth+1);
 			children[3] = new node();
-            children[3]->grow(max_d,depth+1,this);
+			children[3]->grow(max_d,depth+1);
             break;
         case ifVectorZero:
 			children = new node*[3];
 			children[0] = new node();
-            children[0]->grow(max_d,depth+1,this);
+			children[0]->grow(max_d,depth+1);
 			children[1] = new node();
-            children[1]->grow(max_d,depth+1,this);
+			children[1]->grow(max_d,depth+1);
 			children[2] = new node();
-            children[2]->grow(max_d,depth+1,this);
+			children[2]->grow(max_d,depth+1);
             break;
         default:
             ofstream error;
@@ -369,7 +406,7 @@ int node::calc_size(int &size) {
 	case randm:
 	case last_move:
 	case constant:
-	case num_hyenas:
+	case number_hyenas:
 	case mirror_nearest:
 	case delta_fitness:
 		return size;
@@ -417,7 +454,7 @@ node *node::get_point(int pn, int &current, node *&parent) {
 	case randm:
 	case last_move:
 	case constant:
-	case num_hyenas:
+	case number_hyenas:
 	case mirror_nearest:
 	case delta_fitness:
 		return this;
@@ -497,7 +534,7 @@ QString node::graphviz(node *parent, QString extraLabel){
         output += QString("constant (mag=%1 dir=%2)\", shape=plaintext]\n")
                 .arg(the_const->magnitude).arg(the_const->direction);
 		break;
-	case num_hyenas:
+	case number_hyenas:
         output += "num_hyenas\", shape=plaintext]\n";
 		break;
 	case mirror_nearest:

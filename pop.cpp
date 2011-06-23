@@ -47,6 +47,19 @@ void pop::save_data(int iteration){
     for(int i = 0; i < NUM_HYENAS; i++){
 		data[iteration][i + 8] = the_pop[pop_bestteam]->get_hyena_fit(i);
     }
+
+	//// Average hits per hyena on each node type
+	int uses[NUM_TERMS+NUM_NON_TERMS] = {};
+	for(int i = 0; i < POP_SIZE; i++){
+		int *h_uses = the_pop[i]->get_uses();
+		for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS; i++){
+			uses[i] += h_uses[i];
+		}
+	}
+	// Write the values
+	for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS; i++){
+		data[iteration][i+NUM_HYENAS+8] = uses[i] / (float)(NUM_TESTS*NUM_HYENAS*POP_SIZE);
+	}
 }
 
 //void pop::save_data(int g, int trial) {
@@ -78,19 +91,23 @@ void pop::write_data(int trial){
 
 	// provide column labels
 	f << "trial gen time avg_fit worst_zeb_dist worst_num_attacks worst_fit best_zeb_dist best_num_attacks best_fit ";
-	for(int i = 1; i < NUM_HYENAS; i++){
+	for(int i = 1; i < NUM_HYENAS + 1; i++){
 		f << "H" << i << " ";
 	}
-	f << "H" << (int) NUM_HYENAS << "\n";
+	f << "zebra nearest_hyena nearest_lion nearest_calling north randm last_move constant number_hyenas mirror_nearest delta_fitness sum invert iflteMAG iflteCLOCKWISE ifVectorZero \n";
 
 	// iterations
 	for(int j = 0; j < ITERATIONS; j++){
 		f << trial + 1 << " " << j + 1 << " " ; // trial and generation
 		// hyena fitnesses plus 8 attributes at the beginning
-		for(int k = 0; k < NUM_HYENAS + 7; k++){
+		for(int k = 0; k < NUM_HYENAS + 8; k++){
 			f << data[j][k] << " ";
 		}
-		f << data[j][NUM_HYENAS + 7] << "\n";
+		// Hit counters
+		for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS - 1; i++){
+			f << data[j][NUM_HYENAS + 8 + i] << " ";
+		}
+		f << data[j][NUM_HYENAS + 8 + NUM_TERMS+NUM_NON_TERMS - 1] << "\n";
 	}
 	f.close();
 }
@@ -120,9 +137,9 @@ void pop::generate(void) {
 void pop::evaluate_team(int member){
 	ENV->set_up(the_pop[member]);
 	the_pop[member]->reset_fitness();
-	for (int tests = 0; tests < NUM_TESTS; tests++) {
+	for (int test = 0; test < NUM_TESTS; test++) {
 //		the_pop[member]->reset_team();
-		ENV->place_agents(tests);
+		ENV->place_agents(test);
 		the_pop[member]->reset_calling();
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
@@ -212,7 +229,8 @@ void pop::evolve(int trial) {
 			f << "Iteration " << i + 1 << "\n";
 			f.close();
 			cout << "Iteration " << i + 1 << " of " << ITERATIONS <<
-					" (" << (i+1)/(float)ITERATIONS * 100 << "% of trial)" << endl;
+					" (" << (i+1)/(float)ITERATIONS * 100 << "% of trial " <<
+					trial + 1 << ")" << endl;
 			draw_best(pop_bestteam, i);
 		}
 	}

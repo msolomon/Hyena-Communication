@@ -8,7 +8,7 @@ DrawHelper::DrawHelper() {
 	QColor lionColor = QColor(220, 220, 20);
 	QColor zebraColor = QColor(220, 20, 20);
 
-	zebra = QPointF(ZEBRAX, ZEBRAY);
+	zeb = QPointF(ZEBRAX, ZEBRAY);
 	hyenaPen = QPen(QBrush(hyenaColor), hyenaSize, Qt::SolidLine, Qt::RoundCap);
 	hmarkerPen = QPen(QBrush(hyenaColor), .1, Qt::SolidLine, Qt::RoundCap);
 	lionPen = QPen(QBrush(lionColor), 1.5, Qt::SolidLine, Qt::RoundCap);
@@ -60,10 +60,10 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 
 	painter->setOpacity(zebraOpacity);
 	painter->setPen(zebraPen);
-	painter->drawPoint(zebra);
+	painter->drawPoint(zeb);
 	painter->setPen(callRadPen);
 	painter->setOpacity(radiusOpacity);
-	painter->drawPoint(zebra);
+	painter->drawPoint(zeb);
 	painter->setOpacity(animalOpacity);
 
 

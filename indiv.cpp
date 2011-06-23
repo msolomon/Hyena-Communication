@@ -1,21 +1,30 @@
 #include "indiv.h"
 
 void indiv::xOver(indiv *p2) {
-	int point1 = rand() % size + 1;
-	int point2 = rand() % (p2->get_size() + 1);
 	int temp = 0;
+	int point1, point2, tmp1, tmp2;
+	point1 = point2 = 0;
 	node *tempP1 = NULL;
-	node *xOver1 = tree->get_point(point1, temp, tempP1);
-	temp = 0;
+	node *xOver1;
 	node *tempP2 = NULL;
-	node *xOver2 = p2->tree->get_point(point2, temp, tempP2);
-	int c1, c2;
+	node *xOver2;
+	do{
+		point1 += rand() % (size + 1 - point1);
+		point2 += rand() % (p2->get_size() + 1 - point2);
+		tmp1 = temp = 0;
+		xOver1 = tree->get_point(point1, temp, tempP1);
+		xOver1->calc_size(tmp1);
+		tmp2 = temp = 0;
+		xOver2 = p2->tree->get_point(point2, temp, tempP2);
+		xOver2->calc_size(tmp2);
+	} while (size + tmp2 - tmp1 > TREE_MAX_SIZE ||
+			 p2->get_size() + tmp1 - tmp2 > TREE_MAX_SIZE);
 //	tempP1 = xOver1->get_parent();
 //	tempP2 = xOver2->get_parent();
 	if (tempP1 != NULL) { // not root
 		if (tempP2 != NULL) { // not root
-			c1 = tempP1->find_child(xOver1);
-			c2 = tempP2->find_child(xOver2);
+			int c1 = tempP1->find_child(xOver1);
+			int c2 = tempP2->find_child(xOver2);
 //			xOver1->set_parent(tempP2);
 //			xOver2->set_parent(tempP1);
 			tempP2->set_child(c2, xOver1);
@@ -29,6 +38,9 @@ void indiv::reset_fitness(void) {
 	lion_attacks = 0;
 	avg_dist_to_zebra = 0;
 	the_info.curr_fitness = 0;
+	for(int i = 0; i < NUM_TERMS + NUM_NON_TERMS; i++){
+		the_info.uses[i] = 0;
+	}
 }
 
 void indiv::reset(void) {
@@ -57,7 +69,7 @@ indiv &indiv::operator=(const indiv &source) {
 	clear(); // this deletes tree
 	if(source.type == hyena){
 		tree = new node();
-		tree->copy(source.tree, NULL);
+		tree->copy(source.tree);
 	}
 	return *this;
 }
@@ -67,7 +79,7 @@ void indiv::grow(void) {
 	y = Y / 2.0;
 	fitness = 0.0;
 	tree = new node();
-	tree->grow(GROW_DEPTH, 0, NULL);
+	tree->grow(GROW_DEPTH, 0);
 }
 
 void indiv::clear(void) {
@@ -92,7 +104,8 @@ void indiv::lion_move(void) {
 		x += mag * sin(the_info.nearest_hyena.direction);
 		y += mag * cos(the_info.nearest_hyena.direction);
 	}
-	else if(the_info.zebra.magnitude < LION_SEES_ZEBRA &&
+	else if(LIONS_RETURN &&
+			the_info.zebra.magnitude < LION_SEES_ZEBRA &&
 			the_info.zebra.magnitude > LION_NEAR_ZEBRA){
 		float mag = 1.0 - (the_info.num_hyenas /
 				(the_info.num_lions * HYENA_LION_FEAR_RATIO));

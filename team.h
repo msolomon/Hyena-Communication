@@ -30,6 +30,9 @@ public:
 	float get_avg_lion_attacks(void) {
 		return avg_lion_attacks;
 	}
+	int* get_uses(){
+		return (int*) &uses;
+	}
 	void reset_fitness(void);
 	void reset_calling();
 	indiv hyenas[NUM_HYENAS];
@@ -38,6 +41,7 @@ public:
 	float avg_fit;
 	float avg_lion_attacks;
 	float avg_dist_to_zebra;
+	int uses[NUM_TERMS+NUM_NON_TERMS];
 };
 
 #endif

@@ -17,13 +17,13 @@ hyenadir=`pwd`/$hyenadir
 
 ## Clear out old trial data
 echo "Removing old data..."
-if [ -e cores-old ]
+if [ -e run-old ]
 then
-	rm -r cores-old
+	rm -r run-old
 fi
-if [ -e cores ]
+if [ -e run ]
 then
-	mv cores cores-old
+	mv run run-old
 fi
 
 ## Ensure the project is compiled with current files
@@ -39,19 +39,19 @@ fi
 make -j$cores
 cd $thisdir
 # Copy globals.h over so we know what settings were used
-mkdir -p cores
-cp $hyenadir/globals.h cores/settings.txt
+mkdir -p run
+cp $hyenadir/globals.h run/settings.txt
 # link copy script
-ln -s $hyenadir/corecombiner.sh cores/corecombiner.sh
+ln -s $hyenadir/combiner.sh run/combiner.sh
 
 ## Run the trials on each core
 echo "Beginning trials..."
+echo "Output will go to run/status.txt (use tail -f to follow)"
 count=0
 until [ $count -ge $cores ]
 do
 	count=$(( $count + 1 ))
-	mkdir -p cores/$count
-	cd cores/$count
-	$hyenadir/trials.sh $trials $count &
-	cd ../..
+	cd run
+	$hyenadir/trials.sh $trials $count & >> status.txt
+	cd ..
 done

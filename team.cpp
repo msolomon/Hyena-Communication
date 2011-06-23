@@ -93,12 +93,21 @@ float team::calc_avg_fit(void) {
 	avg_lion_attacks = 0;
 	avg_dist_to_zebra = 0;
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		hyena_fits[i] = hyenas[i].get_fitness();
+		hyena_fits[i] = hyenas[i].get_fitness() / NUM_TESTS;
 		avg_fit += hyena_fits[i];
 		avg_dist_to_zebra += hyenas[i].get_avg_dist_to_zebra();
 		avg_lion_attacks += hyenas[i].get_lion_attacks();
 	}
-	avg_lion_attacks /= NUM_HYENAS;
-	avg_dist_to_zebra /= NUM_HYENAS;
+	for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS; i++){
+		uses[i] = 0;
+	}
+	for(int i = 0; i < NUM_HYENAS; i++){
+		int *h_uses = hyenas[i].get_uses();
+		for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS; i++){
+			uses[i] += h_uses[i];
+		}
+	}
+	avg_lion_attacks /= NUM_HYENAS * NUM_TESTS;
+	avg_dist_to_zebra /= NUM_HYENAS * NUM_TESTS;
 	return avg_fit;
 }

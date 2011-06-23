@@ -43,6 +43,10 @@ public:
 	void set_calling(bool b) {
 		calling = b;
 	}
+	void inc_used(ops i){
+		the_info.uses[i]++;
+	}
+
 	void record_last_fitness(){
 		the_info.last_fitness = the_info.curr_fitness;
 		the_info.curr_fitness = fitness;
@@ -108,17 +112,19 @@ public:
 		x = x_in;
 		y = y_in;
 	}
+	int* get_uses(){
+		return (int*) &(the_info.uses);
+	}
 
 	void xOver(indiv*);
 
 	node *tree;
-private:
 	float x;
 	float y;
+private:
 	int size;
 	agent_info the_info;
 	float fitness;
-	float last_fitness;
 	float avg_dist_to_zebra;
 	int lion_attacks;
 	agent_type type;
