@@ -81,7 +81,8 @@ void node::copy(node *p) {
 		return;
 	case number_hyenas:
 	case mirror_nearest:
-	case delta_fitness:
+	case num_attacks:
+	case leader:
 		return;
 	// non-terminals
 	case sum:
@@ -138,7 +139,8 @@ void node::clear(void) {
 		return;
 	case number_hyenas:
 	case mirror_nearest:
-	case delta_fitness:
+	case num_attacks:
+	case leader:
 		return;
 	// non-terminals
 	case sum:
@@ -181,11 +183,12 @@ void node::mutate(void) {
 	case constant:
 	case number_hyenas:
 	case mirror_nearest:
-	case delta_fitness:
-		if (rand() % 100 < MUTATION_CHANCE){
+	case num_attacks:
+	case leader:
+		if (Random::Global.Integer(100) < MUTATION_CHANCE){
 			if(operation == constant)
 				delete the_const;
-			operation = (ops) (rand() % NUM_TERMS);
+			operation = (ops) (Random::Global.Integer(NUM_TERMS));
 			if(operation == constant){
 				the_const = new vect();
 				the_const->random();
@@ -268,11 +271,14 @@ vect node::evaluate(agent_info *the_indiv) {
 	case mirror_nearest:
 		the_indiv->uses[mirror_nearest]++;
 		return (the_indiv->mirrored);
-	case delta_fitness:
-		the_indiv->uses[delta_fitness]++;
+	case num_attacks:
+		the_indiv->uses[num_attacks]++;
 		temp.direction = 0;
-		temp.magnitude = the_indiv->curr_fitness - the_indiv->last_fitness;
+		temp.magnitude = the_indiv->num_attacks;
 		return temp;
+	case leader:
+		the_indiv->uses[leader]++;
+		return the_indiv->leader;
 	// non-terminals
 	case sum:
 		the_indiv->uses[sum]++;
@@ -316,7 +322,7 @@ vect node::evaluate(agent_info *the_indiv) {
 void node::grow(int max_d, int depth){
 //    parent = pare;
 	if(depth == max_d){ // bottomed out, use terminals
-		operation = (ops) (rand() % NUM_TERMS);
+		operation = (ops) (Random::Global.Integer(NUM_TERMS));
 		if(operation == constant){
 			the_const = new vect();
 			the_const->random();
@@ -324,9 +330,9 @@ void node::grow(int max_d, int depth){
 	}
 	else{ // haven't reached bottom, use FULL or GROW algo. as appropriate
 		if(FULL){
-			operation = (ops) (NUM_TERMS + rand() % NUM_NON_TERMS);
+			operation = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
 		} else{
-			operation = (ops) (rand() % (NUM_TERMS + NUM_NON_TERMS));
+			operation = (ops) (Random::Global.Integer(NUM_TERMS + NUM_NON_TERMS));
 		}
         switch(operation){
 		// terminals
@@ -343,7 +349,7 @@ void node::grow(int max_d, int depth){
 			break;
 		case number_hyenas:
 		case mirror_nearest:
-		case delta_fitness:
+		case num_attacks:
 			break;
         case sum:
 			children = new node*[2];
@@ -408,7 +414,8 @@ int node::calc_size(int &size) {
 	case constant:
 	case number_hyenas:
 	case mirror_nearest:
-	case delta_fitness:
+	case num_attacks:
+	case leader:
 		return size;
 	// non-terminals
 	case sum:
@@ -456,7 +463,8 @@ node *node::get_point(int pn, int &current, node *&parent) {
 	case constant:
 	case number_hyenas:
 	case mirror_nearest:
-	case delta_fitness:
+	case num_attacks:
+	case leader:
 		return this;
 	// non-terminals
 	case sum:
@@ -540,10 +548,12 @@ QString node::graphviz(node *parent, QString extraLabel){
 	case mirror_nearest:
         output += "mirror_nearest\", shape=plaintext]\n";
 		break;
-	case delta_fitness:
-        output += "delta_fitness\", shape=plaintext]\n";
+	case num_attacks:
+		output += "num_attacks\", shape=plaintext]\n";
 		break;
-
+	case leader:
+		output += "leader\", shape=plaintext]\n";
+		break;
 	// non-terminals
 	case sum:
         output += "sum\", shape=plaintext]\n";

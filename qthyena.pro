@@ -38,6 +38,8 @@ FORMS += qthyena.ui \
 
 RESOURCES += 
 
+LIBS += -lRandom
+
 #CONFIG(release, debug|release):
 #QMAKE_CFLAGS+=-pg
 #QMAKE_CXXFLAGS+=-pg

@@ -13,10 +13,8 @@ void environment::generate_positions(){
 	for(int i = 0; i < NUM_TESTS; i++){
 		for(int j = 0; j < NUM_LIONS; j++){
 			// place lions within 1 unit of zebra
-			lioncoord[i][j][0] = ZEBRAX +
-					((float)rand() / (float)(RAND_MAX/2.0)) - 1;
-			lioncoord[i][j][1] = ZEBRAY +
-					((float)rand() / (float)(RAND_MAX/2.0)) - 1;
+			lioncoord[i][j][0] = ZEBRAX + Random::Global.FloatW();
+			lioncoord[i][j][1] = ZEBRAY + Random::Global.FloatW();
 		}
 
 		for(int j = 0; j < NUM_HYENAS; j++){
@@ -25,15 +23,15 @@ void environment::generate_positions(){
 			y = ZEBRAY;
 			if(START_OUTSIDE_ZEBRA){
 				while(distance_sq(ZEBRAX - x, ZEBRAY - y) < CALLING_RANGE_SQ){
-					x = (rand() / ((float)RAND_MAX / (float)(X)));
-					y = (rand() / ((float)RAND_MAX / (float)(Y)));
+					x = Random::Global() / ((float)Random::max / (float)X);
+					y = Random::Global() / ((float)Random::max / (float)Y);
 				}
 			} else{ // start outside lion radius instead
 				float distnce = 0;
 				while (distnce <
 					   ((LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1))){
-					x = (rand() / ((float)RAND_MAX / (float)(X)));
-					y = (rand() / ((float)RAND_MAX / (float)(Y)));
+					x = Random::Global() / ((float)Random::max / (float)X);
+					y = Random::Global() / ((float)Random::max / (float)Y);
 					distnce = distance_sq(ZEBRAX - x, ZEBRAY - y);
 				}
 				if(distnce < CALLING_RANGE_SQ){
@@ -74,6 +72,8 @@ void environment::evaluate(void) {
 		if(EAT_BONUS_ACTIVE && radius <= EAT_RADIUS){
 			agents->hyenas[i].changeFit(EAT_BONUS);
 		}
+
+		agents->hyenas[i].reset_attack_input();
 
 		agents->hyenas[i].inc_dist_to_zebra(radius);
 		for (int j = 0; j < NUM_LIONS; j++) {
@@ -124,9 +124,6 @@ void environment::update_vectors(void){
 			agents->hyenas[i].set_calling(false);
 		}
 		agents->hyenas[i].set_zebra(temp);
-
-		// update last_fitness
-		agents->hyenas[i].record_last_fitness();
 	}
 
 	// set nearest hyena vectors (and # calling scouts)
@@ -135,7 +132,8 @@ void environment::update_vectors(void){
 		agenty = agents->hyenas[i].getY();
 		agents->hyenas[i].set_num_hyenas(num_calling);
 		min_mag = HYENA_HYENA_RADIUS_SQ;
-		for(int j = i+1; j < NUM_HYENAS; j++){
+		for(int j = 0; j < NUM_HYENAS; j++){
+			if(i == j) continue;
 			magnitude = distance_sq(agentx - agents->hyenas[j].getX(),
 									agenty - agents->hyenas[j].getY());
 			if(magnitude < min_mag){
@@ -153,18 +151,18 @@ void environment::update_vectors(void){
 			temp.magnitude = sqrt(min_mag);
 			temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
 								   agenty - agents->hyenas[the_j].getY());
-			// set the closest hyena
+			// set the closest hyena and mirror input
 			agents->hyenas[i].set_nearest_hyena(temp);
 			agents->hyenas[i].set_mirrored(agents->hyenas[the_j].get_last_move());
 		}
 	}
 
-	// find nearest lion and calling scout
+	// find nearest lion, leader, and calling scout
 	for(int i = 0; i < NUM_HYENAS; i++){
+		bool setLeader = false;
 		agentx = agents->hyenas[i].getX(); //get hyena x,y
 		agenty = agents->hyenas[i].getY();
 		// find nearest calling scout
-//		min_mag = HEAR_CALLING_RADIUS_SQ;
 		min_mag = FLT_MAX;
 		for(int j = 0; j < NUM_HYENAS; j++){
 			if(agents->hyenas[j].get_calling() && i != j){
@@ -174,16 +172,32 @@ void environment::update_vectors(void){
 					min_mag = magnitude;
 					the_j = j;
 				}
+				// set leader vector, if this is the leader
+				if(j == 0){
+					temp.magnitude = sqrt(magnitude);
+					temp.direction = atan2(agentx - agents->hyenas[j].getX(),
+										   agenty - agents->hyenas[j].getY());
+					agents->hyenas[i].set_leader(temp);
+					setLeader = true;
+				}
 			}
 		}
-//		if (min_mag == HEAR_CALLING_RADIUS_SQ) { // if nearest was too far away
-//			temp.direction = 0;
-//			temp.magnitude = 0;
-//		} else {
+
+		// zero out leader if not yet set
+		if(!setLeader){
+			temp.magnitude = 0;
+			temp.direction = 0;
+			agents->hyenas[i].set_leader(temp);
+		}
+
+		if(min_mag == FLT_MAX){ // no hyenas calling
+			temp.magnitude = 0;
+			temp.direction = 0;
+		} else {
 			temp.magnitude = sqrt(min_mag);
 			temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
 								   agenty - agents->hyenas[the_j].getY());
-//		}
+		}
 		agents->hyenas[i].set_nearestcalling(temp);
 
 		// find nearest lion

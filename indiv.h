@@ -31,13 +31,16 @@ public:
 	void set_nearestcalling(vect v) {
 		the_info.nearest_calling = v;
 	}
+	void set_leader(vect v) {
+		the_info.leader = v;
+	}
 	void set_mirrored(vect v){
 		the_info.mirrored = v;
 	}
 	void set_num_lions(int n) {
 		the_info.num_lions = n;
 	}
-	void set_num_hyenas(int n) {
+	void set_num_hyenas(char n) {
 		the_info.num_hyenas = n;
 	}
 	void set_calling(bool b) {
@@ -46,12 +49,12 @@ public:
 	void inc_used(ops i){
 		the_info.uses[i]++;
 	}
-
+/*
 	void record_last_fitness(){
 		the_info.last_fitness = the_info.curr_fitness;
 		the_info.curr_fitness = fitness;
 	}
-
+*/
 	//     void set_nearest_edge(vect v){the_info.nearest_edge = v;}
 	bool get_calling() {
 		return calling;
@@ -83,10 +86,15 @@ public:
 	}
 	void inc_lion_attacks(void) {
 		lion_attacks++;
+		the_info.num_attacks++;
 	}
 	void zero_lion_attacks(void) {
 		lion_attacks = 0;
 	}
+	void reset_attack_input(){
+		the_info.num_attacks = 0;
+	}
+
 	void rand_move(void);
 	void lion_move(void);
 	void move(void);

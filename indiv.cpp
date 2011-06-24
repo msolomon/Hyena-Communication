@@ -9,8 +9,8 @@ void indiv::xOver(indiv *p2) {
 	node *tempP2 = NULL;
 	node *xOver2;
 	do{
-		point1 += rand() % (size + 1 - point1);
-		point2 += rand() % (p2->get_size() + 1 - point2);
+		point1 += Random::Global.Integer(size + 1 - point1);
+		point2 += Random::Global.Integer(p2->get_size() + 1 - point2);
 		tmp1 = temp = 0;
 		xOver1 = tree->get_point(point1, temp, tempP1);
 		xOver1->calc_size(tmp1);
@@ -37,7 +37,7 @@ void indiv::reset_fitness(void) {
 	fitness = 0;
 	lion_attacks = 0;
 	avg_dist_to_zebra = 0;
-	the_info.curr_fitness = 0;
+//	the_info.curr_fitness = 0;
 	for(int i = 0; i < NUM_TERMS + NUM_NON_TERMS; i++){
 		the_info.uses[i] = 0;
 	}
@@ -47,15 +47,15 @@ void indiv::reset(void) {
 	calling = false;
 	if (type == lion) {
 		// place lions within 1 unit of zebra
-		x = ZEBRAX + ((float)rand() / (float)(RAND_MAX/2.0)) - 1;
-		y = ZEBRAY + ((float)rand() / (float)(RAND_MAX/2.0)) - 1;
+		x = ZEBRAX + Random::Global.FloatW();
+		y = ZEBRAY + Random::Global.FloatW();
 	} else {
 		x = y = 0;
 		while (distance_sq(x, y) < (
 				   (LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1)
 				   )){
-			x = rand() % X;
-			y = rand() % Y;
+			x = Random::Global() / ((float)Random::max / (float)X);
+			y = Random::Global() / ((float)Random::max / (float)Y);
 		}
 	}
 }

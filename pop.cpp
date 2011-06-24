@@ -94,7 +94,7 @@ void pop::write_data(int trial){
 	for(int i = 1; i < NUM_HYENAS + 1; i++){
 		f << "H" << i << " ";
 	}
-	f << "zebra nearest_hyena nearest_lion nearest_calling north randm last_move constant number_hyenas mirror_nearest delta_fitness sum invert iflteMAG iflteCLOCKWISE ifVectorZero \n";
+	f << "zebra nearest_hyena nearest_lion nearest_calling north randm last_move constant number_hyenas mirror_nearest delta_fitness sum invert iflteMAG iflteCLOCKWISE ifVectorZero\n";
 
 	// iterations
 	for(int j = 0; j < ITERATIONS; j++){
@@ -417,10 +417,10 @@ int pop::member_select(int c, int member) {
 	int best = 0, current;
 	float current_fit;
 	float best_fit;
-	best = rand() % POP_SIZE;
+	best = Random::Global.Integer(POP_SIZE);
 	best_fit = the_pop[best]->get_hyena_fit(member);
 	for (int i = 1; i < TOURNAMENT_SIZE; i++) {
-		current = rand() % POP_SIZE;
+		current = Random::Global.Integer(POP_SIZE);
 		current_fit = the_pop[current]->get_hyena_fit(member);
 		if (c == 1) {
 			if (current_fit > best_fit) {
@@ -441,10 +441,10 @@ int pop::tourn_select(int c) { // or worst if c = -1
 	int best = 0, current;
 	float current_fit;
 	float best_fit;
-	best = rand() % POP_SIZE;
+	best = Random::Global.Integer(POP_SIZE);
 	best_fit = the_pop[best]->get_avg_fit();
 	for (int i = 1; i < TOURNAMENT_SIZE; i++) {
-		current = rand() % POP_SIZE;
+		current = Random::Global.Integer(POP_SIZE);
 		current_fit = the_pop[current]->get_avg_fit();
 		if (c == 1) {
 			if (current_fit > best_fit) {

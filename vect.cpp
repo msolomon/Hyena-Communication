@@ -32,6 +32,6 @@ const vect vect::operator+(const vect& v2) const {
 }
 
 void vect::random(void) {
-	direction = rand() / ((RAND_MAX) / (2.0 * PI));
-	magnitude = rand() / ((float)RAND_MAX / (float) X); // proportion of map
+	direction = Random::Global() / ((Random::max) / (2.0 * PI));
+	magnitude = Random::Global() / (Random::max / (float) X); // proportion of map
 }
