@@ -188,7 +188,12 @@ void node::mutate(void) {
 		if (Random::Global.Integer(100) < MUTATION_CHANCE){
 			if(operation == constant)
 				delete the_const;
-			operation = (ops) (Random::Global.Integer(NUM_TERMS));
+			if(DISABLED_OP != none_disabled){
+				do operation = (ops) (Random::Global.Integer(NUM_TERMS));
+				while(operation == DISABLED_OP);
+			} else{
+				operation = (ops) (Random::Global.Integer(NUM_TERMS));
+			}
 			if(operation == constant){
 				the_const = new vect();
 				the_const->random();
@@ -323,6 +328,12 @@ void node::grow(int max_d, int depth){
 //    parent = pare;
 	if(depth == max_d){ // bottomed out, use terminals
 		operation = (ops) (Random::Global.Integer(NUM_TERMS));
+		if(DISABLED_OP != none_disabled){
+			do operation = (ops) (Random::Global.Integer(NUM_TERMS));
+			while(operation == DISABLED_OP);
+		} else{
+			operation = (ops) (Random::Global.Integer(NUM_TERMS));
+		}
 		if(operation == constant){
 			the_const = new vect();
 			the_const->random();
@@ -332,7 +343,12 @@ void node::grow(int max_d, int depth){
 		if(FULL){
 			operation = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
 		} else{
-			operation = (ops) (Random::Global.Integer(NUM_TERMS + NUM_NON_TERMS));
+			if(DISABLED_OP != none_disabled){
+				do operation = (ops) (Random::Global.Integer(NUM_TERMS + NUM_NON_TERMS));
+				while(operation == DISABLED_OP);
+			} else{
+				operation = (ops) (Random::Global.Integer(NUM_TERMS + NUM_NON_TERMS));
+			}
 		}
         switch(operation){
 		// terminals
@@ -350,6 +366,7 @@ void node::grow(int max_d, int depth){
 		case number_hyenas:
 		case mirror_nearest:
 		case num_attacks:
+		case leader:
 			break;
         case sum:
 			children = new node*[2];

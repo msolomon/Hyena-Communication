@@ -94,7 +94,7 @@ void pop::write_data(int trial){
 	for(int i = 1; i < NUM_HYENAS + 1; i++){
 		f << "H" << i << " ";
 	}
-	f << "zebra nearest_hyena nearest_lion nearest_calling north randm last_move constant number_hyenas mirror_nearest delta_fitness sum invert iflteMAG iflteCLOCKWISE ifVectorZero\n";
+	f << "zebra nearest_hyena nearest_lion nearest_calling north randm last_move constant number_hyenas mirror_nearest num_attacks leader sum invert iflteMAG iflteCLOCKWISE ifVectorZero\n";
 
 	// iterations
 	for(int j = 0; j < ITERATIONS; j++){
@@ -195,7 +195,7 @@ void pop::evolve(int trial) {
 	ofstream f;
 	f.open(fname.c_str());
 	f.close();
-	cout << "Trial " << trial + 1 << " of " << trial+TRIALS << endl;
+	cout << "Trial " << trial + 1 << endl;
 	ENV->fname = fname;
 
 	for (int i = 0; i < ITERATIONS; i++) {

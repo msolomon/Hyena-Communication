@@ -18,7 +18,8 @@ HEADERS += qthyena.h \
     pop.h \
     widget.h \
     drawhelper.h \
-    playback.h
+    playback.h \
+    types.h
     
 SOURCES += qthyena.cpp \
     environment.cpp \

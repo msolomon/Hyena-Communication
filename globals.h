@@ -4,25 +4,25 @@
 #include <cmath>
 #include <cfloat>
 
-#include "vect.h"
-
 // include fast random library (randomlib.sourceforge.net)
 #define RANDOMLIB_DEFAULT_GENERATOR SRandomGenerator64
 #include <RandomLib/Random.hpp>
 using RandomLib::Random;
 
+#include "types.h"
+
 //// Common settings
-const int ITERATIONS = 1000;
+const int ITERATIONS = 15000;
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
 const char NUM_LIONS = 2;
 const int TIME_STEPS = 100;
-const int NUM_TESTS = 2; // times to repeat tests to prevent luck
+const int NUM_TESTS = 3; // times to repeat tests to prevent luck
 const bool START_ONE_INSIDE = true; // at least one hyena inside calling radius
 const bool START_OUTSIDE_ZEBRA = false;
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
-const bool FULL = false; // false = GROW, see S. Luke IEEE 10.1109/4235.873237
-const int TREE_MAX_SIZE = 8000000; // size, not depth
+const int TREE_MAX_SIZE = 500; // size, not depth
+const ops DISABLED_OP = none_disabled; // use none_disabled to enable all
 // Only pick one method below
 const bool TEAM_GENERATIONAL = false;
 const bool OET_GENERATIONAL = true;
@@ -43,8 +43,9 @@ const char* const GRAPHVIZ_TEMPLATE = "hyena_%1.gv";
 //// Other settings
 // Selection and reproduction
 const int TOURNAMENT_SIZE = 5;
-const int GROW_DEPTH = 4;
 const int MUTATION_CHANCE = 10; // % chance of mutation
+const bool FULL = true; // false = GROW, see S. Luke IEEE 10.1109/4235.873237
+const int GROW_DEPTH = 4;
 const int TRIALS = 1; // leaks memory; do via script
 // Model
 const int X = 32; // powers of 2 are best - int division elsewhere
@@ -67,57 +68,11 @@ const float HYENA_HYENA_RADIUS_SQ = HYENA_HYENA_RADIUS * HYENA_HYENA_RADIUS;
 const float CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
 // reward getting close enough to actually eat
 const bool EAT_BONUS_ACTIVE = false;
-const float EAT_RADIUS = CALLING_RANGE / 8;
+const float EAT_RADIUS = CALLING_RANGE / 8.0;
 const float EAT_RADIUS_SQ = EAT_RADIUS * EAT_RADIUS;
 const float EAT_BONUS = 1.0;
 // General constants
 const float PI = 3.141592654;
-
-
-//// Types
-enum ops {
-	zebra,
-	nearest_hyena,
-	nearest_lion,
-	nearest_calling,
-	north,
-	randm,
-	last_move,
-	constant,
-	number_hyenas,
-	mirror_nearest, // repeat the previous action of the nearest hyena
-	num_attacks,
-	leader, // only get vector if leader calls
-	sum,
-	invert,
-	iflteMAG,
-	iflteCLOCKWISE,
-	ifVectorZero
-};
-
-const int NUM_TERMS = 12;
-const int NUM_NON_TERMS = 5;
-
-typedef struct {
-	vect zebra;
-	vect nearest_hyena;
-	vect nearest_lion;
-	vect last_move;
-	vect mirrored;
-	vect nearest_calling;
-	vect leader;
-	char num_lions;
-	char num_hyenas;
-	int num_attacks;
-	int uses[NUM_TERMS + NUM_NON_TERMS];
-} agent_info;
-
-//enum agent_type {
-//	hyena, lion
-//};
-typedef bool agent_type;
-const agent_type hyena = true;
-const agent_type lion = false;
 
 //// Global functions
 inline float dist(float x, float y){  // 'distance' is a built-in function
