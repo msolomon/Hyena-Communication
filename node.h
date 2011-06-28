@@ -20,17 +20,11 @@ class node {
 public:
 	node(void);
 	void grow(int, int);
-	vect evaluate(agent_info *);
+	vect evaluate(agent_info *, int);
 	void mutate(void);
 	void clear(void);
 	void copy(node *);
-	int calc_size(int &);
-//	node *get_parent(void) {
-//		return parent;
-//	}
-//	void set_parent(node *p) {
-//		parent = p;
-//	}
+	int calc_size();
 	int find_child(node *);
 	void set_child(int c2, node *);
 	node *get_point(int, int &, node *&);

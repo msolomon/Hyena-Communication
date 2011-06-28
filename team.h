@@ -24,24 +24,33 @@ public:
 	float get_hyena_fit(int i) {
 		return hyena_fits[i];
 	}
-	float get_avg_dist_to_zebra(void) {
+	float get_avg_dist_to_zebra() {
 		return avg_dist_to_zebra;
 	}
-	float get_avg_lion_attacks(void) {
+	float get_avg_lion_attacks() {
 		return avg_lion_attacks;
 	}
-	int* get_uses(){
-		return (int*) &uses;
+	float get_avg_hits() {
+		return avg_hits;
+	}
+	float* get_uses(){
+		return (float*) &uses;
+	}
+	double* get_importance(){
+		return (double*) &importance;
 	}
 	void reset_fitness(void);
 	void reset_calling();
 	indiv hyenas[NUM_HYENAS];
 	indiv lions[NUM_LIONS];
 	float hyena_fits[NUM_HYENAS];
-	float avg_fit;
+	float avg_fit; // average team fitness
 	float avg_lion_attacks;
 	float avg_dist_to_zebra;
-	int uses[NUM_TERMS+NUM_NON_TERMS];
+	float avg_hits;
+	float avg_size;
+	float uses[NUM_TERMS+NUM_NON_TERMS];
+	double importance[NUM_TERMS+NUM_NON_TERMS];
 };
 
 #endif

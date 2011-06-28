@@ -11,12 +11,12 @@ void indiv::xOver(indiv *p2) {
 	do{
 		point1 += Random::Global.Integer(size + 1 - point1);
 		point2 += Random::Global.Integer(p2->get_size() + 1 - point2);
-		tmp1 = temp = 0;
+		temp = 0;
 		xOver1 = tree->get_point(point1, temp, tempP1);
-		xOver1->calc_size(tmp1);
-		tmp2 = temp = 0;
+		tmp1 = xOver1->calc_size();
+		temp = 0;
 		xOver2 = p2->tree->get_point(point2, temp, tempP2);
-		xOver2->calc_size(tmp2);
+		tmp2 = xOver2->calc_size();
 	} while (size + tmp2 - tmp1 > TREE_MAX_SIZE ||
 			 p2->get_size() + tmp1 - tmp2 > TREE_MAX_SIZE);
 //	tempP1 = xOver1->get_parent();
@@ -37,9 +37,10 @@ void indiv::reset_fitness(void) {
 	fitness = 0;
 	lion_attacks = 0;
 	avg_dist_to_zebra = 0;
-//	the_info.curr_fitness = 0;
+	the_info.hits = 0;
 	for(int i = 0; i < NUM_TERMS + NUM_NON_TERMS; i++){
-		the_info.uses[i] = 0;
+//		the_info.uses[i] = 0;
+		the_info.importance[i] = 0;
 	}
 }
 
@@ -75,8 +76,8 @@ indiv &indiv::operator=(const indiv &source) {
 }
 
 void indiv::grow(void) {
-	x = X / 2.0;
-	y = Y / 2.0;
+	x = ZEBRAX;
+	y = ZEBRAY;
 	fitness = 0.0;
 	tree = new node();
 	tree->grow(GROW_DEPTH, 0);
@@ -120,7 +121,7 @@ void indiv::move(void) {
 		lion_move();
 		return;
 	}
-	v = tree->evaluate(&the_info);
+	v = tree->evaluate(&the_info, 0);
 	if (v.magnitude > 1){ // trying to move too far
 		v.magnitude = 1;
 

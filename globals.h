@@ -12,17 +12,18 @@ using RandomLib::Random;
 #include "types.h"
 
 //// Common settings
-const int ITERATIONS = 15000;
+const int GENERATIONS = 10;
 const int POP_SIZE = 80;
 const char NUM_HYENAS = 20;
 const char NUM_LIONS = 2;
 const int TIME_STEPS = 100;
-const int NUM_TESTS = 3; // times to repeat tests to prevent luck
+const int NUM_TESTS = 1; // times to repeat tests to prevent luck
 const bool START_ONE_INSIDE = true; // at least one hyena inside calling radius
 const bool START_OUTSIDE_ZEBRA = false;
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const int TREE_MAX_SIZE = 500; // size, not depth
 const ops DISABLED_OP = none_disabled; // use none_disabled to enable all
+//const ops TRACKED_OP = leader; // track hits on this op. must be valid op!
 // Only pick one method below
 const bool TEAM_GENERATIONAL = false;
 const bool OET_GENERATIONAL = true;
@@ -48,11 +49,12 @@ const bool FULL = true; // false = GROW, see S. Luke IEEE 10.1109/4235.873237
 const int GROW_DEPTH = 4;
 const int TRIALS = 1; // leaks memory; do via script
 // Model
-const int X = 32; // powers of 2 are best - int division elsewhere
+const int X = 32;
 const int Y = X;
 const float ZEBRAX = X / 2.0;
 const float ZEBRAY = Y / 2.0;
 const float CALLING_RANGE = 8; // hyenas call when close to zebra
+const double BASE_IMPORTANCE = 5000.0;
 const float LION_ATTACK_RADIUS = 3;
 const int LION_LION_RADIUS = 5;
 const int LION_HYENA_RADIUS = 5; // both ways

@@ -3,9 +3,9 @@
 // do fast string building for graphviz output
 #define QT_USE_FAST_CONCATENATION
 #define QT_USE_FAST_OPERATOR_PLUS
+//
 #define children data.childs
 #define the_const data.the_const
-
 
 using namespace std;
 
@@ -229,7 +229,7 @@ void node::mutate(void) {
 	}
 }
 
-vect node::evaluate(agent_info *the_indiv) {
+vect node::evaluate(agent_info *the_indiv, int depth) {
 	vect temp;
 	if (this == NULL) {
 		ofstream error;
@@ -239,82 +239,103 @@ vect node::evaluate(agent_info *the_indiv) {
 		return (temp);
 	}
 
+	depth++;
+	// count the size of the tree that is hit
+	the_indiv->hits++;
+
 	switch (operation) {
 	// terminals
 	case zebra:
-		the_indiv->uses[zebra]++;
+//		the_indiv->uses[zebra]++;
+		the_indiv->importance[zebra] += BASE_IMPORTANCE / depth;
 		return (the_indiv->zebra);
 	case nearest_hyena:
-		the_indiv->uses[nearest_hyena]++;
+//		the_indiv->uses[nearest_hyena]++;
+		the_indiv->importance[nearest_hyena] += BASE_IMPORTANCE / depth;
 		return (the_indiv->nearest_hyena);
 	case nearest_lion:
-		the_indiv->uses[nearest_lion]++;
+//		the_indiv->uses[nearest_lion]++;
+		the_indiv->importance[nearest_lion] += BASE_IMPORTANCE / depth;
 		return (the_indiv->nearest_lion);
 	case nearest_calling:
-		the_indiv->uses[nearest_calling]++;
+//		the_indiv->uses[nearest_calling]++;
+		the_indiv->importance[nearest_calling] += BASE_IMPORTANCE / depth;
 		return (the_indiv->nearest_calling);
 	case north:
-		the_indiv->uses[north]++;
+//		the_indiv->uses[north]++;
+		the_indiv->importance[north] += BASE_IMPORTANCE / depth;
 		temp.direction = PI;
 		temp.magnitude = 1;
 		return (temp);
 	case randm:
-		the_indiv->uses[randm]++;
+//		the_indiv->uses[randm]++;
+		the_indiv->importance[randm] += BASE_IMPORTANCE / depth;
 		temp.random();
 		return temp;
 	case last_move:
-		the_indiv->uses[last_move]++;
+//		the_indiv->uses[last_move]++;
+		the_indiv->importance[last_move] += BASE_IMPORTANCE / depth;
 		return (the_indiv->last_move);
 	case constant:
-		the_indiv->uses[constant]++;
+//		the_indiv->uses[constant]++;
+		the_indiv->importance[constant] += BASE_IMPORTANCE / depth;
 		return (*the_const);
 	case number_hyenas:
-		the_indiv->uses[number_hyenas]++;
+//		the_indiv->uses[number_hyenas]++;
+		the_indiv->importance[number_hyenas] += BASE_IMPORTANCE / depth;
 		temp.direction = 0;
 		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
 		return temp;
 	case mirror_nearest:
-		the_indiv->uses[mirror_nearest]++;
+//		the_indiv->uses[mirror_nearest]++;
+		the_indiv->importance[mirror_nearest] += BASE_IMPORTANCE / depth;
 		return (the_indiv->mirrored);
 	case num_attacks:
-		the_indiv->uses[num_attacks]++;
+//		the_indiv->uses[num_attacks]++;
+		the_indiv->importance[num_attacks] += BASE_IMPORTANCE / depth;
 		temp.direction = 0;
 		temp.magnitude = the_indiv->num_attacks;
 		return temp;
 	case leader:
-		the_indiv->uses[leader]++;
+//		the_indiv->uses[leader]++;
+		the_indiv->importance[leader] += BASE_IMPORTANCE / depth;
 		return the_indiv->leader;
 	// non-terminals
 	case sum:
-		the_indiv->uses[sum]++;
-		return children[0]->evaluate(the_indiv) +
-				children[1]->evaluate(the_indiv);
+//		the_indiv->uses[sum]++;
+		the_indiv->importance[sum] += BASE_IMPORTANCE / depth;
+		return children[0]->evaluate(the_indiv, depth) +
+				children[1]->evaluate(the_indiv, depth);
 	case invert:
-		the_indiv->uses[invert]++;
-		temp = children[0]->evaluate(the_indiv);
+//		the_indiv->uses[invert]++;
+		the_indiv->importance[invert] += BASE_IMPORTANCE / depth;
+		temp = children[0]->evaluate(the_indiv, depth);
 		temp.direction += PI;
 		return (temp);
 	case iflteMAG:
-		the_indiv->uses[iflteMAG]++;
-		if (children[0]->evaluate(the_indiv).magnitude <=
-				children[1]->evaluate(the_indiv).magnitude)
-			return (children[2]->evaluate(the_indiv));
+//		the_indiv->uses[iflteMAG]++;
+		the_indiv->importance[iflteMAG] += BASE_IMPORTANCE / depth;
+		if (children[0]->evaluate(the_indiv, depth).magnitude <=
+				children[1]->evaluate(the_indiv, depth).magnitude)
+			return (children[2]->evaluate(the_indiv, depth));
 		else
-			return (children[3]->evaluate(the_indiv));
+			return (children[3]->evaluate(the_indiv, depth));
 	case iflteCLOCKWISE:
-		the_indiv->uses[iflteCLOCKWISE]++;
-		if (children[0]->evaluate(the_indiv).direction <=
-				children[1]->evaluate(the_indiv).direction)
-			return (children[2]->evaluate(the_indiv));
+//		the_indiv->uses[iflteCLOCKWISE]++;
+		the_indiv->importance[iflteCLOCKWISE] += BASE_IMPORTANCE / depth;
+		if (children[0]->evaluate(the_indiv, depth).direction <=
+				children[1]->evaluate(the_indiv, depth).direction)
+			return (children[2]->evaluate(the_indiv, depth));
 		else
-			return (children[3]->evaluate(the_indiv));
+			return (children[3]->evaluate(the_indiv, depth));
 	case ifVectorZero:
-		the_indiv->uses[ifVectorZero]++;
-		temp = children[0]->evaluate(the_indiv);
+//		the_indiv->uses[ifVectorZero]++;
+		the_indiv->importance[ifVectorZero] += BASE_IMPORTANCE / depth;
+		temp = children[0]->evaluate(the_indiv, depth);
 		if (temp.magnitude == 0)
-			return (children[1]->evaluate(the_indiv));
+			return (children[1]->evaluate(the_indiv, depth));
 		else
-			return (children[2]->evaluate(the_indiv));
+			return (children[2]->evaluate(the_indiv, depth));
 	default:
 		ofstream error;
 		error.open("error.txt", ios_base::app);
@@ -411,14 +432,14 @@ void node::grow(int max_d, int depth){
     }
 }
 
-int node::calc_size(int &size) {
+int node::calc_size() {
 	if (this == NULL) {
 		ofstream error;
 		error.open("error.txt", ios_base::app);
 		error << "error in calc size: evaluating null" << endl;
 		error.close();
 	}
-	size++;
+	int size = 1;
 	switch (operation) {
 	// terminals
 	case zebra:
@@ -436,23 +457,23 @@ int node::calc_size(int &size) {
 		return size;
 	// non-terminals
 	case sum:
-		children[0]->calc_size(size);
-		children[1]->calc_size(size);
+		size += children[0]->calc_size();
+		size += children[1]->calc_size();
 		return size;
 	case invert:
-		children[0]->calc_size(size);
+		size += children[0]->calc_size();
 		return size;
 	case iflteMAG:
 	case iflteCLOCKWISE:
-		children[0]->calc_size(size);
-		children[1]->calc_size(size);
-		children[2]->calc_size(size);
-		children[3]->calc_size(size);
+		size += children[0]->calc_size();
+		size += children[1]->calc_size();
+		size += children[2]->calc_size();
+		size += children[3]->calc_size();
 		return size;
 	case ifVectorZero:
-		children[0]->calc_size(size);
-		children[1]->calc_size(size);
-		children[2]->calc_size(size);
+		size += children[0]->calc_size();
+		size += children[1]->calc_size();
+		size += children[2]->calc_size();
 		return size;
 	default:
 		ofstream error;

@@ -44,7 +44,8 @@ private:
 	team *the_pop[POP_SIZE];
 //        float data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
 	// data. all team fitnesses plus 8 iteration attributes (avg. and soforth)
-	float data[ITERATIONS][NUM_HYENAS + NUM_TERMS+NUM_NON_TERMS + 8];
+	static const int NUM_EXTRA = 7;
+	float data[GENERATIONS][NUM_EXTRA + NUM_TERMS+NUM_NON_TERMS + 3*NUM_HYENAS];
 	float pop_bestfitness;
 	int pop_bestteam;
 	int pop_worstteam;

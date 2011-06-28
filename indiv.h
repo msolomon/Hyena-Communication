@@ -9,10 +9,9 @@
 class indiv {
 public:
 	void calc_size(void) {
-		int s = 0;
 		//if(tree == NULL)
 		//	return;
-		size = tree->calc_size(s);
+		size = tree->calc_size();
 	}
 	indiv(void);
 
@@ -46,9 +45,9 @@ public:
 	void set_calling(bool b) {
 		calling = b;
 	}
-	void inc_used(ops i){
-		the_info.uses[i]++;
-	}
+//	void inc_used(ops i){
+//		the_info.uses[i]++;
+//	}
 /*
 	void record_last_fitness(){
 		the_info.last_fitness = the_info.curr_fitness;
@@ -120,8 +119,14 @@ public:
 		x = x_in;
 		y = y_in;
 	}
-	int* get_uses(){
-		return (int*) &(the_info.uses);
+//	int* get_uses(){
+//		return (int*) &(the_info.uses);
+//	}
+	double* get_importance(){
+		return (double*) &(the_info.importance);
+	}
+	int get_hits(){
+		return the_info.hits;
 	}
 
 	void xOver(indiv*);
