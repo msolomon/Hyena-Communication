@@ -92,6 +92,7 @@ void team::mutate(int member) {
 float team::calc_avg_fit(void) {
 	avg_fit = 0;
 	avg_lion_attacks = 0;
+    avg_penalty = 0;
 	avg_dist_to_zebra = 0;
 	avg_hits = 0;
 	for (int i = 0; i < NUM_HYENAS; i++) {
@@ -99,6 +100,7 @@ float team::calc_avg_fit(void) {
 		avg_fit += hyena_fits[i];
 		avg_dist_to_zebra += hyenas[i].get_avg_dist_to_zebra();
 		avg_lion_attacks += hyenas[i].get_lion_attacks();
+        avg_penalty += hyenas[i].get_penalty();
 		avg_hits += hyenas[i].get_hits();
 	}
 	for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS; i++){
@@ -129,6 +131,7 @@ float team::calc_avg_fit(void) {
 	}
 	avg_hits /= NUM_HYENAS * NUM_TESTS;
 	avg_lion_attacks /= NUM_TESTS;
+    avg_penalty /= NUM_TESTS;
 	avg_dist_to_zebra /= NUM_HYENAS * NUM_TESTS;
 	return avg_fit;
 }

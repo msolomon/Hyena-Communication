@@ -32,15 +32,17 @@ void pop::save_data(int iteration){
 	data[iteration][2] = the_pop[pop_bestteam]->get_avg_dist_to_zebra();
 	// average number of lion attacks (for whole team per test, not per hyena)
 	data[iteration][3] = the_pop[pop_bestteam]->get_avg_lion_attacks();
+    // average penalty from lion attacks (for whole team/test, not per hyena)
+    data[iteration][4] = the_pop[pop_bestteam]->get_avg_penalty();
 	// average fitness for best team (for whole team per test, not per hyena)
-	data[iteration][4] = the_pop[pop_bestteam]->get_avg_fit();
+    data[iteration][5] = the_pop[pop_bestteam]->get_avg_fit();
 	// best team average number of hits
-	data[iteration][5] = the_pop[pop_bestteam]->get_avg_hits();
+    data[iteration][6] = the_pop[pop_bestteam]->get_avg_hits();
 	// best team average importance of a given node type
-	data[iteration][6] = 0;
+    data[iteration][7] = 0;
 	double *imp = the_pop[pop_bestteam]->get_importance();
 	for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS; i++){
-		data[iteration][6] += imp[i] / (NUM_TERMS+NUM_NON_TERMS);
+        data[iteration][7] += imp[i] / (NUM_TERMS+NUM_NON_TERMS);
 	}
 
 	/*
@@ -98,7 +100,7 @@ void pop::write_data(int trial){
 	f.open(fname.toStdString().c_str());
 
 	// provide column labels
-	f << "trial gen time avg_fit best_zeb_dist best_num_attacks best_fit best_hits best_imp "
+	f << "trial gen time avg_fit best_zeb_dist best_num_attacks best_pen best_fit best_hits best_imp "
 		 "zebra nearest_hyena nearest_lion nearest_calling north randm "
 		 "last_move constant number_hyenas mirror_nearest num_attacks leader "
 		 "sum invert iflteMAG iflteCLOCKWISE ifVectorZero ";
@@ -221,7 +223,7 @@ void pop::evolve(int trial) {
 			f.open(fname.c_str(), ios_base::app);
 			f << "Iteration " << i + 1 << "\n";
 			f.close();
-			cout << "Iteration " << i + 1 << " of " << GENERATIONS <<
+            cout << "Generation " << i + 1 << " of " << GENERATIONS <<
 					" (" << (i+1)/(float)GENERATIONS * 100 << "% of trial " <<
 					trial + 1 << ")" << endl;
 			draw_best(pop_bestteam, i);

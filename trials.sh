@@ -5,10 +5,6 @@ corenum=$2
 hyenadir=`dirname $0`
 #hyenadir=`pwd`/../../$hyenadir
 
-# Limit each trial to 2GB of memory and 1 hour CPU time
-ulimit -d 2097152
-ulimit -t 7200
-
 count=0
 until [ $count -ge $trials ]
 do

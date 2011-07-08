@@ -36,6 +36,7 @@ void indiv::xOver(indiv *p2) {
 void indiv::reset_fitness(void) {
 	fitness = 0;
 	lion_attacks = 0;
+    attack_pen = 0;
 	avg_dist_to_zebra = 0;
 	the_info.hits = 0;
 	for(int i = 0; i < NUM_TERMS + NUM_NON_TERMS; i++){

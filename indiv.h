@@ -77,15 +77,19 @@ public:
 	float get_lion_attacks(void) {
 		return lion_attacks;
 	}
+    float get_penalty(void) {
+        return attack_pen;
+    }
 	void inc_dist_to_zebra(float d) {
 		avg_dist_to_zebra += (d / TIME_STEPS);
 	}
 	void set_avg_dist_to_zebra(float d) {
 		avg_dist_to_zebra = d;
 	}
-	void inc_lion_attacks(void) {
+    void inc_lion_attacks(float penalty) {
 		lion_attacks++;
 		the_info.num_attacks++;
+        attack_pen += penalty;
 	}
 	void zero_lion_attacks(void) {
 		lion_attacks = 0;
@@ -139,6 +143,7 @@ private:
 	agent_info the_info;
 	float fitness;
 	float avg_dist_to_zebra;
+    float attack_pen;
 	int lion_attacks;
 	agent_type type;
 	bool calling;

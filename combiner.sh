@@ -13,3 +13,6 @@ do
 done
 
 du -h data.txt
+bzip2 data.txt
+du -h data.txt.bz2
+

@@ -14,7 +14,7 @@ DrawHelper::DrawHelper() {
 	lionPen = QPen(QBrush(lionColor), 1.5, Qt::SolidLine, Qt::RoundCap);
 	// 2 * b/c width is twice the radius
 	lionRadPen = QPen(QBrush(lionColor), 2*LION_ATTACK_RADIUS, Qt::SolidLine, Qt::RoundCap);
-	zebraPen = QPen(QBrush(zebraColor), 2*EAT_RADIUS, Qt::SolidLine, Qt::RoundCap);
+    zebraPen = QPen(QBrush(zebraColor), 2*1, Qt::SolidLine, Qt::RoundCap);
 	callRadPen = QPen(QBrush(zebraColor), 2*CALLING_RANGE, Qt::SolidLine, Qt::RoundCap);
 
 	timestep = 0;

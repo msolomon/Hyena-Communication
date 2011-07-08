@@ -68,10 +68,6 @@ void environment::evaluate(void) {
 		radius = dist((tempx - ZEBRAX), (tempy - ZEBRAY));
 		agents->hyenas[i].changeFit(1.0 / (1.0 + radius)); // near zebra
 		//		radius = sqrt(radius);
-		// bonus for getting close enough to 'eat'
-		if(EAT_BONUS_ACTIVE && radius <= EAT_RADIUS){
-			agents->hyenas[i].changeFit(EAT_BONUS);
-		}
 
 		agents->hyenas[i].reset_attack_input();
 
@@ -79,9 +75,11 @@ void environment::evaluate(void) {
 		for (int j = 0; j < NUM_LIONS; j++) {
 			radius = distance_sq(tempx - agents->lions[j].getX(),
 								 tempy - agents->lions[j].getY());
-			if (radius < LION_ATTACK_RADIUS_SQ) { // not too close to lions
-				agents->hyenas[i].changeFit(3*(sqrt(radius)-LION_ATTACK_RADIUS)); // near lion
-				agents->hyenas[i].inc_lion_attacks();
+            if (radius < LION_ATTACK_RADIUS_SQ) { // not too close to lions
+                float penalty = LION_ATTACK_PENALTY *
+                        (sqrt(radius) - LION_ATTACK_RADIUS);
+                agents->hyenas[i].changeFit(penalty); // near lion
+                agents->hyenas[i].inc_lion_attacks(penalty);
 			}
 		}
 	}
@@ -116,8 +114,12 @@ void environment::update_vectors(void){
 		if (temp.magnitude < CALLING_RANGE_SQ) { // min range to zebra
 			temp.magnitude = sqrt(temp.magnitude); // now calculate sqrt
 			temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
-			agents->hyenas[i].set_calling(true);
-			num_calling++;
+			if(CALLING_ENABLED){
+				agents->hyenas[i].set_calling(true);
+				num_calling++;
+			} else {
+				agents->hyenas[i].set_calling(false);
+			}
 		} else {
 			temp.direction = 0;
 			temp.magnitude = 0;

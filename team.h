@@ -30,6 +30,9 @@ public:
 	float get_avg_lion_attacks() {
 		return avg_lion_attacks;
 	}
+    float get_avg_penalty() {
+        return avg_penalty;
+    }
 	float get_avg_hits() {
 		return avg_hits;
 	}
@@ -46,6 +49,7 @@ public:
 	float hyena_fits[NUM_HYENAS];
 	float avg_fit; // average team fitness
 	float avg_lion_attacks;
+    float avg_penalty;
 	float avg_dist_to_zebra;
 	float avg_hits;
 	float avg_size;
