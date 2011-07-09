@@ -85,7 +85,7 @@ void pop::save_data(int iteration){
 				(float) (NUM_TESTS * TIME_STEPS);
 	}
 
-	// Best team individual leader counts
+	// Best team individual named counts
 	for(int i = 0; i < NUM_HYENAS; i++){
 		data[iteration][i +2*(NUM_TERMS+NUM_NON_TERMS)+NUM_EXTRA+2*NUM_HYENAS] =
 				the_pop[pop_bestteam]->hyenas[i].get_uses()[TRACKED_OP] /
@@ -102,7 +102,7 @@ void pop::write_data(int trial){
 	// provide column labels
 	f << "trial gen time avg_fit best_zeb_dist best_num_attacks best_pen best_fit best_hits best_imp "
 		 "zebra nearest_hyena nearest_lion nearest_calling north randm "
-		 "last_move constant number_hyenas mirror_nearest num_attacks leader "
+		 "last_move constant number_hyenas mirror_nearest num_attacks named "
 		 "sum invert iflteMAG iflteCLOCKWISE ifVectorZero ";
 	for(int i = 1; i < NUM_HYENAS; i++){
 		f << "h" << i << " ";
@@ -135,7 +135,7 @@ void pop::evaluate_team(int member){
 	for (int test = 0; test < NUM_TESTS; test++) {
 //		the_pop[member]->reset_team();
 		ENV->place_agents(test);
-		the_pop[member]->reset_calling();
+		the_pop[member]->reset_inputs();
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
 			ENV->move();
@@ -151,7 +151,7 @@ void pop::draw_best(int member, int iteration){
 	ENV->set_up(&best);
 	//		the_pop[member]->reset_team();
 	ENV->place_agents(0); // just use first set of start positions
-	best.reset_calling();
+	best.reset_inputs();
 	for (int g = 0; g < TIME_STEPS; g++) {
 		ENV->update_vectors();
 		ENV->draw(helper, iteration);

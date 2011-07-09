@@ -22,10 +22,13 @@ public:
 	std::string fname;
 	void generate_positions();
 	void place_agents(int);
+	float landmarkcoord[NUM_TESTS][2];
 	float hyenacoord[NUM_TESTS][NUM_HYENAS][2];
 	float lioncoord[NUM_TESTS][NUM_LIONS][2];
 private:
 	team *agents;
+	float landmarkx;
+	float landmarky;
 };
 
 #endif

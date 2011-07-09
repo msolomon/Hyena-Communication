@@ -81,8 +81,9 @@ void node::copy(node *p) {
 		return;
 	case number_hyenas:
 	case mirror_nearest:
-	case num_attacks:
-	case leader:
+	case last_pen:
+	case named:
+	case landmark:
 		return;
 	// non-terminals
 	case sum:
@@ -139,8 +140,9 @@ void node::clear(void) {
 		return;
 	case number_hyenas:
 	case mirror_nearest:
-	case num_attacks:
-	case leader:
+	case last_pen:
+	case named:
+	case landmark:
 		return;
 	// non-terminals
 	case sum:
@@ -183,14 +185,15 @@ void node::mutate(void) {
 	case constant:
 	case number_hyenas:
 	case mirror_nearest:
-	case num_attacks:
-	case leader:
+	case last_pen:
+	case named:
+	case landmark:
 		if (Random::Global.Integer(100) < MUTATION_CHANCE){
 			if(operation == constant)
 				delete the_const;
-			if(DISABLED_OP != none_disabled){
+			if(DISABLED_OP != none_disabled || DISABLED_OP2 != none_disabled){
 				do operation = (ops) (Random::Global.Integer(NUM_TERMS));
-				while(operation == DISABLED_OP);
+				while(operation == DISABLED_OP || operation == DISABLED_OP2);
 			} else{
 				operation = (ops) (Random::Global.Integer(NUM_TERMS));
 			}
@@ -246,74 +249,62 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 	switch (operation) {
 	// terminals
 	case zebra:
-//		the_indiv->uses[zebra]++;
 		the_indiv->importance[zebra] += BASE_IMPORTANCE / depth;
 		return (the_indiv->zebra);
 	case nearest_hyena:
-//		the_indiv->uses[nearest_hyena]++;
 		the_indiv->importance[nearest_hyena] += BASE_IMPORTANCE / depth;
 		return (the_indiv->nearest_hyena);
 	case nearest_lion:
-//		the_indiv->uses[nearest_lion]++;
 		the_indiv->importance[nearest_lion] += BASE_IMPORTANCE / depth;
 		return (the_indiv->nearest_lion);
 	case nearest_calling:
-//		the_indiv->uses[nearest_calling]++;
 		the_indiv->importance[nearest_calling] += BASE_IMPORTANCE / depth;
 		return (the_indiv->nearest_calling);
 	case north:
-//		the_indiv->uses[north]++;
 		the_indiv->importance[north] += BASE_IMPORTANCE / depth;
-		temp.direction = PI;
+		temp.direction = 0;
 		temp.magnitude = 1;
 		return (temp);
 	case randm:
-//		the_indiv->uses[randm]++;
 		the_indiv->importance[randm] += BASE_IMPORTANCE / depth;
 		temp.random();
 		return temp;
 	case last_move:
-//		the_indiv->uses[last_move]++;
 		the_indiv->importance[last_move] += BASE_IMPORTANCE / depth;
 		return (the_indiv->last_move);
 	case constant:
-//		the_indiv->uses[constant]++;
 		the_indiv->importance[constant] += BASE_IMPORTANCE / depth;
 		return (*the_const);
 	case number_hyenas:
-//		the_indiv->uses[number_hyenas]++;
 		the_indiv->importance[number_hyenas] += BASE_IMPORTANCE / depth;
 		temp.direction = 0;
 		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
 		return temp;
 	case mirror_nearest:
-//		the_indiv->uses[mirror_nearest]++;
 		the_indiv->importance[mirror_nearest] += BASE_IMPORTANCE / depth;
 		return (the_indiv->mirrored);
-	case num_attacks:
-//		the_indiv->uses[num_attacks]++;
-		the_indiv->importance[num_attacks] += BASE_IMPORTANCE / depth;
+	case last_pen:
+		the_indiv->importance[last_pen] += BASE_IMPORTANCE / depth;
 		temp.direction = 0;
-		temp.magnitude = the_indiv->num_attacks;
+		temp.magnitude = the_indiv->last_pen;
 		return temp;
-	case leader:
-//		the_indiv->uses[leader]++;
-		the_indiv->importance[leader] += BASE_IMPORTANCE / depth;
-		return the_indiv->leader;
+	case named:
+		the_indiv->importance[named] += BASE_IMPORTANCE / depth;
+		return the_indiv->named;
+	case landmark:
+		the_indiv->importance[landmark] += BASE_IMPORTANCE / depth;
+		return the_indiv->landmark;
 	// non-terminals
 	case sum:
-//		the_indiv->uses[sum]++;
 		the_indiv->importance[sum] += BASE_IMPORTANCE / depth;
 		return children[0]->evaluate(the_indiv, depth) +
 				children[1]->evaluate(the_indiv, depth);
 	case invert:
-//		the_indiv->uses[invert]++;
 		the_indiv->importance[invert] += BASE_IMPORTANCE / depth;
 		temp = children[0]->evaluate(the_indiv, depth);
 		temp.direction += PI;
 		return (temp);
 	case iflteMAG:
-//		the_indiv->uses[iflteMAG]++;
 		the_indiv->importance[iflteMAG] += BASE_IMPORTANCE / depth;
 		if (children[0]->evaluate(the_indiv, depth).magnitude <=
 				children[1]->evaluate(the_indiv, depth).magnitude)
@@ -321,7 +312,6 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		else
 			return (children[3]->evaluate(the_indiv, depth));
 	case iflteCLOCKWISE:
-//		the_indiv->uses[iflteCLOCKWISE]++;
 		the_indiv->importance[iflteCLOCKWISE] += BASE_IMPORTANCE / depth;
 		if (children[0]->evaluate(the_indiv, depth).direction <=
 				children[1]->evaluate(the_indiv, depth).direction)
@@ -329,7 +319,6 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		else
 			return (children[3]->evaluate(the_indiv, depth));
 	case ifVectorZero:
-//		the_indiv->uses[ifVectorZero]++;
 		the_indiv->importance[ifVectorZero] += BASE_IMPORTANCE / depth;
 		temp = children[0]->evaluate(the_indiv, depth);
 		if (temp.magnitude == 0)
@@ -349,9 +338,9 @@ void node::grow(int max_d, int depth){
 //    parent = pare;
 	if(depth == max_d){ // bottomed out, use terminals
 		operation = (ops) (Random::Global.Integer(NUM_TERMS));
-		if(DISABLED_OP != none_disabled){
+		if(DISABLED_OP != none_disabled || DISABLED_OP2 != none_disabled){
 			do operation = (ops) (Random::Global.Integer(NUM_TERMS));
-			while(operation == DISABLED_OP);
+			while(operation == DISABLED_OP || operation == DISABLED_OP2);
 		} else{
 			operation = (ops) (Random::Global.Integer(NUM_TERMS));
 		}
@@ -364,9 +353,9 @@ void node::grow(int max_d, int depth){
 		if(FULL){
 			operation = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
 		} else{
-			if(DISABLED_OP != none_disabled){
+			if(DISABLED_OP != none_disabled || DISABLED_OP2 != none_disabled){
 				do operation = (ops) (Random::Global.Integer(NUM_TERMS + NUM_NON_TERMS));
-				while(operation == DISABLED_OP);
+				while(operation == DISABLED_OP || operation == DISABLED_OP2);
 			} else{
 				operation = (ops) (Random::Global.Integer(NUM_TERMS + NUM_NON_TERMS));
 			}
@@ -380,14 +369,16 @@ void node::grow(int max_d, int depth){
 		case north:
 		case randm:
 		case last_move:
+			break;
 		case constant:
 			the_const = new vect();
 			the_const->random();
 			break;
 		case number_hyenas:
 		case mirror_nearest:
-		case num_attacks:
-		case leader:
+		case last_pen:
+		case named:
+		case landmark:
 			break;
         case sum:
 			children = new node*[2];
@@ -452,8 +443,9 @@ int node::calc_size() {
 	case constant:
 	case number_hyenas:
 	case mirror_nearest:
-	case num_attacks:
-	case leader:
+	case last_pen:
+	case named:
+	case landmark:
 		return size;
 	// non-terminals
 	case sum:
@@ -501,8 +493,9 @@ node *node::get_point(int pn, int &current, node *&parent) {
 	case constant:
 	case number_hyenas:
 	case mirror_nearest:
-	case num_attacks:
-	case leader:
+	case last_pen:
+	case named:
+	case landmark:
 		return this;
 	// non-terminals
 	case sum:
@@ -586,11 +579,14 @@ QString node::graphviz(node *parent, QString extraLabel){
 	case mirror_nearest:
         output += "mirror_nearest\", shape=plaintext]\n";
 		break;
-	case num_attacks:
-		output += "num_attacks\", shape=plaintext]\n";
+	case last_pen:
+		output += "last_pen\", shape=plaintext]\n";
 		break;
-	case leader:
-		output += "leader\", shape=plaintext]\n";
+	case named:
+		output += "named\", shape=plaintext]\n";
+		break;
+	case landmark:
+		output += "landmark\", shape=plaintext]\n";
 		break;
 	// non-terminals
 	case sum:

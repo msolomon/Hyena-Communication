@@ -23,6 +23,7 @@ const bool START_OUTSIDE_ZEBRA = false;
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const int TREE_MAX_SIZE = 5000; // size, not depth
 const ops DISABLED_OP = none_disabled; // use none_disabled to enable all
+const ops DISABLED_OP2 = none_disabled;
 // Only pick one method below
 const bool OET_GENERATIONAL = true;
 const bool TEAM_GENERATIONAL = false;

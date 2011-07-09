@@ -15,6 +15,25 @@ public:
 	}
 	indiv(void);
 
+	void reset_inputs(){
+		the_info.zebra.reset();
+		the_info.nearest_hyena.reset();
+		the_info.nearest_lion.reset();
+		the_info.last_move.reset();
+		the_info.mirrored.reset();
+		the_info.nearest_calling.reset();
+		the_info.named.reset();
+		the_info.landmark.reset();
+		the_info.num_lions = 0;
+		the_info.num_hyenas = 0;
+		the_info.hits = 0;
+		the_info.last_pen = 0;
+	}
+
+	void set_landmark(vect v){
+		the_info.landmark = v;
+	}
+
 	void set_nearest_hyena(vect v) {
 		the_info.nearest_hyena = v;
 	}
@@ -30,8 +49,8 @@ public:
 	void set_nearestcalling(vect v) {
 		the_info.nearest_calling = v;
 	}
-	void set_leader(vect v) {
-		the_info.leader = v;
+	void set_named(vect v) {
+		the_info.named = v;
 	}
 	void set_mirrored(vect v){
 		the_info.mirrored = v;
@@ -88,14 +107,14 @@ public:
 	}
     void inc_lion_attacks(float penalty) {
 		lion_attacks++;
-		the_info.num_attacks++;
+		the_info.last_pen = -penalty; // unary - to make positive
         attack_pen += penalty;
 	}
 	void zero_lion_attacks(void) {
 		lion_attacks = 0;
 	}
-	void reset_attack_input(){
-		the_info.num_attacks = 0;
+	void reset_pen_input(){
+		the_info.last_pen = 0;
 	}
 
 	void rand_move(void);

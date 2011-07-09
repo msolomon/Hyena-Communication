@@ -42,8 +42,23 @@ void environment::generate_positions(){
 			hyenacoord[i][j][0] = x;
 			hyenacoord[i][j][1] = y;
 		}
+
 		if(START_ONE_INSIDE && one_inside == false){
 			i--; // redo this test's positions until one starts inside
+			continue;
+		}
+
+		// place the landmark inside the calling radius
+		if(DISABLED_OP != landmark && DISABLED_OP2 != landmark){
+			float x, y;
+			do{
+				x = (Random::Global() / ((float)Random::max / 2*(float)CALLING_RANGE))
+						+ (ZEBRAX - CALLING_RANGE);
+				y = (Random::Global() / ((float)Random::max / 2*(float)CALLING_RANGE))
+						+ (ZEBRAY - CALLING_RANGE);
+			} while (distance_sq(ZEBRAX - x, ZEBRAY - y) >= CALLING_RANGE_SQ);
+			landmarkcoord[i][0] = x;
+			landmarkcoord[i][1] = y;
 		}
 	}
 }
@@ -57,6 +72,8 @@ void environment::place_agents(int test){
 		agents->hyenas[i].set_position(hyenacoord[test][i][0],
 									   hyenacoord[test][i][1]);
 	}
+	landmarkx = landmarkcoord[test][0];
+	landmarky = landmarkcoord[test][1];
 }
 
 void environment::evaluate(void) {
@@ -68,8 +85,6 @@ void environment::evaluate(void) {
 		radius = dist((tempx - ZEBRAX), (tempy - ZEBRAY));
 		agents->hyenas[i].changeFit(1.0 / (1.0 + radius)); // near zebra
 		//		radius = sqrt(radius);
-
-		agents->hyenas[i].reset_attack_input();
 
 		agents->hyenas[i].inc_dist_to_zebra(radius);
 		for (int j = 0; j < NUM_LIONS; j++) {
@@ -106,9 +121,16 @@ void environment::update_vectors(void){
 	char num_calling = 0;
 
 	// set calling hyenas and if they call, set vectors toward zebra
+	// and set landmark vector
 	for(int i = 0; i < NUM_HYENAS; i++){
 		agentx = agents->hyenas[i].getX(); //get hyena x,y
 		agenty = agents->hyenas[i].getY();
+
+		if(DISABLED_OP != landmark && DISABLED_OP2 != landmark){
+			temp.magnitude = dist(agentx - landmarkx, agenty - landmarky);
+			temp.direction = atan2(agentx - landmarkx, agenty - landmarky);
+			agents->hyenas[i].set_landmark(temp);
+		}
 
 		temp.magnitude = distance_sq(agentx - ZEBRAX, agenty - ZEBRAY);
 		if (temp.magnitude < CALLING_RANGE_SQ) { // min range to zebra
@@ -159,37 +181,37 @@ void environment::update_vectors(void){
 		}
 	}
 
-	// find nearest lion, leader, and calling scout
+	// find nearest lion, named hyena, and calling hyena
 	for(int i = 0; i < NUM_HYENAS; i++){
-		bool setLeader = false;
+		bool setNamed = false;
 		agentx = agents->hyenas[i].getX(); //get hyena x,y
 		agenty = agents->hyenas[i].getY();
-		// find nearest calling scout
+		// find nearest calling hyena
 		min_mag = FLT_MAX;
 		for(int j = 0; j < NUM_HYENAS; j++){
-			if(agents->hyenas[j].get_calling() && i != j){
+			if(i != j && agents->hyenas[j].get_calling()){
 				magnitude = distance_sq(agentx - agents->hyenas[j].getX(),
 										agenty - agents->hyenas[j].getY());
 				if(magnitude < min_mag){
 					min_mag = magnitude;
 					the_j = j;
 				}
-				// set leader vector, if this is the leader
+				// set named vector, if we are on the named hyena
 				if(j == 0){
 					temp.magnitude = sqrt(magnitude);
 					temp.direction = atan2(agentx - agents->hyenas[j].getX(),
 										   agenty - agents->hyenas[j].getY());
-					agents->hyenas[i].set_leader(temp);
-					setLeader = true;
+					agents->hyenas[i].set_named(temp);
+					setNamed = true;
 				}
 			}
 		}
 
-		// zero out leader if not yet set
-		if(!setLeader){
+		// zero out named if not yet set
+		if(!setNamed){
 			temp.magnitude = 0;
 			temp.direction = 0;
-			agents->hyenas[i].set_leader(temp);
+			agents->hyenas[i].set_named(temp);
 		}
 
 		if(min_mag == FLT_MAX){ // no hyenas calling

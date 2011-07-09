@@ -21,6 +21,7 @@ public:
 	void generate(void);
 	void clear(void);
 	void reset_team(void);
+	void reset_inputs();
 	float get_hyena_fit(int i) {
 		return hyena_fits[i];
 	}

@@ -40,7 +40,6 @@ void indiv::reset_fitness(void) {
 	avg_dist_to_zebra = 0;
 	the_info.hits = 0;
 	for(int i = 0; i < NUM_TERMS + NUM_NON_TERMS; i++){
-//		the_info.uses[i] = 0;
 		the_info.importance[i] = 0;
 	}
 }

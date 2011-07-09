@@ -35,3 +35,8 @@ void vect::random(void) {
 	direction = Random::Global() / ((Random::max) / (2.0 * PI));
 	magnitude = Random::Global() / (Random::max / (float) X); // proportion of map
 }
+
+void vect::reset(){
+	direction = 0;
+	magnitude = 0;
+}

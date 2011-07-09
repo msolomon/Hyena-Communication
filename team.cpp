@@ -21,9 +21,9 @@ void team::reset_team(void) {
 	}
 }
 
-void team::reset_calling(){
+void team::reset_inputs(){
 	for(int i = 0; i < NUM_HYENAS; i++){
-		hyenas[i].set_calling(false);
+		hyenas[i].reset_inputs();
 	}
 }
 

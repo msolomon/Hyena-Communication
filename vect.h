@@ -8,6 +8,7 @@ class vect {
 public:
 	vect();
 	void random(void);
+	void reset();
 	float direction;
 	float magnitude;
 	vect& operator=(const vect&);
