@@ -23,6 +23,7 @@ public:
 	void updateGui();
 	QQueue<QPointF> hyenas[NUM_HYENAS];
 	QQueue<QPointF> lions[NUM_LIONS];
+	QQueue<QPointF> landmarks;
 
 	QQueue<int> iter;
 	QQueue<int> step;
@@ -34,6 +35,7 @@ private:
 	QPen lionRadPen;
 	QPen zebraPen;
 	QPen callRadPen;
+	QPen landmarkPen;
 	QBrush backgroundBrush;
 	QPointF zeb;
 	int timestep;

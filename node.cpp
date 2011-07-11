@@ -191,12 +191,10 @@ void node::mutate(void) {
 		if (Random::Global.Integer(100) < MUTATION_CHANCE){
 			if(operation == constant)
 				delete the_const;
-			if(DISABLED_OP != none_disabled || DISABLED_OP2 != none_disabled){
-				do operation = (ops) (Random::Global.Integer(NUM_TERMS));
-				while(operation == DISABLED_OP || operation == DISABLED_OP2);
-			} else{
-				operation = (ops) (Random::Global.Integer(NUM_TERMS));
-			}
+
+			do operation = (ops) (Random::Global.Integer(NUM_TERMS));
+			while(is_disabled(operation));
+
 			if(operation == constant){
 				the_const = new vect();
 				the_const->random();
@@ -337,13 +335,9 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 void node::grow(int max_d, int depth){
 //    parent = pare;
 	if(depth == max_d){ // bottomed out, use terminals
-		operation = (ops) (Random::Global.Integer(NUM_TERMS));
-		if(DISABLED_OP != none_disabled || DISABLED_OP2 != none_disabled){
-			do operation = (ops) (Random::Global.Integer(NUM_TERMS));
-			while(operation == DISABLED_OP || operation == DISABLED_OP2);
-		} else{
-			operation = (ops) (Random::Global.Integer(NUM_TERMS));
-		}
+		do operation = (ops) (Random::Global.Integer(NUM_TERMS));
+		while(is_disabled(operation));
+
 		if(operation == constant){
 			the_const = new vect();
 			the_const->random();
@@ -351,14 +345,11 @@ void node::grow(int max_d, int depth){
 	}
 	else{ // haven't reached bottom, use FULL or GROW algo. as appropriate
 		if(FULL){
-			operation = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
-		} else{
-			if(DISABLED_OP != none_disabled || DISABLED_OP2 != none_disabled){
-				do operation = (ops) (Random::Global.Integer(NUM_TERMS + NUM_NON_TERMS));
-				while(operation == DISABLED_OP || operation == DISABLED_OP2);
-			} else{
-				operation = (ops) (Random::Global.Integer(NUM_TERMS + NUM_NON_TERMS));
-			}
+			do operation = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
+			while(is_disabled(operation));
+		} else { // grow
+			do operation = (ops) (Random::Global.Integer(NUM_TERMS + NUM_NON_TERMS));
+			while(is_disabled(operation));
 		}
         switch(operation){
 		// terminals

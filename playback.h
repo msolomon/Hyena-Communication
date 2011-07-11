@@ -21,6 +21,7 @@ public:
     ~Playback();
 	QMap<QString, QQueue<QPointF> > hyenas;
 	QMap<QString, QQueue<QPointF> > lions;
+	QMap<QString, QPointF> landmarks;
 
 private:
 	Ui::Playback *ui;

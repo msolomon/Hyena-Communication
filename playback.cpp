@@ -29,8 +29,11 @@ void Playback::on_but_play_clicked(){
 	QString key = ui->combo_iterations->currentText();
 	QQueue<QPointF>* h = &hyenas[key];
 	QQueue<QPointF>* l = &lions[key];
+
 	// TODO: make this not depend on compile-time constant num of animals
+	QPointF landmark = landmarks[key];
 	for(int it = 0; it < l->length()/NUM_LIONS; it++){
+		ui->widget->helper.landmarks.enqueue(landmark);
 		for(int i = 0; i < NUM_HYENAS; i++){
 			ui->widget->helper.hyenas[i].enqueue(h->at(it * NUM_HYENAS + i));
 		}
@@ -57,12 +60,17 @@ void Playback::parse_video(){
 	QFile f(ui->txt_file->text());
 	if(f.open(QIODevice::ReadOnly)){
 		QTextStream t(&f);
-		QString key = "Unnamed iteration";
+		QString key = "Unnamed generation";
 		while(!t.atEnd()){
 			QString s = t.readLine();
-			if(s.startsWith("Iteration ")){ // new section
+			if(s.startsWith("generation ")){ // new section
 				key = QString("%1").arg(s.right(s.size() - 10), 20, '\0');
-			} else if(s.startsWith(" ")){ // hyena section
+			} else if(s.startsWith("l")){ // landmark
+				QList<QString> coords = s.split(" ", QString::SkipEmptyParts);
+				coords.removeFirst(); // ditch the "l"
+				landmarks[key] = QPointF(coords.takeFirst().toFloat(),
+										 coords.takeFirst().toFloat());
+			} else if(s.startsWith("  ")){ // hyena section
 				QList<QString> coords = s.split(" ", QString::SkipEmptyParts);
 				while(!coords.isEmpty()){
 					float x = coords.takeFirst().toFloat();

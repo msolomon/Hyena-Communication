@@ -6,6 +6,10 @@ using namespace std;
 
 void environment::set_up(team *a) {
 	agents = a;
+	if(is_disabled(landmark)){
+		landmarkx = -100;
+		landmarky = -100;
+	}
 }
 
 void environment::generate_positions(){
@@ -49,12 +53,12 @@ void environment::generate_positions(){
 		}
 
 		// place the landmark inside the calling radius
-		if(DISABLED_OP != landmark && DISABLED_OP2 != landmark){
+		if(!is_disabled(landmark)){
 			float x, y;
 			do{
-				x = (Random::Global() / ((float)Random::max / 2*(float)CALLING_RANGE))
+				x = (Random::Global() / ((float)Random::max / (2*(float)CALLING_RANGE)))
 						+ (ZEBRAX - CALLING_RANGE);
-				y = (Random::Global() / ((float)Random::max / 2*(float)CALLING_RANGE))
+				y = (Random::Global() / ((float)Random::max / (2*(float)CALLING_RANGE)))
 						+ (ZEBRAY - CALLING_RANGE);
 			} while (distance_sq(ZEBRAX - x, ZEBRAY - y) >= CALLING_RANGE_SQ);
 			landmarkcoord[i][0] = x;
@@ -72,8 +76,11 @@ void environment::place_agents(int test){
 		agents->hyenas[i].set_position(hyenacoord[test][i][0],
 									   hyenacoord[test][i][1]);
 	}
-	landmarkx = landmarkcoord[test][0];
-	landmarky = landmarkcoord[test][1];
+
+	if(!is_disabled(landmark)){
+		landmarkx = landmarkcoord[test][0];
+		landmarky = landmarkcoord[test][1];
+	}
 }
 
 void environment::evaluate(void) {
@@ -126,7 +133,7 @@ void environment::update_vectors(void){
 		agentx = agents->hyenas[i].getX(); //get hyena x,y
 		agenty = agents->hyenas[i].getY();
 
-		if(DISABLED_OP != landmark && DISABLED_OP2 != landmark){
+		if(!is_disabled(landmark)){
 			temp.magnitude = dist(agentx - landmarkx, agenty - landmarky);
 			temp.direction = atan2(agentx - landmarkx, agenty - landmarky);
 			agents->hyenas[i].set_landmark(temp);
@@ -423,23 +430,29 @@ void environment::update_vectors(void){
 
 void environment::draw(DrawHelper* helper, int itera) {
 	helper->iter.enqueue(itera);
+	helper->landmarks.enqueue(QPointF(landmarkx, landmarky));
+
 	QStringList list;
 	list.reserve(NUM_LIONS + NUM_HYENAS + 3);
+
+	list.append(QString("l %1 %2\n").arg(landmarkx).arg(landmarky));
 
 	for (int i = 0; i < NUM_LIONS; i++) {
 		QPointF p = QPointF(agents->lions[i].getX(),
 							agents->lions[i].getY());
 		list.append(QString("%1 %2").arg(p.x()).arg(p.y()));
-		helper->lions[i].enqueue(p);
+		if(GUI)
+			helper->lions[i].enqueue(p);
 	}
-	list.append("\n");
+	list.append("\n ");
 
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		QPointF p = QPointF(agents->hyenas[i].getX(),
 							agents->hyenas[i].getY());
-        list.append(QString("%1 %2").arg(p.x(), 0, 'g', 4)
+		list.append(QString("%1 %2").arg(p.x(), 0, 'g', 4)
                     .arg(p.y(), 0, 'g', 4));
-		helper->hyenas[i].enqueue(p);
+		if(GUI)
+			helper->hyenas[i].enqueue(p);
 	}
 	list.append("\n");
 	ofstream f;

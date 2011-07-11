@@ -100,9 +100,13 @@ void pop::write_data(int trial){
 	f.open(fname.toStdString().c_str());
 
 	// provide column labels
-	f << "trial gen time avg_fit best_zeb_dist best_num_attacks best_pen best_fit best_hits best_imp "
-		 "zebra nearest_hyena nearest_lion nearest_calling north randm "
-		 "last_move constant number_hyenas mirror_nearest num_attacks named "
+	f << "trial gen time avg_fit best_zeb_dist best_num_attacks best_pen "
+		 "best_fit best_hits best_imp "
+		 // terminals
+		 "zebra nearest_hyena nearest_lion nearest_calling "
+		 "north randm last_move constant number_hyenas mirror_nearest "
+		 "last_pen named landmark "
+		 // nonterminals
 		 "sum invert iflteMAG iflteCLOCKWISE ifVectorZero ";
 	for(int i = 1; i < NUM_HYENAS; i++){
 		f << "h" << i << " ";
@@ -221,7 +225,7 @@ void pop::evolve(int trial) {
 		// draw the best team
 		if(i % DRAW_EVERY == (DRAW_EVERY - 1)){
 			f.open(fname.c_str(), ios_base::app);
-			f << "Iteration " << i + 1 << "\n";
+			f << "generation " << i + 1 << "\n";
 			f.close();
             cout << "Generation " << i + 1 << " of " << GENERATIONS <<
 					" (" << (i+1)/(float)GENERATIONS * 100 << "% of trial " <<
@@ -439,6 +443,7 @@ int pop::tourn_select(int c) { // or worst if c = -1
 	float current_fit;
 	float best_fit;
 	best = Random::Global.Integer(POP_SIZE);
+
 	best_fit = the_pop[best]->get_avg_fit();
 	for (int i = 1; i < TOURNAMENT_SIZE; i++) {
 		current = Random::Global.Integer(POP_SIZE);

@@ -30,7 +30,6 @@ SOURCES += qthyena.cpp \
     team.cpp \
     vect.cpp \
     widget.cpp \
-    globals.cpp \
     drawhelper.cpp \
     playback.cpp
     
