@@ -54,8 +54,8 @@ public:
 	float avg_dist_to_zebra;
 	float avg_hits;
 	float avg_size;
-	float uses[NUM_TERMS+NUM_NON_TERMS];
-	double importance[NUM_TERMS+NUM_NON_TERMS];
+	float uses[NUM_OPS];
+	double importance[NUM_OPS];
 };
 
 #endif

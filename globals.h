@@ -18,6 +18,7 @@ const char NUM_HYENAS = 15;
 const char NUM_LIONS = 2;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat tests to prevent luck
+const int FINAL_TESTS = 500; // number of times to run best hyena of last trial
 const bool START_ONE_INSIDE = true; // at least one hyena inside calling radius
 const bool START_OUTSIDE_ZEBRA = false;
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas

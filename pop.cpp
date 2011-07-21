@@ -41,53 +41,53 @@ void pop::save_data(int iteration){
 	// best team average importance of a given node type
     data[iteration][7] = 0;
 	double *imp = the_pop[pop_bestteam]->get_importance();
-	for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS; i++){
-        data[iteration][7] += imp[i] / (NUM_TERMS+NUM_NON_TERMS);
+	for(int i = 0; i < NUM_OPS; i++){
+		data[iteration][7] += imp[i] / (NUM_OPS);
 	}
 
 	/*
 	//// Average hits per hyena on each node type, for entire generation
-	float uses[NUM_TERMS+NUM_NON_TERMS] = {};
+	float uses[NUM_OPS] = {};
 	for(int i = 0; i < POP_SIZE; i++){
 		float *h_uses = the_pop[i]->get_uses();
-		for(int j = 0; j < NUM_TERMS+NUM_NON_TERMS; j++){
+		for(int j = 0; j < NUM_OPS; j++){
 			uses[j] += h_uses[j];
 		}
 	}
 
 	// Write the values
-	for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS; i++){
+	for(int i = 0; i < NUM_OPS; i++){
 		data[iteration][i+NUM_EXTRA] = uses[i] / (float)(POP_SIZE);
 	}
 	*/
 /*
 	// Best team hits per hyena on each node type
 	float *uses = the_pop[pop_bestteam]->get_uses();
-	for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS; i++){
+	for(int i = 0; i < NUM_OPS; i++){
 		data[iteration][i+NUM_EXTRA] = uses[i];
 	}
 */
 	// Best team average importance for each node type
-	for(int i = 0; i < NUM_TERMS+NUM_NON_TERMS; i++){
+	for(int i = 0; i < NUM_OPS; i++){
 		data[iteration][i+NUM_EXTRA] = imp[i];
 	}
 
 	// Best team individual fitnesses
 	for(int i = 0; i < NUM_HYENAS; i++){
-		data[iteration][i + (NUM_TERMS+NUM_NON_TERMS) + NUM_EXTRA] =
+		data[iteration][i + (NUM_OPS) + NUM_EXTRA] =
 				the_pop[pop_bestteam]->get_hyena_fit(i);
 	}
 /*
 	// Best team individual tree hits
 	for(int i = 0; i < NUM_HYENAS; i++){
-		data[iteration][i +2*(NUM_TERMS+NUM_NON_TERMS)+NUM_EXTRA+NUM_HYENAS] =
+		data[iteration][i +2*(NUM_OPS)+NUM_EXTRA+NUM_HYENAS] =
 				the_pop[pop_bestteam]->hyenas[i].get_hits() /
 				(float) (NUM_TESTS * TIME_STEPS);
 	}
 
 	// Best team individual named counts
 	for(int i = 0; i < NUM_HYENAS; i++){
-		data[iteration][i +2*(NUM_TERMS+NUM_NON_TERMS)+NUM_EXTRA+2*NUM_HYENAS] =
+		data[iteration][i +2*(NUM_OPS)+NUM_EXTRA+2*NUM_HYENAS] =
 				the_pop[pop_bestteam]->hyenas[i].get_uses()[TRACKED_OP] /
 				(float) (NUM_TESTS * TIME_STEPS);
 	}
@@ -117,10 +117,10 @@ void pop::write_data(int trial){
 	for(int i = 0; i < GENERATIONS; i++){
 		f << trial + 1 << " " << i + 1 << " " ; // trial and generation
 		// now write all data fields
-		for(int j = 0; j < NUM_EXTRA + (NUM_TERMS+NUM_NON_TERMS) + NUM_HYENAS - 1; j++){
+		for(int j = 0; j < NUM_EXTRA + (NUM_OPS) + NUM_HYENAS - 1; j++){
 			f << data[i][j] << " ";
 		}
-		f << data[i][NUM_EXTRA + (NUM_TERMS+NUM_NON_TERMS) + NUM_HYENAS - 1]
+		f << data[i][NUM_EXTRA + (NUM_OPS) + NUM_HYENAS - 1]
 		  << "\n";
 	}
 	f.close();
@@ -212,14 +212,10 @@ void pop::evolve(int trial) {
 		// only use one method of reproduction
 		if(ISLAND_STEADY)
 			island_reproduce();
-//		team_reproduce();
-//		member_reproduce();
-//		OET1_reproduce();
 		if(TEAM_GENERATIONAL || ISLAND_GENERATIONAL ||
 		   OET_GENERATIONAL)
 			all_generational();
 		pop_bestteam = select_best_team(1);
-		pop_worstteam = select_best_team(-1);
 		save_data(i);
 
 		// draw the best team
@@ -241,6 +237,29 @@ void pop::evolve(int trial) {
 	f.open(fname.c_str());
     f << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL, "").toStdString() << endl;
 	f.close();
+
+    // retest the best team of the last gen FINAL_TESTS times and save the data
+    final_test();
+
+}
+
+void pop::final_test(){
+	ENV->set_up(the_pop[pop_bestteam]);
+	int testnum = 0;
+	for (int test = 0; test < FINAL_TESTS; test++) {
+		test == NUM_TESTS ? testnum = 0 : testnum = test;
+		if(testnum == 0) // need to generate more test positions
+			ENV->generate_positions();
+		the_pop[pop_bestteam]->reset_fitness();
+		ENV->place_agents(testnum);
+		the_pop[pop_bestteam]->reset_inputs();
+		for (int g = 0; g < TIME_STEPS; g++) {
+			ENV->update_vectors();
+			ENV->move();
+			ENV->evaluate();
+		}
+		the_pop[pop_bestteam]->calc_avg_fit();
+	}
 }
 
 /*

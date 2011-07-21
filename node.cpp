@@ -348,7 +348,7 @@ void node::grow(int max_d, int depth){
 			do operation = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
 			while(is_disabled(operation));
 		} else { // grow
-			do operation = (ops) (Random::Global.Integer(NUM_TERMS + NUM_NON_TERMS));
+			do operation = (ops) (Random::Global.Integer(NUM_OPS));
 			while(is_disabled(operation));
 		}
         switch(operation){

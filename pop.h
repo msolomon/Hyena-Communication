@@ -35,6 +35,7 @@ public:
 	int member_select(int, int);
 	void add_blank_nodes();
 	void draw_best(int, int);
+    void final_test();
 	qint64 trialstarttime;
 	DrawHelper *helper;
 	environment *ENV;
@@ -45,10 +46,9 @@ private:
 //        float data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
 	// data. all team fitnesses plus 8 iteration attributes (avg. and soforth)
     static const int NUM_EXTRA = 8;
-	float data[GENERATIONS][NUM_EXTRA + NUM_TERMS+NUM_NON_TERMS + 3*NUM_HYENAS];
+	float data[GENERATIONS][NUM_EXTRA + NUM_OPS + 3*NUM_HYENAS];
 	float pop_bestfitness;
 	int pop_bestteam;
-	int pop_worstteam;
 
 signals:
 	void calc_iter(QString);
