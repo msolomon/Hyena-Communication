@@ -109,7 +109,7 @@ void pop::write_data(int trial){
 		 "north randm last_move constant number_calling mirror_nearest "
 		 "last_pen named landmark "
 		 // nonterminals
-		 "sum invert iflteMAG iflteCLOCKWISE ifVectorZero ";
+		 "sum subtract compare invert iflteMAG iflteCLOCKWISE ifVectorZero ";
 	for(int i = 1; i < NUM_HYENAS; i++){
 		f << "h" << i << " ";
 	}
@@ -257,7 +257,7 @@ void pop::final_test(int trial){
 		 "north randm last_move constant number_calling mirror_nearest "
 		 "last_pen named landmark "
 		 // nonterminals
-		 "sum invert iflteMAG iflteCLOCKWISE ifVectorZero ";
+		 "sum subtract compare invert iflteMAG iflteCLOCKWISE ifVectorZero ";
 	for(int i = 1; i < NUM_HYENAS; i++){
 		f << "h" << i << " ";
 	}

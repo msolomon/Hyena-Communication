@@ -12,18 +12,18 @@ using RandomLib::Random;
 #include "types.h"
 
 //// Common settings
-const int GENERATIONS = 100;
+const int GENERATIONS = 1500;
 const int POP_SIZE = 80;
 const int NUM_HYENAS = 15;
 const int NUM_LIONS = 2;
 const int TIME_STEPS = 100;
-const int NUM_TESTS = 1; // times to repeat tests to prevent luck
+const int NUM_TESTS = 5; // times to repeat tests to prevent luck
 const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const bool START_ONE_INSIDE = true; // at least one hyena inside calling radius
 const bool START_OUTSIDE_ZEBRA = false;
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const int TREE_MAX_SIZE = 5000; // size, not depth
-const ops DISABLED_OPS[] = {};
+const ops DISABLED_OPS[] = {subtract, compare};
 // Only pick one method below
 const bool OET_GENERATIONAL = true;
 const bool TEAM_GENERATIONAL = false;
