@@ -32,6 +32,8 @@ void team::reset_fitness(void) {
 	avg_lion_attacks = 0;
 	avg_dist_to_zebra = 0;
 	avg_hits = 0;
+	avg_penalty = 0;
+	avg_reward = 0;
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		hyena_fits[i] = 0;
 		hyenas[i].reset_fitness();
@@ -89,10 +91,11 @@ void team::mutate(int member) {
 	hyenas[member].mutate();
 }
 
-float team::calc_avg_fit_final(void) {
+float team::write_avg_fit_final(std::ofstream &f, int trial, int test) {
 	avg_fit = 0;
 	avg_lion_attacks = 0;
 	avg_penalty = 0;
+	avg_reward = 0;
 	avg_dist_to_zebra = 0;
 	avg_hits = 0;
 	for (int i = 0; i < NUM_HYENAS; i++) {
@@ -102,18 +105,13 @@ float team::calc_avg_fit_final(void) {
 		avg_lion_attacks += hyenas[i].get_lion_attacks();
 		avg_penalty += hyenas[i].get_penalty();
 		avg_hits += hyenas[i].get_hits();
+		avg_reward += hyenas[i].get_reward();
 	}
 	for(int i = 0; i < NUM_OPS; i++){
 		uses[i] = 0;
 		importance[i] = 0;
 	}
-//	// sum up usages
-//	for(int i = 0; i < NUM_HYENAS; i++){
-//		int *h_uses = hyenas[i].get_uses();
-//		for(int j = 0; j < NUM_OPS; j++){
-//			uses[j] += h_uses[j];
-//		}
-//	}
+
 	// sum up importance
 	for(int i = 0; i < NUM_HYENAS; i++){
 		double *h_imp = hyenas[i].get_importance();
@@ -121,16 +119,34 @@ float team::calc_avg_fit_final(void) {
 			importance[j] += h_imp[j];
 		}
 	}
-//	// divide out each usage
-//	for(int i = 0; i < NUM_OPS; i++){
-//		uses[i] /= NUM_HYENAS * NUM_TESTS * TIME_STEPS;
-//	}
+
 	// divide out each importance
+	float avg_imp = 0;
 	for(int i = 0; i < NUM_OPS; i++){
 		importance[i] /= NUM_HYENAS * TIME_STEPS;
+		avg_imp += importance[i];
 	}
+	avg_imp /= NUM_OPS;
+
 	avg_hits /= NUM_HYENAS;
 	avg_dist_to_zebra /= NUM_HYENAS;
+
+	//// Now write it all
+	f << trial << " "
+	  << test << " "
+	  << avg_dist_to_zebra << " "
+	  << avg_lion_attacks << " "
+	  << avg_penalty << " "
+	  << avg_reward << " "
+	  << avg_fit << " "
+	  << avg_hits << " "
+	  << avg_imp << " ";
+	for(int i = 0; i < NUM_OPS; i++)
+		f << importance[i] << " ";
+	for(int i = 0; i < NUM_HYENAS - 1; i++)
+		f << hyena_fits[i] << " ";
+	f << hyena_fits[NUM_HYENAS - 1] << "\n";
+
 	return avg_fit;
 }
 
@@ -138,6 +154,7 @@ float team::calc_avg_fit(void) {
 	avg_fit = 0;
 	avg_lion_attacks = 0;
     avg_penalty = 0;
+	avg_reward = 0;
 	avg_dist_to_zebra = 0;
 	avg_hits = 0;
 	for (int i = 0; i < NUM_HYENAS; i++) {
@@ -147,18 +164,13 @@ float team::calc_avg_fit(void) {
 		avg_lion_attacks += hyenas[i].get_lion_attacks();
         avg_penalty += hyenas[i].get_penalty();
 		avg_hits += hyenas[i].get_hits();
+		avg_reward += hyenas[i].get_reward();
 	}
 	for(int i = 0; i < NUM_OPS; i++){
 		uses[i] = 0;
 		importance[i] = 0;
 	}
-//	// sum up usages
-//	for(int i = 0; i < NUM_HYENAS; i++){
-//		int *h_uses = hyenas[i].get_uses();
-//		for(int j = 0; j < NUM_OPS; j++){
-//			uses[j] += h_uses[j];
-//		}
-//	}
+
 	// sum up importance
 	for(int i = 0; i < NUM_HYENAS; i++){
 		double *h_imp = hyenas[i].get_importance();
@@ -166,10 +178,7 @@ float team::calc_avg_fit(void) {
 			importance[j] += h_imp[j];
 		}
 	}
-//	// divide out each usage
-//	for(int i = 0; i < NUM_OPS; i++){
-//		uses[i] /= NUM_HYENAS * NUM_TESTS * TIME_STEPS;
-//	}
+
 	// divide out each importance
 	for(int i = 0; i < NUM_OPS; i++){
 		importance[i] /= NUM_HYENAS * NUM_TESTS * TIME_STEPS;
@@ -178,5 +187,6 @@ float team::calc_avg_fit(void) {
 	avg_lion_attacks /= NUM_TESTS;
     avg_penalty /= NUM_TESTS;
 	avg_dist_to_zebra /= NUM_HYENAS * NUM_TESTS;
+	avg_reward /= NUM_TESTS;
 	return avg_fit;
 }

@@ -58,7 +58,7 @@ public:
 	void set_num_lions(int n) {
 		the_info.num_lions = n;
 	}
-	void set_num_hyenas(char n) {
+	void set_num_hyenas(int n) {
 		the_info.num_hyenas = n;
 	}
 	void set_calling(bool b) {
@@ -89,6 +89,9 @@ public:
 	}
 	float get_fitness(void) {
 		return fitness;
+	}
+	float get_reward(void) {
+		return reward;
 	}
 	float get_avg_dist_to_zebra(void) {
 		return avg_dist_to_zebra;
@@ -122,6 +125,7 @@ public:
 	void move(void);
 	indiv &operator=(const indiv &);
 	void changeFit(float f) {
+		if(f > 0) reward += f;
 		fitness += f;
 	}
 	void mutate(void);
@@ -161,6 +165,7 @@ private:
 	int size;
 	agent_info the_info;
 	float fitness;
+	float reward;
 	float avg_dist_to_zebra;
     float attack_pen;
 	int lion_attacks;

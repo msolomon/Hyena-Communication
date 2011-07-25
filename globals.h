@@ -12,13 +12,13 @@ using RandomLib::Random;
 #include "types.h"
 
 //// Common settings
-const int GENERATIONS = 1500;
+const int GENERATIONS = 100;
 const int POP_SIZE = 80;
-const char NUM_HYENAS = 15;
-const char NUM_LIONS = 2;
+const int NUM_HYENAS = 15;
+const int NUM_LIONS = 2;
 const int TIME_STEPS = 100;
-const int NUM_TESTS = 5; // times to repeat tests to prevent luck
-const int FINAL_TESTS = 500; // number of times to run best hyena of last trial
+const int NUM_TESTS = 1; // times to repeat tests to prevent luck
+const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const bool START_ONE_INSIDE = true; // at least one hyena inside calling radius
 const bool START_OUTSIDE_ZEBRA = false;
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
@@ -40,6 +40,7 @@ const bool HYENA_MARKERS = true; // draw short line to ID different hyenas
 const char* const VIDEO_TEMPLATE = "video_%1.txt";
 const char* const DATA_TEMPLATE = "data_%1.txt";
 const char* const GRAPHVIZ_TEMPLATE = "hyena_%1.gv";
+const char* const FINAL_TEMPLATE = "final_%1.txt";
 
 //// Other settings
 // Selection and reproduction

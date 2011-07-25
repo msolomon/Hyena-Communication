@@ -34,15 +34,17 @@ void pop::save_data(int iteration){
 	data[iteration][3] = the_pop[pop_bestteam]->get_avg_lion_attacks();
     // average penalty from lion attacks (for whole team/test, not per hyena)
     data[iteration][4] = the_pop[pop_bestteam]->get_avg_penalty();
+	// average bonus from getting close to zebra (whole team/test, not per hy.)
+	data[iteration][5] = the_pop[pop_bestteam]->get_avg_reward();
 	// average fitness for best team (for whole team per test, not per hyena)
-    data[iteration][5] = the_pop[pop_bestteam]->get_avg_fit();
+	data[iteration][6] = the_pop[pop_bestteam]->get_avg_fit();
 	// best team average number of hits
-    data[iteration][6] = the_pop[pop_bestteam]->get_avg_hits();
+	data[iteration][7] = the_pop[pop_bestteam]->get_avg_hits();
 	// best team average importance of a given node type
-    data[iteration][7] = 0;
+	data[iteration][8] = 0;
 	double *imp = the_pop[pop_bestteam]->get_importance();
 	for(int i = 0; i < NUM_OPS; i++){
-		data[iteration][7] += imp[i] / (NUM_OPS);
+		data[iteration][8] += imp[i] / (NUM_OPS);
 	}
 
 	/*
@@ -101,10 +103,10 @@ void pop::write_data(int trial){
 
 	// provide column labels
 	f << "trial gen time avg_fit best_zeb_dist best_num_attacks best_pen "
-		 "best_fit best_hits best_imp "
+		 "best_reward best_fit best_hits best_imp "
 		 // terminals
 		 "zebra nearest_hyena nearest_lion nearest_calling "
-		 "north randm last_move constant number_hyenas mirror_nearest "
+		 "north randm last_move constant number_calling mirror_nearest "
 		 "last_pen named landmark "
 		 // nonterminals
 		 "sum invert iflteMAG iflteCLOCKWISE ifVectorZero ";
@@ -239,15 +241,32 @@ void pop::evolve(int trial) {
 	f.close();
 
     // retest the best team of the last gen FINAL_TESTS times and save the data
-    final_test();
+	final_test(trial);
 
 }
 
-void pop::final_test(){
+void pop::final_test(int trial){
+	QString fname = QString(FINAL_TEMPLATE).arg(trial+1);
+	ofstream f;
+	f.open(fname.toStdString().c_str());
+	// provide column labels
+	f << "trial id best_zeb_dist best_num_attacks best_pen "
+		 "best_reward best_fit best_hits best_imp "
+		 // terminals
+		 "zebra nearest_hyena nearest_lion nearest_calling "
+		 "north randm last_move constant number_calling mirror_nearest "
+		 "last_pen named landmark "
+		 // nonterminals
+		 "sum invert iflteMAG iflteCLOCKWISE ifVectorZero ";
+	for(int i = 1; i < NUM_HYENAS; i++){
+		f << "h" << i << " ";
+	}
+	f << "h" << (int)NUM_HYENAS << "\n";
+
 	ENV->set_up(the_pop[pop_bestteam]);
 	int testnum = 0;
 	for (int test = 0; test < FINAL_TESTS; test++) {
-		test == NUM_TESTS ? testnum = 0 : testnum = test;
+		testnum == (NUM_TESTS-1) ? testnum = 0 : testnum++;
 		if(testnum == 0) // need to generate more test positions
 			ENV->generate_positions();
 		the_pop[pop_bestteam]->reset_fitness();
@@ -258,8 +277,10 @@ void pop::final_test(){
 			ENV->move();
 			ENV->evaluate();
 		}
-		the_pop[pop_bestteam]->calc_avg_fit();
+
+		the_pop[pop_bestteam]->write_avg_fit_final(f, trial+1, test+1);
 	}
+	f.close();
 }
 
 /*

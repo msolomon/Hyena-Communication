@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <cmath>
 
 #include <QString>
 
@@ -21,6 +22,7 @@ public:
 	node(void);
 	void grow(int, int);
 	vect evaluate(agent_info *, int);
+	vect compare_vectors(vect, vect);
 	void mutate(void);
 	void clear(void);
 	void copy(node *);

@@ -16,7 +16,6 @@ public:
 	void run();
 	int select_best_team(int);
 	int tourn_select(int);
-        // TODO: fix TEAM_SIZE and re-enable calls to write_fitnesses and save_data
 //	void write_fitnesses(void);
 //	void save_data(int, int);
 	void write_data(int);
@@ -35,7 +34,7 @@ public:
 	int member_select(int, int);
 	void add_blank_nodes();
 	void draw_best(int, int);
-    void final_test();
+	void final_test(int);
 	qint64 trialstarttime;
 	DrawHelper *helper;
 	environment *ENV;
@@ -45,7 +44,7 @@ private:
 	team *the_pop[POP_SIZE];
 //        float data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
 	// data. all team fitnesses plus 8 iteration attributes (avg. and soforth)
-    static const int NUM_EXTRA = 8;
+	static const int NUM_EXTRA = 9;
 	float data[GENERATIONS][NUM_EXTRA + NUM_OPS + 3*NUM_HYENAS];
 	float pop_bestfitness;
 	int pop_bestteam;

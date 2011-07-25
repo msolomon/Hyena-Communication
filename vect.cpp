@@ -21,7 +21,7 @@ vect& vect::operator+=(const vect &v2){
 	y += cos(v2.direction) * v2.magnitude;
 
 	magnitude = dist(x, y);
-	direction = atan2(x, y);
+    direction = atan2(y, x);
 	return *this;
 }
 
@@ -32,7 +32,7 @@ const vect vect::operator+(const vect& v2) const {
 }
 
 void vect::random(void) {
-	direction = Random::Global() / ((Random::max) / (2.0 * PI));
+	direction = (Random::Global() / ((Random::max) / (2.0 * PI))) - PI;
 	magnitude = Random::Global() / (Random::max / (float) X); // proportion of map
 }
 

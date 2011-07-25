@@ -9,12 +9,11 @@ public:
 	vect();
 	void random(void);
 	void reset();
-	float direction;
-	float magnitude;
 	vect& operator=(const vect&);
 	vect& operator+=(const vect&);
 	const vect operator+(const vect&) const;
-private:
+    float direction;
+    float magnitude;
 };
 
 #endif

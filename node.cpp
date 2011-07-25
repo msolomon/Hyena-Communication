@@ -22,11 +22,13 @@ void node::set_child(int c, node *child) {
 }
 
 int node::find_child(node *c) {
-	int num = 0;
+    int num = 0; // arity of operator
 	switch (operation) {
 	// non-terminals
 	case sum:
-		num = 2;
+	case subtract:
+    case compare:
+        num = 2;
 		break;
 	case invert:
 		num = 1;
@@ -79,7 +81,7 @@ void node::copy(node *p) {
 		the_const->direction = p->the_const->direction;
 		the_const->magnitude = p->the_const->magnitude;
 		return;
-	case number_hyenas:
+	case number_calling:
 	case mirror_nearest:
 	case last_pen:
 	case named:
@@ -87,6 +89,8 @@ void node::copy(node *p) {
 		return;
 	// non-terminals
 	case sum:
+	case subtract:
+	case compare:
 		children = new node*[2];
 		children[0] = new node();
 		children[0]->copy(p->children[0]);
@@ -124,7 +128,7 @@ void node::copy(node *p) {
 void node::clear(void) {
 	if(this == NULL)
 		return;
-	int num = 0;
+    int num = 0; // arity of operator
 	switch (operation) {
 	// terminals
 	case zebra:
@@ -138,7 +142,7 @@ void node::clear(void) {
 	case constant:
 		delete the_const;
 		return;
-	case number_hyenas:
+	case number_calling:
 	case mirror_nearest:
 	case last_pen:
 	case named:
@@ -146,6 +150,8 @@ void node::clear(void) {
 		return;
 	// non-terminals
 	case sum:
+    case subtract:
+    case compare:
 		num = 2;
 		break;
 	case invert:
@@ -183,7 +189,7 @@ void node::mutate(void) {
 	case randm:
 	case last_move:
 	case constant:
-	case number_hyenas:
+	case number_calling:
 	case mirror_nearest:
 	case last_pen:
 	case named:
@@ -203,6 +209,8 @@ void node::mutate(void) {
 		break;
 	// non-terminals
 	case sum:
+    case subtract:
+    case compare:
 		children[0]->mutate();
 		children[1]->mutate();
 		break;
@@ -260,7 +268,7 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		return (the_indiv->nearest_calling);
 	case north:
 		the_indiv->importance[north] += BASE_IMPORTANCE / depth;
-		temp.direction = 0;
+        temp.direction = 0;
 		temp.magnitude = 1;
 		return (temp);
 	case randm:
@@ -273,8 +281,8 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 	case constant:
 		the_indiv->importance[constant] += BASE_IMPORTANCE / depth;
 		return (*the_const);
-	case number_hyenas:
-		the_indiv->importance[number_hyenas] += BASE_IMPORTANCE / depth;
+	case number_calling:
+		the_indiv->importance[number_calling] += BASE_IMPORTANCE / depth;
 		temp.direction = 0;
 		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
 		return temp;
@@ -297,10 +305,20 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		the_indiv->importance[sum] += BASE_IMPORTANCE / depth;
 		return children[0]->evaluate(the_indiv, depth) +
 				children[1]->evaluate(the_indiv, depth);
+    case subtract:
+        the_indiv->importance[subtract] += BASE_IMPORTANCE / depth;
+        temp = children[0]->evaluate(the_indiv, depth) +
+                children[1]->evaluate(the_indiv, depth);
+        temp.direction > 0 ? temp.direction -= PI : temp.direction += PI;
+        return temp;
+    case compare:
+		the_indiv->importance[compare] += BASE_IMPORTANCE / depth;
+		return compare_vectors(children[0]->evaluate(the_indiv, depth),
+							   children[1]->evaluate(the_indiv, depth));
 	case invert:
 		the_indiv->importance[invert] += BASE_IMPORTANCE / depth;
-		temp = children[0]->evaluate(the_indiv, depth);
-		temp.direction += PI;
+        temp = children[0]->evaluate(the_indiv, depth);
+        temp.direction > 0 ? temp.direction -= PI : temp.direction += PI;
 		return (temp);
 	case iflteMAG:
 		the_indiv->importance[iflteMAG] += BASE_IMPORTANCE / depth;
@@ -330,6 +348,25 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		error.close();
 		return temp;
 	}
+}
+
+vect node::compare_vectors(vect a, vect b){
+    vect temp;
+	float ax, ay, bx, by;
+    ax = sin(a.direction) * a.magnitude;
+    ay = cos(a.direction) * a.magnitude;
+
+	bx = sin(b.direction) * b.magnitude;
+	by = cos(b.direction) * b.magnitude;
+
+    // distance between the two points
+	temp.magnitude = dist(bx - ax, by - ay);
+	// angle between (0, 0) and the end points
+	temp.direction = atan2(by, bx) - atan2(ay, ax);
+	if(temp.direction > PI) temp.direction -= 2*PI;
+	else if(temp.direction < -PI) temp.direction += 2*PI;
+	temp.direction = fabs(temp.direction);
+    return temp;
 }
 
 void node::grow(int max_d, int depth){
@@ -365,13 +402,15 @@ void node::grow(int max_d, int depth){
 			the_const = new vect();
 			the_const->random();
 			break;
-		case number_hyenas:
+		case number_calling:
 		case mirror_nearest:
 		case last_pen:
 		case named:
 		case landmark:
 			break;
         case sum:
+		case subtract:
+		case compare:
 			children = new node*[2];
 			children[0] = new node();
 			children[0]->grow(max_d,depth+1);
@@ -432,7 +471,7 @@ int node::calc_size() {
 	case randm:
 	case last_move:
 	case constant:
-	case number_hyenas:
+	case number_calling:
 	case mirror_nearest:
 	case last_pen:
 	case named:
@@ -440,6 +479,8 @@ int node::calc_size() {
 		return size;
 	// non-terminals
 	case sum:
+	case subtract:
+	case compare:
 		size += children[0]->calc_size();
 		size += children[1]->calc_size();
 		return size;
@@ -482,7 +523,7 @@ node *node::get_point(int pn, int &current, node *&parent) {
 	case randm:
 	case last_move:
 	case constant:
-	case number_hyenas:
+	case number_calling:
 	case mirror_nearest:
 	case last_pen:
 	case named:
@@ -490,6 +531,8 @@ node *node::get_point(int pn, int &current, node *&parent) {
 		return this;
 	// non-terminals
 	case sum:
+	case subtract:
+	case compare:
 		parent = this;
 		answer = children[0]->get_point(pn, current, parent);
 		if (current >= pn)
@@ -564,7 +607,7 @@ QString node::graphviz(node *parent, QString extraLabel){
         output += QString("constant (mag=%1 dir=%2)\", shape=plaintext]\n")
                 .arg(the_const->magnitude).arg(the_const->direction);
 		break;
-	case number_hyenas:
+	case number_calling:
         output += "num_hyenas\", shape=plaintext]\n";
 		break;
 	case mirror_nearest:
@@ -584,6 +627,18 @@ QString node::graphviz(node *parent, QString extraLabel){
         output += "sum\", shape=plaintext]\n";
 		for (int i = 0; i < 2; i++) {
             output += children[i]->graphviz(this, QString::number(i));
+		}
+		break;
+	case subtract:
+		output += "subtract\", shape=plaintext]\n";
+		for (int i = 0; i < 2; i++) {
+			output += children[i]->graphviz(this, QString::number(i));
+		}
+		break;
+	case compare:
+		output += "compare\", shape=plaintext]\n";
+		for (int i = 0; i < 2; i++) {
+			output += children[i]->graphviz(this, QString::number(i));
 		}
 		break;
 	case invert:

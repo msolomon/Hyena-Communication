@@ -3,11 +3,13 @@
 
 #include "globals.h"
 #include "indiv.h"
+#include <fstream>
 
 class team {
 public:
 	team();
 	float calc_avg_fit();
+	float write_avg_fit_final(std::ofstream&, int, int);
 	float get_avg_fit() {
 		return this->avg_fit;
 	}
@@ -34,6 +36,9 @@ public:
     float get_avg_penalty() {
         return avg_penalty;
     }
+	float get_avg_reward() {
+		return avg_reward;
+	}
 	float get_avg_hits() {
 		return avg_hits;
 	}
@@ -51,6 +56,7 @@ public:
 	float avg_fit; // average team fitness
 	float avg_lion_attacks;
     float avg_penalty;
+	float avg_reward;
 	float avg_dist_to_zebra;
 	float avg_hits;
 	float avg_size;
