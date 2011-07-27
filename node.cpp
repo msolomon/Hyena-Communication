@@ -307,10 +307,11 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 				children[1]->evaluate(the_indiv, depth);
     case subtract:
         the_indiv->importance[subtract] += BASE_IMPORTANCE / depth;
-        temp = children[0]->evaluate(the_indiv, depth) +
-                children[1]->evaluate(the_indiv, depth);
+		// get second input and invert it
+		temp = children[1]->evaluate(the_indiv, depth);
         temp.direction > 0 ? temp.direction -= PI : temp.direction += PI;
-        return temp;
+		// add it to the first input
+		return (temp + children[0]->evaluate(the_indiv, depth));
     case compare:
 		the_indiv->importance[compare] += BASE_IMPORTANCE / depth;
 		return compare_vectors(children[0]->evaluate(the_indiv, depth),
