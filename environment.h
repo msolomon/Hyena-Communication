@@ -17,7 +17,7 @@ public:
 	void draw(DrawHelper*, int);
 	void rand_move(void);
 	void move(void);
-	void evaluate();
+	void evaluate(int);
 	void set_up(team *);
 	std::string fname;
 	void generate_positions();

@@ -362,7 +362,7 @@ vect node::compare_vectors(vect a, vect b){
     // distance between the two points
 	temp.magnitude = dist(bx - ax, by - ay);
 	// angle between (0, 0) and the end points
-	temp.direction = atan2(by, bx) - atan2(ay, ax);
+	temp.direction = atan2(bx, by) - atan2(ax, ay);
 	if(temp.direction > PI) temp.direction -= 2*PI;
 	else if(temp.direction < -PI) temp.direction += 2*PI;
 	temp.direction = fabs(temp.direction);

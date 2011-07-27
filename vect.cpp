@@ -21,7 +21,7 @@ vect& vect::operator+=(const vect &v2){
 	y += cos(v2.direction) * v2.magnitude;
 
 	magnitude = dist(x, y);
-    direction = atan2(y, x);
+	direction = atan2(x, y);
 	return *this;
 }
 

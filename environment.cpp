@@ -83,14 +83,14 @@ void environment::place_agents(int test){
 	}
 }
 
-void environment::evaluate(void) {
+void environment::evaluate(int timestep) {
 	float tempx, tempy;
 	float radius;
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		tempx = agents->hyenas[i].getX();
 		tempy = agents->hyenas[i].getY();
 		radius = dist((tempx - ZEBRAX), (tempy - ZEBRAY));
-		agents->hyenas[i].changeFit(1.0 / (1.0 + radius)); // near zebra
+		agents->hyenas[i].changeFit(1.0/(1.0 + radius)); // near zebra
 		//		radius = sqrt(radius);
 
 		agents->hyenas[i].inc_dist_to_zebra(radius);
@@ -135,14 +135,14 @@ void environment::update_vectors(void){
 
 		if(!is_disabled(landmark)){
 			temp.magnitude = dist(agentx - landmarkx, agenty - landmarky);
-            temp.direction = atan2(agenty - landmarky, agentx - landmarkx);
+			temp.direction = atan2(agentx - landmarkx, agenty - landmarky);
 			agents->hyenas[i].set_landmark(temp);
 		}
 
 		temp.magnitude = distance_sq(agentx - ZEBRAX, agenty - ZEBRAY);
 		if (temp.magnitude < CALLING_RANGE_SQ) { // min range to zebra
 			temp.magnitude = sqrt(temp.magnitude); // now calculate sqrt
-            temp.direction = atan2(agenty - ZEBRAY, agentx - ZEBRAX);
+			temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
 			if(CALLING_ENABLED){
 				agents->hyenas[i].set_calling(true);
 				num_calling++;
@@ -180,8 +180,8 @@ void environment::update_vectors(void){
 			agents->hyenas[i].set_mirrored(temp);
 		} else { // set to nearest hyena
 			temp.magnitude = sqrt(min_mag);
-            temp.direction = atan2(agenty - agents->hyenas[the_j].getY(),
-                                   agentx - agents->hyenas[the_j].getX());
+			temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
+								   agenty - agents->hyenas[the_j].getY());
 			// set the closest hyena and mirror input
 			agents->hyenas[i].set_nearest_hyena(temp);
 			agents->hyenas[i].set_mirrored(agents->hyenas[the_j].get_last_move());
@@ -206,8 +206,8 @@ void environment::update_vectors(void){
 				// set named vector, if we are on the named hyena
 				if(j == 0){
 					temp.magnitude = sqrt(magnitude);
-                    temp.direction = atan2(agenty - agents->hyenas[j].getY(),
-                                           agentx - agents->hyenas[j].getX());
+					temp.direction = atan2(agentx - agents->hyenas[j].getX(),
+										   agenty - agents->hyenas[j].getY());
 					agents->hyenas[i].set_named(temp);
 					setNamed = true;
 				}
@@ -226,8 +226,8 @@ void environment::update_vectors(void){
 			temp.direction = 0;
 		} else {
 			temp.magnitude = sqrt(min_mag);
-            temp.direction = atan2(agenty - agents->hyenas[the_j].getY(),
-                                   agentx - agents->hyenas[the_j].getX());
+			temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
+								   agenty - agents->hyenas[the_j].getY());
 		}
 		agents->hyenas[i].set_nearestcalling(temp);
 
@@ -246,8 +246,8 @@ void environment::update_vectors(void){
 			temp.magnitude = 0;
 		} else{
 			temp.magnitude = sqrt(magnitude);
-            temp.direction = atan2(agenty - agents->lions[the_j].getY(),
-                                   agentx - agents->lions[the_j].getX());
+			temp.direction = atan2(agentx - agents->lions[the_j].getX(),
+								   agenty - agents->lions[the_j].getY());
 		}
 		agents->hyenas[i].set_nearest_lion(temp);
 	}
@@ -271,8 +271,8 @@ void environment::update_vectors(void){
 		}
 		if(min_mag < LION_HYENA_RADIUS_SQ){ // lion close enough to hyena
 			temp.magnitude = sqrt(min_mag);
-            temp.direction = atan2(agenty - agents->hyenas[the_j].getY(),
-                                   agentx - agents->hyenas[the_j].getX());
+			temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
+								   agenty - agents->hyenas[the_j].getY());
 		}
 		else {
 			temp.direction = 0;
@@ -295,7 +295,7 @@ void environment::update_vectors(void){
 
 		// lion -> zebra
 		temp.magnitude = sqrt(distance_sq(agentx - ZEBRAX, agenty - ZEBRAY));
-        temp.direction = atan2(agenty - ZEBRAY, agentx - ZEBRAX);
+		temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
 		agents->lions[i].set_zebra(temp);
 	}
 }

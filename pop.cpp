@@ -145,7 +145,7 @@ void pop::evaluate_team(int member){
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
 			ENV->move();
-			ENV->evaluate();
+			ENV->evaluate(g);
 		}
 	}
 	the_pop[member]->calc_avg_fit();
@@ -162,7 +162,7 @@ void pop::draw_best(int member, int iteration){
 		ENV->update_vectors();
 		ENV->draw(helper, iteration);
 		ENV->move();
-		ENV->evaluate();
+		ENV->evaluate(g);
 	}
 	best.clear();
 }
@@ -275,7 +275,7 @@ void pop::final_test(int trial){
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
 			ENV->move();
-			ENV->evaluate();
+			ENV->evaluate(g);
 		}
 
 		the_pop[pop_bestteam]->write_avg_fit_final(f, trial+1, test+1);
