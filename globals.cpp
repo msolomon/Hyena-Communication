@@ -3,7 +3,7 @@
 //// Global function definitions
 
 float select_from_numtests(float fitnesses[NUM_TESTS]){
-	const int end = ceil(NUM_TESTS/2.0);
+	const int end = (int) ceil(NUM_TESTS/2.0);
 	const bool odd = ((NUM_TESTS % 2) == 1);
 	float fit;
 	switch(SELECTION_METHOD){

@@ -18,13 +18,14 @@ const int NUM_HYENAS = 15;
 const int NUM_LIONS = 2;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat tests to prevent luck
-const int FINAL_TESTS = 2; // number of times to run best hyena of last trial
-const bool START_ONE_INSIDE = true; // at least one hyena inside calling radius
-const bool START_OUTSIDE_ZEBRA = false;
+const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
-const int TREE_MAX_SIZE = 2; // size, not depth
+const int TREE_MAX_SIZE = 5000; // size, not depth
 const ops DISABLED_OPS[] = {};
 const selection_method SELECTION_METHOD = median;
+// 0 to disable, else start hyenas within X units: exactly 1 non-named inside
+// the calling radius
+const float RADIUS_START = 0;
 // Only pick one method below
 const bool OET_GENERATIONAL = true;
 const bool TEAM_GENERATIONAL = false;
@@ -42,6 +43,7 @@ const char* const VIDEO_TEMPLATE = "video_%1.txt";
 const char* const DATA_TEMPLATE = "data_%1.txt";
 const char* const GRAPHVIZ_TEMPLATE = "hyena_%1.gv";
 const char* const FINAL_TEMPLATE = "final_%1.txt";
+const char* const FINAL_VIDEO_TEMPLATE = "finalvideo_%1.txt";
 
 //// Other settings
 // Selection and reproduction
@@ -57,6 +59,8 @@ const float ZEBRAX = X / 2.0;
 const float ZEBRAY = Y / 2.0;
 const bool CALLING_ENABLED = true;
 const float CALLING_RANGE = 8; // hyenas call when close to zebra
+const bool START_ONE_INSIDE = true; // at least one hyena inside calling radius
+const bool START_OUTSIDE_ZEBRA = false;
 const double BASE_IMPORTANCE = 5000.0;
 const float LION_ATTACK_RADIUS = 3;
 const float LION_ATTACK_PENALTY = 3;

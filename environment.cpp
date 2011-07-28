@@ -13,56 +13,73 @@ void environment::set_up(team *a) {
 }
 
 void environment::generate_positions(){
-	bool one_inside = false;
 	for(int i = 0; i < NUM_TESTS; i++){
+		float dir, mag;
 		for(int j = 0; j < NUM_LIONS; j++){
 			// place lions within 1 unit of zebra
-			lioncoord[i][j][0] = ZEBRAX + Random::Global.FloatW();
-			lioncoord[i][j][1] = ZEBRAY + Random::Global.FloatW();
+			dir = Random::Global.FixedS<float>() * 2 * PI;
+			mag = Random::Global.Fixed<float>();
+			lioncoord[i][j][0] = ZEBRAX + sin(dir) * mag;
+			lioncoord[i][j][1] = ZEBRAY + cos(dir) * mag;
 		}
 
-		for(int j = 0; j < NUM_HYENAS; j++){
-			float x, y;
-			x = ZEBRAX;
-			y = ZEBRAY;
-			if(START_OUTSIDE_ZEBRA){
-				while(distance_sq(ZEBRAX - x, ZEBRAY - y) < CALLING_RANGE_SQ){
-					x = Random::Global() / ((float)Random::max / (float)X);
-					y = Random::Global() / ((float)Random::max / (float)Y);
+		if(RADIUS_START > 0){
+			// pick a random non-named hyena
+			int inside = Random::Global.IntegerC(1, NUM_HYENAS - 1);
+			dir = Random::Global.FixedS<float>() * 2 * PI;
+			mag = Random::Global.Fixed<float>() * CALLING_RANGE;
+			hyenacoord[i][inside][0] = ZEBRAX + sin(dir) * mag;
+			hyenacoord[i][inside][1] = ZEBRAY + cos(dir) * mag;
+
+			// place the rest outside CALLING_RANGE and inside RADIUS_START
+			for(int j = 0; j < NUM_HYENAS; j++){
+				if(j == inside) continue;
+				dir = Random::Global.FixedS<float>() * 2 * PI;
+				mag = Random::Global.Fixed<float>() *
+						(RADIUS_START - CALLING_RANGE) + CALLING_RANGE;
+				hyenacoord[i][j][0] = ZEBRAX + sin(dir) * mag;
+				hyenacoord[i][j][1] = ZEBRAY + cos(dir) * mag;
+			}
+		} else{ // randomize x,y seperately (non-uniform w.r.t. radius)
+			bool one_inside = false;
+			for(int j = 0; j < NUM_HYENAS; j++){
+				float x, y;
+				x = ZEBRAX;
+				y = ZEBRAY;
+				if(START_OUTSIDE_ZEBRA){
+					while(distance_sq(ZEBRAX - x, ZEBRAY - y) < CALLING_RANGE_SQ){
+						x = Random::Global.Fixed<float>() * X;
+						y = Random::Global.Fixed<float>() * Y;
+					}
+				} else{ // start outside lion radius instead
+					float distnce = 0;
+					while (distnce <
+						   ((LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1))){
+						x = Random::Global.Fixed<float>() * X;
+						y = Random::Global.Fixed<float>() * Y;
+						distnce = distance_sq(ZEBRAX - x, ZEBRAY - y);
+					}
+					if(distnce < CALLING_RANGE_SQ){
+						one_inside = true;
+					}
 				}
-			} else{ // start outside lion radius instead
-				float distnce = 0;
-				while (distnce <
-					   ((LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1))){
-					x = Random::Global() / ((float)Random::max / (float)X);
-					y = Random::Global() / ((float)Random::max / (float)Y);
-					distnce = distance_sq(ZEBRAX - x, ZEBRAY - y);
-				}
-				if(distnce < CALLING_RANGE_SQ){
-					one_inside = true;
-				}
+
+				hyenacoord[i][j][0] = x;
+				hyenacoord[i][j][1] = y;
 			}
 
-			hyenacoord[i][j][0] = x;
-			hyenacoord[i][j][1] = y;
-		}
-
-		if(START_ONE_INSIDE && one_inside == false){
-			i--; // redo this test's positions until one starts inside
-			continue;
+			if(START_ONE_INSIDE && one_inside == false){
+				i--; // redo this test's positions until one starts inside
+				continue;
+			}
 		}
 
 		// place the landmark inside the calling radius
 		if(!is_disabled(landmark)){
-			float x, y;
-			do{
-				x = (Random::Global() / ((float)Random::max / (2*(float)CALLING_RANGE)))
-						+ (ZEBRAX - CALLING_RANGE);
-				y = (Random::Global() / ((float)Random::max / (2*(float)CALLING_RANGE)))
-						+ (ZEBRAY - CALLING_RANGE);
-			} while (distance_sq(ZEBRAX - x, ZEBRAY - y) >= CALLING_RANGE_SQ);
-			landmarkcoord[i][0] = x;
-			landmarkcoord[i][1] = y;
+			dir = Random::Global.FixedS<float>() * 2 * PI;
+			mag = Random::Global.Fixed<float>() * CALLING_RANGE;
+			landmarkcoord[i][0] = ZEBRAX + sin(dir) * mag;
+			landmarkcoord[i][1] = ZEBRAY + cos(dir) * mag;
 		}
 	}
 }
@@ -301,8 +318,10 @@ void environment::update_vectors(void){
 }
 
 void environment::draw(DrawHelper* helper, int itera) {
-	helper->iter.enqueue(itera);
-	helper->landmarks.enqueue(QPointF(landmarkx, landmarky));
+	if(GUI){
+		helper->iter.enqueue(itera);
+		helper->landmarks.enqueue(QPointF(landmarkx, landmarky));
+	}
 
 	QStringList list;
 	list.reserve(NUM_LIONS + NUM_HYENAS + 3);

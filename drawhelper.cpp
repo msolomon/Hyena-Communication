@@ -3,11 +3,12 @@
 const float hyenaSize = .8;
 
 DrawHelper::DrawHelper() {
-	backgroundBrush = QBrush(QColor(180, 240, 150));
+	backgroundBrush = QBrush(QColor(130, 200, 110));
 	QColor hyenaColor = QColor(139, 69, 19);
 	QColor lionColor = QColor(220, 220, 20);
 	QColor zebraColor = QColor(220, 20, 20);
 	QColor landmarkColor = QColor(30, 200, 30);
+	QColor radStartColor = QColor(180, 240, 150);
 
 	zeb = QPointF(ZEBRAX, ZEBRAY);
 	hyenaPen = QPen(QBrush(hyenaColor), hyenaSize, Qt::SolidLine, Qt::RoundCap);
@@ -17,6 +18,7 @@ DrawHelper::DrawHelper() {
 	lionRadPen = QPen(QBrush(lionColor), 2*LION_ATTACK_RADIUS, Qt::SolidLine, Qt::RoundCap);
     zebraPen = QPen(QBrush(zebraColor), 2*1, Qt::SolidLine, Qt::RoundCap);
 	callRadPen = QPen(QBrush(zebraColor), 2*CALLING_RANGE, Qt::SolidLine, Qt::RoundCap);
+	radStartPen = QPen(QBrush(radStartColor), 2*RADIUS_START, Qt::SolidLine, Qt::RoundCap);
 	landmarkPen = QPen(QBrush(landmarkColor), 2, Qt::SolidLine, Qt::RoundCap);
 
 	timestep = 0;
@@ -65,6 +67,10 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 		painter->setPen(landmarkPen);
 		painter->drawPoint(landmarks.dequeue());
 	}
+
+	painter->setOpacity(zebraOpacity);
+	painter->setPen(radStartPen);
+	painter->drawPoint(zeb);
 	painter->setPen(zebraPen);
 	painter->drawPoint(zeb);
 	painter->setOpacity(radiusOpacity);

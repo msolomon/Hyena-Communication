@@ -1,5 +1,6 @@
 #include "pop.h"
 #include <QString>
+#include <string>
 
 using namespace std;
 
@@ -253,8 +254,10 @@ void pop::evolve(int trial) {
 }
 
 void pop::final_test(int trial){
+	// set the draw video name
+//	ENV->fname = QString(FINAL_VIDEO_TEMPLATE).arg(trial+1).toStdString();
 	QString fname = QString(FINAL_TEMPLATE).arg(trial+1);
-	ofstream f;
+	ofstream f, f2;
 	f.open(fname.toStdString().c_str());
 	// provide column labels
 	f << "trial id best_zeb_dist best_num_attacks best_pen "
@@ -271,7 +274,7 @@ void pop::final_test(int trial){
 	f << "h" << (int)NUM_HYENAS << "\n";
 
 	ENV->set_up(the_pop[pop_bestteam]);
-	int testnum = 0;
+	int testnum = -1;
 	for (int test = 0; test < FINAL_TESTS; test++) {
 		testnum == (NUM_TESTS-1) ? testnum = 0 : testnum++;
 		if(testnum == 0) // need to generate more test positions
@@ -279,10 +282,21 @@ void pop::final_test(int trial){
 		the_pop[pop_bestteam]->reset_fitness();
 		ENV->place_agents(testnum);
 		the_pop[pop_bestteam]->reset_inputs();
+		if(test % DRAW_EVERY == (DRAW_EVERY - 1)){
+			f2.open(ENV->fname.c_str(), ios_base::app);
+			f2 << "generation " << test + 1 << "\n";
+			f2.close();
+			cout << "Retest " << test + 1 << " of " << FINAL_TESTS <<
+					" (" << (test+1)/(float)FINAL_TESTS * 100 << "% of trial " <<
+					trial + 1 << ")" << endl;
+		}
+
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
+			if(test % DRAW_EVERY == (DRAW_EVERY - 1))
+				ENV->draw(helper, test);
 			ENV->move();
-            ENV->evaluate(test, g);
+			ENV->evaluate(testnum, g);
 		}
 
 		the_pop[pop_bestteam]->write_team_fit_final(f, trial+1, test+1);
