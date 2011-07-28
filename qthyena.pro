@@ -31,7 +31,8 @@ SOURCES += qthyena.cpp \
     vect.cpp \
     widget.cpp \
     drawhelper.cpp \
-    playback.cpp
+    playback.cpp \
+    globals.cpp
     
 FORMS += qthyena.ui \
     playback.ui

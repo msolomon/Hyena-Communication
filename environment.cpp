@@ -83,14 +83,14 @@ void environment::place_agents(int test){
 	}
 }
 
-void environment::evaluate(int timestep) {
+void environment::evaluate(int test, int timestep) {
 	float tempx, tempy;
 	float radius;
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		tempx = agents->hyenas[i].getX();
 		tempy = agents->hyenas[i].getY();
 		radius = dist((tempx - ZEBRAX), (tempy - ZEBRAY));
-		agents->hyenas[i].changeFit(1.0/(1.0 + radius)); // near zebra
+		agents->hyenas[i].changeFit(1.0/(1.0 + radius), test); // near zebra
 		//		radius = sqrt(radius);
 
 		agents->hyenas[i].inc_dist_to_zebra(radius);
@@ -100,7 +100,7 @@ void environment::evaluate(int timestep) {
             if (radius < LION_ATTACK_RADIUS_SQ) { // not too close to lions
                 float penalty = LION_ATTACK_PENALTY *
                         (sqrt(radius) - LION_ATTACK_RADIUS);
-                agents->hyenas[i].changeFit(penalty); // near lion
+				agents->hyenas[i].changeFit(penalty, test); // near lion
                 agents->hyenas[i].inc_lion_attacks(penalty);
 			}
 		}

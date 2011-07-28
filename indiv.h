@@ -87,9 +87,20 @@ public:
 	inline float getY(void) {
 		return y;
 	}
-	float get_fitness(void) {
-		return fitness;
+	float get_mean_fitness(void){
+		float fit = 0;
+		for(int i = 0; i < NUM_TESTS; i++){
+			fit += fitnesses[i];
+		}
+		return fit;
 	}
+	float get_fitness(){
+		return select_from_numtests(fitnesses);
+	}
+
+    float get_fitness(int test) {
+        return fitnesses[test];
+    }
 	float get_reward(void) {
 		return reward;
 	}
@@ -124,9 +135,9 @@ public:
 	void lion_move(void);
 	void move(void);
 	indiv &operator=(const indiv &);
-	void changeFit(float f) {
+    void changeFit(float f, int test) {
 		if(f > 0) reward += f;
-		fitness += f;
+        fitnesses[test] += f;
 	}
 	void mutate(void);
 	void clear(void);
@@ -164,7 +175,7 @@ public:
 private:
 	int size;
 	agent_info the_info;
-	float fitness;
+    float fitnesses[NUM_TESTS];
 	float reward;
 	float avg_dist_to_zebra;
     float attack_pen;

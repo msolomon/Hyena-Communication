@@ -8,10 +8,10 @@
 class team {
 public:
 	team();
-	float calc_avg_fit();
-	float write_avg_fit_final(std::ofstream&, int, int);
-	float get_avg_fit() {
-		return this->avg_fit;
+	float calc_team_fit();
+	float write_team_fit_final(std::ofstream&, int, int);
+	float get_team_fit() {
+		return this->team_fit;
 	}
 	void calc_size();
 	void mutate();
@@ -53,7 +53,7 @@ public:
 	indiv hyenas[NUM_HYENAS];
 	indiv lions[NUM_LIONS];
 	float hyena_fits[NUM_HYENAS];
-	float avg_fit; // average team fitness
+	float team_fit; // SELECTION_METHOD team fitness
 	float avg_lion_attacks;
     float avg_penalty;
 	float avg_reward;

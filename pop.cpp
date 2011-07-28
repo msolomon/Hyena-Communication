@@ -21,11 +21,11 @@ void pop::save_data(int iteration){
 	// total ms from start
 	data[iteration][0] = QDateTime::currentMSecsSinceEpoch() - trialstarttime;
 	// generation's average team fitnesses
-	float avg_fit = 0;
+	float team_fit = 0;
 	for (int i = 0; i < POP_SIZE; i++) {
-		avg_fit += the_pop[i]->get_avg_fit();
+		team_fit += the_pop[i]->get_team_fit();
 	}
-    data[iteration][1] = avg_fit / POP_SIZE;
+	data[iteration][1] = team_fit / POP_SIZE;
 
     //// Best team information
 	// average distance to zebra (per hyena)
@@ -36,8 +36,8 @@ void pop::save_data(int iteration){
     data[iteration][4] = the_pop[pop_bestteam]->get_avg_penalty();
 	// average bonus from getting close to zebra (whole team/test, not per hy.)
 	data[iteration][5] = the_pop[pop_bestteam]->get_avg_reward();
-	// average fitness for best team (for whole team per test, not per hyena)
-	data[iteration][6] = the_pop[pop_bestteam]->get_avg_fit();
+	// fitness for best team (for whole team per test, not per hyena)
+	data[iteration][6] = the_pop[pop_bestteam]->get_team_fit();
 	// best team average number of hits
 	data[iteration][7] = the_pop[pop_bestteam]->get_avg_hits();
 	// best team average importance of a given node type
@@ -145,10 +145,10 @@ void pop::evaluate_team(int member){
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
 			ENV->move();
-			ENV->evaluate(g);
+            ENV->evaluate(test, g);
 		}
 	}
-	the_pop[member]->calc_avg_fit();
+	the_pop[member]->calc_team_fit();
 }
 
 void pop::draw_best(int member, int iteration){
@@ -162,7 +162,7 @@ void pop::draw_best(int member, int iteration){
 		ENV->update_vectors();
 		ENV->draw(helper, iteration);
 		ENV->move();
-		ENV->evaluate(g);
+        ENV->evaluate(0, g);
 	}
 	best.clear();
 }
@@ -198,6 +198,13 @@ void pop::evolve(int trial) {
 	f.close();
 	cout << "Trial " << trial + 1 << endl;
 	ENV->fname = fname;
+
+//	// test the first set of teams
+//	ENV->generate_positions();
+//	for(int i = 0; i < POP_SIZE; i++){
+//		the_pop[i]->reset_fitness();
+//		evaluate_team(i);
+//	}
 
 	for (int i = 0; i < GENERATIONS; i++) {
 		// update the GUI
@@ -275,10 +282,10 @@ void pop::final_test(int trial){
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
 			ENV->move();
-			ENV->evaluate(g);
+            ENV->evaluate(test, g);
 		}
 
-		the_pop[pop_bestteam]->write_avg_fit_final(f, trial+1, test+1);
+		the_pop[pop_bestteam]->write_team_fit_final(f, trial+1, test+1);
 	}
 	f.close();
 }
@@ -484,10 +491,10 @@ int pop::tourn_select(int c) { // or worst if c = -1
 	float best_fit;
 	best = Random::Global.Integer(POP_SIZE);
 
-	best_fit = the_pop[best]->get_avg_fit();
+	best_fit = the_pop[best]->get_team_fit();
 	for (int i = 1; i < TOURNAMENT_SIZE; i++) {
 		current = Random::Global.Integer(POP_SIZE);
-		current_fit = the_pop[current]->get_avg_fit();
+		current_fit = the_pop[current]->get_team_fit();
 		if (c == 1) {
 			if (current_fit > best_fit) {
 				best_fit = current_fit;
@@ -506,9 +513,9 @@ int pop::tourn_select(int c) { // or worst if c = -1
 int pop::select_best_team(int c) { // or worst if c = -1
 	int best = 0;
 	float current_fit;
-	float best_fit = the_pop[0]->get_avg_fit();
+	float best_fit = the_pop[0]->get_team_fit();
 	for (int i = 1; i < POP_SIZE; i++) {
-		current_fit = the_pop[i]->get_avg_fit();
+		current_fit = the_pop[i]->get_team_fit();
 		if (c == 1) {
 			if (current_fit > best_fit) {
 				best_fit = current_fit;

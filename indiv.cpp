@@ -33,8 +33,10 @@ void indiv::xOver(indiv *p2) {
 	}
 }
 
-void indiv::reset_fitness(void) {
-	fitness = 0;
+void indiv::reset_fitness() {
+    for(int i = 0; i < NUM_TESTS; i++){
+        fitnesses[i] = 0;
+    }
 	reward = 0;
 	lion_attacks = 0;
     attack_pen = 0;
@@ -66,8 +68,6 @@ indiv &indiv::operator=(const indiv &source) {
 	x=source.x;
 	y=source.y;
 	the_info = source.the_info;
-	fitness = source.fitness;
-	reward = source.reward;
 	size = source.size;
 	clear(); // this deletes tree
 	if(source.type == hyena){
@@ -80,8 +80,6 @@ indiv &indiv::operator=(const indiv &source) {
 void indiv::grow(void) {
 	x = ZEBRAX;
 	y = ZEBRAY;
-	fitness = 0;
-	reward = 0;
 	tree = new node();
 	tree->grow(GROW_DEPTH, 0);
 }

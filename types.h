@@ -31,6 +31,14 @@ const int NUM_TERMS = 13;
 const int NUM_NON_TERMS = 7;
 const int NUM_OPS = NUM_TERMS + NUM_NON_TERMS;
 
+// how to combine results from retesting, at both the individual and team levels
+enum selection_method{
+	mean, // O(n)
+	median, // selection sort. good if n < ~20
+	minimum, // O(n)
+	maximum // O(n)
+};
+
 typedef struct {
 	vect zebra;
 	vect nearest_hyena;

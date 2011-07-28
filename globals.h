@@ -18,12 +18,13 @@ const int NUM_HYENAS = 15;
 const int NUM_LIONS = 2;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat tests to prevent luck
-const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
+const int FINAL_TESTS = 2; // number of times to run best hyena of last trial
 const bool START_ONE_INSIDE = true; // at least one hyena inside calling radius
 const bool START_OUTSIDE_ZEBRA = false;
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
-const int TREE_MAX_SIZE = 5000; // size, not depth
-const ops DISABLED_OPS[] = {subtract, compare};
+const int TREE_MAX_SIZE = 2; // size, not depth
+const ops DISABLED_OPS[] = {};
+const selection_method SELECTION_METHOD = median;
 // Only pick one method below
 const bool OET_GENERATIONAL = true;
 const bool TEAM_GENERATIONAL = false;
@@ -76,11 +77,11 @@ const float PI = 3.141592654;
 
 //// Global functions
 inline float dist(float x, float y){  // 'distance' is a built-in function
-    return sqrt((x * x) + (y * y));
+	return sqrt((x * x) + (y * y));
 }
 
 inline float distance_sq(float x, float y){
-    return x * x + y * y;
+	return x * x + y * y;
 }
 
 inline bool is_disabled(ops op){
@@ -88,5 +89,8 @@ inline bool is_disabled(ops op){
 		if(op == DISABLED_OPS[i]) return true;
 	return false;
 }
+
+// Prototypes
+float select_from_numtests(float fitnesses[NUM_TESTS]);
 
 #endif
