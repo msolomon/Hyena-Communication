@@ -8,8 +8,9 @@
 class team {
 public:
 	team();
+    float recalc_team_avg_fit();
 	float calc_team_fit();
-	float write_team_fit_final(std::ofstream&, int, int);
+	float write_team_fit_final(std::ofstream&, int, int, int);
 	float get_team_fit() {
 		return this->team_fit;
 	}

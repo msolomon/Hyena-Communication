@@ -90,24 +90,22 @@ void team::mutate(int member) {
 	hyenas[member].mutate();
 }
 
-float team::write_team_fit_final(std::ofstream &f, int trial, int test) {
-	float run_fits[NUM_TESTS] = {0};
+float team::write_team_fit_final(std::ofstream &f, int trial, int test, int testnum) {
+	team_fit = 0;
 	avg_lion_attacks = 0;
 	avg_penalty = 0;
 	avg_reward = 0;
 	avg_dist_to_zebra = 0;
 	avg_hits = 0;
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		for(int j = 0; j < NUM_TESTS; j++)
-			run_fits[j] += hyenas[i].get_fitness(j);
-		hyena_fits[i] = hyenas[i].get_fitness(); // destroys order of fitnesses
+		hyena_fits[i] = hyenas[i].get_fitness(testnum);
+		team_fit += hyena_fits[i];
 		avg_dist_to_zebra += hyenas[i].get_avg_dist_to_zebra();
 		avg_lion_attacks += hyenas[i].get_lion_attacks();
 		avg_penalty += hyenas[i].get_penalty();
 		avg_hits += hyenas[i].get_hits();
 		avg_reward += hyenas[i].get_reward();
 	}
-	team_fit = select_from_numtests(run_fits);
 
 	for(int i = 0; i < NUM_OPS; i++){
 		uses[i] = 0;
@@ -134,8 +132,8 @@ float team::write_team_fit_final(std::ofstream &f, int trial, int test) {
 	avg_dist_to_zebra /= NUM_HYENAS;
 
 	//// Now write it all
-	f << trial << " "
-	  << test << " "
+	f << trial + 1 << " "
+	  << test + 1 << " "
 	  << avg_dist_to_zebra << " "
 	  << avg_lion_attacks << " "
 	  << avg_penalty << " "
@@ -149,6 +147,15 @@ float team::write_team_fit_final(std::ofstream &f, int trial, int test) {
 		f << hyena_fits[i] << " ";
 	f << hyena_fits[NUM_HYENAS - 1] << "\n";
 
+	return team_fit;
+}
+
+float team::recalc_team_avg_fit(){
+    team_fit = 0;
+    for(int i = 0; i < NUM_HYENAS; i++){
+        for(int j = 0; j < NUM_TESTS; j++)
+            team_fit += hyenas[i].get_fitness(j) / NUM_TESTS;
+    }
 	return team_fit;
 }
 

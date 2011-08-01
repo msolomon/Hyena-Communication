@@ -193,12 +193,13 @@ void pop::evolve(int trial) {
 	for (int i = 0; i < POP_SIZE; i++) {
 		evaluate_team(i);
 	}
-	string fname = QString(VIDEO_TEMPLATE).arg(trial+1).toStdString();
+	string fname_s = QString(VIDEO_TEMPLATE).arg(trial+1).toStdString();
+	const char *fname = fname_s.c_str();
+	free(ENV->fname);
+	ENV->fname = strdup(fname);
 	ofstream f;
-	f.open(fname.c_str());
-	f.close();
+
 	cout << "Trial " << trial + 1 << endl;
-	ENV->fname = fname;
 
 //	// test the first set of teams
 //	ENV->generate_positions();
@@ -230,7 +231,7 @@ void pop::evolve(int trial) {
 
 		// draw the best team
 		if(i % DRAW_EVERY == (DRAW_EVERY - 1)){
-			f.open(fname.c_str(), ios_base::app);
+			f.open(fname, ios_base::app);
 			f << "generation " << i + 1 << "\n";
 			f.close();
             cout << "Generation " << i + 1 << " of " << GENERATIONS <<
@@ -242,10 +243,18 @@ void pop::evolve(int trial) {
 
 	write_data(trial); // one file per trial
 
+    // reselect via mean if option set
+    if(FINAL_TEST_MEAN){
+        for(int i = 0; i < POP_SIZE; i++){
+            the_pop[i]->recalc_team_avg_fit();
+        }
+        pop_bestteam = select_best_team(1);
+    }
+
 	// graphviz output of the first hyena in best team of last generation's tree
-	fname = QString(GRAPHVIZ_TEMPLATE).arg(trial+1).toStdString();
-	f.open(fname.c_str());
-    f << the_pop[select_best_team(1)]->hyenas[0].tree->graphviz(NULL, "").toStdString() << endl;
+	fname_s = QString(GRAPHVIZ_TEMPLATE).arg(trial+1).toStdString();
+	f.open(fname_s.c_str());
+    f << the_pop[pop_bestteam]->hyenas[0].tree->graphviz(NULL, "").toStdString() << endl;
 	f.close();
 
     // retest the best team of the last gen FINAL_TESTS times and save the data
@@ -255,7 +264,8 @@ void pop::evolve(int trial) {
 
 void pop::final_test(int trial){
 	// set the draw video name
-//	ENV->fname = QString(FINAL_VIDEO_TEMPLATE).arg(trial+1).toStdString();
+	free(ENV->fname);
+	ENV->fname = strdup(QString(FINAL_VIDEO_TEMPLATE).arg(trial+1).toStdString().c_str());
 	QString fname = QString(FINAL_TEMPLATE).arg(trial+1);
 	ofstream f, f2;
 	f.open(fname.toStdString().c_str());
@@ -282,8 +292,8 @@ void pop::final_test(int trial){
 		the_pop[pop_bestteam]->reset_fitness();
 		ENV->place_agents(testnum);
 		the_pop[pop_bestteam]->reset_inputs();
-		if(test % DRAW_EVERY == (DRAW_EVERY - 1)){
-			f2.open(ENV->fname.c_str(), ios_base::app);
+		if(test % (DRAW_EVERY*NUM_TESTS) == ((DRAW_EVERY*NUM_TESTS) - 1)){
+			f2.open(ENV->fname, ios_base::app);
 			f2 << "generation " << test + 1 << "\n";
 			f2.close();
 			cout << "Retest " << test + 1 << " of " << FINAL_TESTS <<
@@ -293,13 +303,13 @@ void pop::final_test(int trial){
 
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
-			if(test % DRAW_EVERY == (DRAW_EVERY - 1))
+			if(test % (DRAW_EVERY*NUM_TESTS) == ((DRAW_EVERY*NUM_TESTS) - 1))
 				ENV->draw(helper, test);
 			ENV->move();
 			ENV->evaluate(testnum, g);
 		}
 
-		the_pop[pop_bestteam]->write_team_fit_final(f, trial+1, test+1);
+		the_pop[pop_bestteam]->write_team_fit_final(f, trial, test, testnum);
 	}
 	f.close();
 }
