@@ -2,31 +2,31 @@
 
 void indiv::xOver(indiv *p2) {
 	int temp = 0;
-	int point1, point2, tmp1, tmp2;
+    int point1, point2, tmp1, tmp2, size1, size2;
 	point1 = point2 = 0;
 	node *tempP1 = NULL;
 	node *xOver1;
 	node *tempP2 = NULL;
 	node *xOver2;
+    size1 = get_size();
+    size2 = p2->get_size();
 	do{
-		point1 += Random::Global.Integer(size + 1 - point1);
-		point2 += Random::Global.Integer(p2->get_size() + 1 - point2);
+        point1 += Random::Global.Integer(size1 + 1 - point1);
+        point2 += Random::Global.Integer(size2 + 1 - point2);
 		temp = 0;
 		xOver1 = tree->get_point(point1, temp, tempP1);
-		tmp1 = xOver1->calc_size();
+        tmp1 = xOver1->get_size();
 		temp = 0;
 		xOver2 = p2->tree->get_point(point2, temp, tempP2);
-		tmp2 = xOver2->calc_size();
-	} while (size + tmp2 - tmp1 > TREE_MAX_SIZE ||
-			 p2->get_size() + tmp1 - tmp2 > TREE_MAX_SIZE);
+        tmp2 = xOver2->get_size();
+    } while (size1 + tmp2 - tmp1 > TREE_MAX_SIZE ||
+             size2 + tmp1 - tmp2 > TREE_MAX_SIZE);
 //	tempP1 = xOver1->get_parent();
 //	tempP2 = xOver2->get_parent();
 	if (tempP1 != NULL) { // not root
 		if (tempP2 != NULL) { // not root
-			int c1 = tempP1->find_child(xOver1);
-			int c2 = tempP2->find_child(xOver2);
-//			xOver1->set_parent(tempP2);
-//			xOver2->set_parent(tempP1);
+            short c1 = tempP1->find_child(xOver1);
+            short c2 = tempP2->find_child(xOver2);
 			tempP2->set_child(c2, xOver1);
 			tempP1->set_child(c1, xOver2);
 		}
@@ -68,7 +68,6 @@ indiv &indiv::operator=(const indiv &source) {
 	x=source.x;
 	y=source.y;
 	the_info = source.the_info;
-	size = source.size;
 	clear(); // this deletes tree
 	if(source.type == hyena){
 		tree = new node();

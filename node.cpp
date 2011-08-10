@@ -15,6 +15,7 @@ node::node(){
 //	}
 	operation = north; // just initializing; will be written over
 	the_const = NULL;
+    size = 0;
 }
 
 void node::set_child(int c, node *child) {
@@ -65,6 +66,7 @@ void node::copy(node *p) {
 		return;
 	clear();
 	operation = p->operation;
+    size = p->size;
 //	parent = parn;
 	switch (operation) {
 	// terminals
@@ -449,19 +451,27 @@ void node::grow(int max_d, int depth){
             error.open("error.txt", ios_base::app);
             error << "error in grow: " << operation << endl;
             error.close();
-            return;
+            break;
         }
     }
+
+//    get_size(); // this will be done on first usage anyway. lazy evaluate
 }
 
-int node::calc_size() {
+int node::get_size() {
 	if (this == NULL) {
 		ofstream error;
 		error.open("error.txt", ios_base::app);
 		error << "error in calc size: evaluating null" << endl;
 		error.close();
 	}
-	int size = 1;
+
+    if(size > 0){
+        return size;
+    }
+
+    size = 1;
+
 	switch (operation) {
 	// terminals
 	case zebra:
@@ -477,36 +487,37 @@ int node::calc_size() {
 	case last_pen:
 	case named:
 	case landmark:
-		return size;
+        break;
 	// non-terminals
 	case sum:
 	case subtract:
 	case compare:
-		size += children[0]->calc_size();
-		size += children[1]->calc_size();
-		return size;
+        size += children[0]->get_size();
+        size += children[1]->get_size();
+        break;
 	case invert:
-		size += children[0]->calc_size();
-		return size;
+        size += children[0]->get_size();
+        break;
 	case iflteMAG:
 	case iflteCLOCKWISE:
-		size += children[0]->calc_size();
-		size += children[1]->calc_size();
-		size += children[2]->calc_size();
-		size += children[3]->calc_size();
-		return size;
+        size += children[0]->get_size();
+        size += children[1]->get_size();
+        size += children[2]->get_size();
+        size += children[3]->get_size();
+        break;
 	case ifVectorZero:
-		size += children[0]->calc_size();
-		size += children[1]->calc_size();
-		size += children[2]->calc_size();
-		return size;
+        size += children[0]->get_size();
+        size += children[1]->get_size();
+        size += children[2]->get_size();
+        break;
 	default:
 		ofstream error;
 		error.open("error.txt", ios_base::app);
 		error << "error in calc size: unknown operator" << endl;
 		error.close();
-		return size;
+        break;
 	}
+    return size;
 }
 
 node *node::get_point(int pn, int &current, node *&parent) {
@@ -534,6 +545,7 @@ node *node::get_point(int pn, int &current, node *&parent) {
 	case sum:
 	case subtract:
 	case compare:
+        size = 0;
 		parent = this;
 		answer = children[0]->get_point(pn, current, parent);
 		if (current >= pn)
@@ -541,10 +553,12 @@ node *node::get_point(int pn, int &current, node *&parent) {
 		parent = this;
 		return children[1]->get_point(pn, current, parent);
 	case invert:
+        size = 0;
 		parent = this;
 		return children[0]->get_point(pn, current, parent);
 	case iflteMAG:
 	case iflteCLOCKWISE:
+        size = 0;
 		for (int i = 0; i < 4; i++) {
 			parent = this;
 			answer = children[i]->get_point(pn, current, parent);
@@ -553,6 +567,7 @@ node *node::get_point(int pn, int &current, node *&parent) {
 		}
 		return answer;
 	case ifVectorZero:
+        size = 0;
 		for (int i = 0; i < 3; i++) {
 			parent = this;
 			answer = children[i]->get_point(pn, current, parent);

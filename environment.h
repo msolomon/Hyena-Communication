@@ -13,13 +13,14 @@
 
 class environment {
 public:
+	environment();
 	void update_vectors(void);
 	void draw(DrawHelper*, int);
 	void rand_move(void);
 	void move(void);
     void evaluate(int, int);
 	void set_up(team *);
-	std::string fname;
+	char *fname;
 	void generate_positions();
 	void place_agents(int);
 	float landmarkcoord[NUM_TESTS][2];

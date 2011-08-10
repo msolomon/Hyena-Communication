@@ -26,7 +26,7 @@ public:
 	void mutate(void);
 	void clear(void);
 	void copy(node *);
-	int calc_size();
+    int get_size();
 	int find_child(node *);
 	void set_child(int c2, node *);
 	node *get_point(int, int &, node *&);
@@ -45,6 +45,7 @@ private:
 //	vect *the_const;
 //	node *parent;
 	void replace(node*[], int index);
+    unsigned int size;
 };
 
 

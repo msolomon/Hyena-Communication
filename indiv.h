@@ -8,11 +8,6 @@
 
 class indiv {
 public:
-	void calc_size(void) {
-		//if(tree == NULL)
-		//	return;
-		size = tree->calc_size();
-	}
 	indiv(void);
 
 	void reset_inputs(){
@@ -151,7 +146,7 @@ public:
 		return type;
 	}
 	int get_size(void) {
-		return size;
+        return tree->get_size();
 	}
 	void set_position(float x_in, float y_in){
 		x = x_in;
@@ -173,7 +168,6 @@ public:
 	float x;
 	float y;
 private:
-	int size;
 	agent_info the_info;
     float fitnesses[NUM_TESTS];
 	float reward;
