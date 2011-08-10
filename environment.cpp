@@ -4,10 +4,6 @@
 
 using namespace std;
 
-environment::environment(){
-	fname = NULL;
-}
-
 void environment::set_up(team *a) {
 	agents = a;
 	if(is_disabled(landmark)){
@@ -351,7 +347,7 @@ void environment::draw(DrawHelper* helper, int itera) {
 	}
 	list.append("\n");
 	ofstream f;
-	f.open(fname, ios_base::app);
+	f.open(fname.c_str(), ios_base::app);
 	f << list.join(" ").toStdString();
 	f.close();
 }

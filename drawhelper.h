@@ -30,6 +30,7 @@ public:
 
 private:
 	QPen hyenaPen;
+	QPen namedPen;
 	QPen hmarkerPen;
 	QPen lionPen;
 	QPen lionRadPen;

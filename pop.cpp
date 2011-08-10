@@ -223,7 +223,7 @@ void pop::evolve(int trial) {
 		// only use one method of reproduction
 		if(ISLAND_STEADY)
 			island_reproduce();
-		if(TEAM_GENERATIONAL || ISLAND_GENERATIONAL ||
+		if(TEAM_GENERATIONAL || INDIV_GENERATIONAL ||
 		   OET_GENERATIONAL)
 			all_generational();
 		pop_bestteam = select_best_team(1);
@@ -245,7 +245,7 @@ void pop::evolve(int trial) {
 
     // reselect via mean if option set
     if(FINAL_TEST_MEAN){
-        for(int i = 0; i < POP_SIZE; i++){
+		for(int i = 0; i < POP_SIZE; i++){
             the_pop[i]->recalc_team_avg_fit();
         }
         pop_bestteam = select_best_team(1);
@@ -406,7 +406,7 @@ void pop::all_generational(){
 	int bound; // determines how to split the new population between island and team
 	if(TEAM_GENERATIONAL)
 		bound = POP_SIZE;       // team approach
-	if(ISLAND_GENERATIONAL)
+	if(INDIV_GENERATIONAL)
 		bound = 0;                      // island approach
 	if(OET_GENERATIONAL)
 		bound = POP_SIZE/2;   // OET approach,  POP_SIZE should always be even
@@ -419,8 +419,8 @@ void pop::all_generational(){
 		} while (p2 == p1);
 		temp->the_pop[i]->copy(the_pop[p1]);
 		temp->the_pop[i + 1]->copy(the_pop[p2]);
-		temp->the_pop[i]->calc_size();
-		temp->the_pop[i + 1]->calc_size();
+        temp->the_pop[i]->get_size();
+        temp->the_pop[i + 1]->get_size();
 		temp->the_pop[i]->xOver(temp->the_pop[i + 1]);
 		temp->the_pop[i]->mutate();
 		temp->the_pop[i + 1]->mutate();
@@ -438,8 +438,8 @@ void pop::all_generational(){
 			parent_hyena = member_select(1, j);
 			temp->the_pop[i + 1]->copy(the_pop[parent_hyena], j);
 		}
-		temp->the_pop[i]->calc_size();
-		temp->the_pop[i + 1]->calc_size();
+        temp->the_pop[i]->get_size();
+        temp->the_pop[i + 1]->get_size();
 		temp->the_pop[i]->xOver(temp->the_pop[i + 1]);
 		temp->the_pop[i]->mutate();
 		temp->the_pop[i + 1]->mutate();

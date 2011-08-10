@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <cfloat>
+#include <climits>
 
 // include fast random library (randomlib.sourceforge.net)
 #define RANDOMLIB_DEFAULT_GENERATOR SRandomGenerator64
@@ -12,25 +13,25 @@ using RandomLib::Random;
 #include "types.h"
 
 //// Common settings
-const int GENERATIONS = 100;
+const int GENERATIONS = 15;
 const int POP_SIZE = 80;
 const int NUM_HYENAS = 15;
 const int NUM_LIONS = 2;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat tests to prevent luck
 const bool FINAL_TEST_MEAN = true; // use mean fitness to pick final best team
-const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
+const int FINAL_TESTS = 20; // number of times to run best hyena of last trial
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
-const int TREE_MAX_SIZE = 5000; // size, not depth
+const int TREE_MAX_SIZE = INT_MAX; // size, not depth
 const ops DISABLED_OPS[] = {};
-const selection_method SELECTION_METHOD = median;
+const selection_method SELECTION_METHOD = mean;
 // 0 to disable, else start hyenas within X units: exactly 1 non-named inside
 // the calling radius
 const float RADIUS_START = 0;
 // Only pick one method below
 const bool OET_GENERATIONAL = true;
 const bool TEAM_GENERATIONAL = false;
-const bool ISLAND_GENERATIONAL = false;
+const bool INDIV_GENERATIONAL = false;
 const bool ISLAND_STEADY = false;
 // GUI/Drawing settings
 const bool GUI = false;
@@ -68,7 +69,7 @@ const float LION_ATTACK_PENALTY = 3;
 const float LION_LION_RADIUS = 5;
 const float LION_HYENA_RADIUS = 5; // both ways
 const float HYENA_HYENA_RADIUS = 10;
-const float HYENA_LION_FEAR_RATIO = 3;
+const float HYENA_LION_FEAR_RATIO = 3; // greater than
 const float LION_SEES_ZEBRA = CALLING_RANGE;
 const float LION_NEAR_ZEBRA = 1;
 // Squared versions of constants (for performance)

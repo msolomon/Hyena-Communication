@@ -76,9 +76,11 @@ void team::xOver(team *p2) {
 		hyenas[i].xOver(&(p2->hyenas[i]));
 }
 
-void team::calc_size(void) {
+int team::get_size(void) {
+    int total = 0;
 	for (int i = 0; i < NUM_HYENAS; i++)
-		hyenas[i].calc_size();
+        total += hyenas[i].get_size();
+    return total;
 }
 
 void team::mutate(void) {

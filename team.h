@@ -14,7 +14,7 @@ public:
 	float get_team_fit() {
 		return this->team_fit;
 	}
-	void calc_size();
+    int get_size();
 	void mutate();
 	void mutate(int);
 	void xOver(team *);

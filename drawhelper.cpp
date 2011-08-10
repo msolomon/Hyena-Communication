@@ -5,6 +5,7 @@ const float hyenaSize = .8;
 DrawHelper::DrawHelper() {
 	backgroundBrush = QBrush(QColor(130, 200, 110));
 	QColor hyenaColor = QColor(139, 69, 19);
+	QColor namedColor = QColor(139, 69, 150);
 	QColor lionColor = QColor(220, 220, 20);
 	QColor zebraColor = QColor(220, 20, 20);
 	QColor landmarkColor = QColor(30, 200, 30);
@@ -12,6 +13,7 @@ DrawHelper::DrawHelper() {
 
 	zeb = QPointF(ZEBRAX, ZEBRAY);
 	hyenaPen = QPen(QBrush(hyenaColor), hyenaSize, Qt::SolidLine, Qt::RoundCap);
+	namedPen = QPen(QBrush(namedColor), hyenaSize, Qt::SolidLine, Qt::RoundCap);
 	hmarkerPen = QPen(QBrush(hyenaColor), .1, Qt::SolidLine, Qt::RoundCap);
 	lionPen = QPen(QBrush(lionColor), 1.5, Qt::SolidLine, Qt::RoundCap);
 	// 2 * b/c width is twice the radius
@@ -58,8 +60,8 @@ void DrawHelper::updateGui(){
 
 void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 	const float zebraOpacity = 1;
-	const float radiusOpacity = .3;
-	const float animalOpacity = .7;
+	const float radiusOpacity = .2;
+	const float animalOpacity = .5;
 	painter->fillRect(event->rect(), backgroundBrush);
 
 	painter->setOpacity(zebraOpacity);
@@ -68,6 +70,7 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 		painter->drawPoint(landmarks.dequeue());
 	}
 
+	// set up the field
 	painter->setOpacity(zebraOpacity);
 	painter->setPen(radStartPen);
 	painter->drawPoint(zeb);
@@ -78,6 +81,7 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 	painter->drawPoint(zeb);
 	painter->setOpacity(animalOpacity);
 
+	// draw lions
 	painter->setPen(lionPen);
 	for (int i = 0; i < NUM_LIONS; i++) {
 		if(!lions[i].isEmpty()){
@@ -91,6 +95,7 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 		}
 	}
 
+	// draw hyenas
 	painter->setPen(hyenaPen);
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		if(!hyenas[i].isEmpty()){
@@ -105,7 +110,13 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 				painter->drawPie(rect, (i*increment), 0);
 				painter->setPen(hyenaPen);
 			}
-			painter->drawPoint(h);
+			if(i == 0 && !is_disabled(named)){
+				painter->setPen(namedPen);
+				painter->drawPoint(h);
+				painter->setPen(hyenaPen);
+			} else{
+				painter->drawPoint(h);
+			}
 		}
 	}
 }
