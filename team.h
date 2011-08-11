@@ -10,7 +10,7 @@ public:
 	team();
     float recalc_team_avg_fit();
 	float calc_team_fit();
-	float write_team_fit_final(std::ofstream&, int, int, int);
+    float write_team_fit_final(std::ofstream&, int, int, int, float);
 	float get_team_fit() {
 		return this->team_fit;
 	}
@@ -25,6 +25,7 @@ public:
 	void clear(void);
 	void reset_team(void);
 	void reset_inputs();
+    void apply_parsimony();
 	float get_hyena_fit(int i) {
 		return hyena_fits[i];
 	}
@@ -40,6 +41,9 @@ public:
 	float get_avg_reward() {
 		return avg_reward;
 	}
+    float get_avg_parsimony() {
+        return avg_parsimony;
+    }
 	float get_avg_hits() {
 		return avg_hits;
 	}
@@ -58,6 +62,7 @@ public:
 	float avg_lion_attacks;
     float avg_penalty;
 	float avg_reward;
+    float avg_parsimony;
 	float avg_dist_to_zebra;
 	float avg_hits;
 	float avg_size;

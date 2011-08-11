@@ -83,6 +83,17 @@ int team::get_size(void) {
     return total;
 }
 
+void team::apply_parsimony(){
+    avg_parsimony = 0;
+    for(int i = 0; i < NUM_HYENAS; i++){
+        float penalty = hyenas[i].get_size() * -PARSIMONY_COEFF;
+        for(int j = 0; j < NUM_TESTS; j++) // must do for each test
+            hyenas[i].changeFit(penalty, j);
+        avg_parsimony += penalty;
+    }
+    avg_parsimony /= NUM_HYENAS;
+}
+
 void team::mutate(void) {
 	for (int i = 0; i < NUM_HYENAS; i++)
 		hyenas[i].mutate();
@@ -92,7 +103,7 @@ void team::mutate(int member) {
 	hyenas[member].mutate();
 }
 
-float team::write_team_fit_final(std::ofstream &f, int trial, int test, int testnum) {
+float team::write_team_fit_final(std::ofstream &f, int trial, int test, int testnum, float parsimony) {
 	team_fit = 0;
 	avg_lion_attacks = 0;
 	avg_penalty = 0;
@@ -139,6 +150,7 @@ float team::write_team_fit_final(std::ofstream &f, int trial, int test, int test
 	  << avg_dist_to_zebra << " "
 	  << avg_lion_attacks << " "
 	  << avg_penalty << " "
+      << parsimony << " "
 	  << avg_reward << " "
 	  << team_fit << " "
 	  << avg_hits << " "
