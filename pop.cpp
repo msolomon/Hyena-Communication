@@ -41,13 +41,15 @@ void pop::save_data(int iteration){
     data[iteration][6] = the_pop[pop_bestteam]->get_avg_reward();
 	// fitness for best team (for whole team per test, not per hyena)
     data[iteration][7] = the_pop[pop_bestteam]->get_team_fit();
+	// best team average tree size
+	data[iteration][8] = the_pop[pop_bestteam]->get_size() / (float) NUM_HYENAS;
 	// best team average number of hits
-    data[iteration][8] = the_pop[pop_bestteam]->get_avg_hits();
+	data[iteration][9] = the_pop[pop_bestteam]->get_avg_hits();
 	// best team average importance of a given node type
-    data[iteration][9] = 0;
+	data[iteration][10] = 0;
 	double *imp = the_pop[pop_bestteam]->get_importance();
 	for(int i = 0; i < NUM_OPS; i++){
-        data[iteration][9] += imp[i] / (NUM_OPS);
+		data[iteration][10] += imp[i] / (NUM_OPS);
 	}
 
 	/*
@@ -106,7 +108,7 @@ void pop::write_data(int trial){
 
 	// provide column labels
 	f << "trial gen time avg_fit best_zeb_dist best_num_attacks best_pen "
-         "best_parsimony best_reward best_fit best_hits best_imp "
+		 "best_parsimony best_reward best_fit best_size best_hits best_imp "
 		 // terminals
 		 "zebra nearest_hyena nearest_lion nearest_calling "
 		 "north randm last_move constant number_calling mirror_nearest "
@@ -274,7 +276,7 @@ void pop::final_test(int trial){
 	f.open(fname.toStdString().c_str());
 	// provide column labels
 	f << "trial id best_zeb_dist best_num_attacks best_pen "
-         "best_parsimony best_reward best_fit best_hits best_imp "
+		 "best_parsimony best_reward best_fit best_size best_hits best_imp "
 		 // terminals
 		 "zebra nearest_hyena nearest_lion nearest_calling "
 		 "north randm last_move constant number_calling mirror_nearest "
@@ -285,8 +287,8 @@ void pop::final_test(int trial){
 		f << "h" << i << " ";
 	}
     f << "h" << (int)NUM_HYENAS << "\n";
-    // calculate the parsimony coefficient
-    float p = (the_pop[pop_bestteam]->get_size() * -PARSIMONY_COEFF) / (float)NUM_HYENAS;
+	// calculate the  tree size
+	float size = the_pop[pop_bestteam]->get_size() / (float) NUM_HYENAS;
 
 	ENV->set_up(the_pop[pop_bestteam]);
 	int testnum = -1;
@@ -314,7 +316,7 @@ void pop::final_test(int trial){
 			ENV->evaluate(testnum, g);
 		}
 
-        the_pop[pop_bestteam]->write_team_fit_final(f, trial, test, testnum, p);
+		the_pop[pop_bestteam]->write_team_fit_final(f, trial, test, testnum, size);
 	}
 	free(ENV->fname);
 	f.close();

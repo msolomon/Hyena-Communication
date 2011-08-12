@@ -103,7 +103,7 @@ void team::mutate(int member) {
 	hyenas[member].mutate();
 }
 
-float team::write_team_fit_final(std::ofstream &f, int trial, int test, int testnum, float parsimony) {
+float team::write_team_fit_final(std::ofstream &f, int trial, int test, int testnum, int size) {
 	team_fit = 0;
 	avg_lion_attacks = 0;
 	avg_penalty = 0;
@@ -150,9 +150,10 @@ float team::write_team_fit_final(std::ofstream &f, int trial, int test, int test
 	  << avg_dist_to_zebra << " "
 	  << avg_lion_attacks << " "
 	  << avg_penalty << " "
-      << parsimony << " "
+	  << (size * -PARSIMONY_COEFF) << " " // parsimony
 	  << avg_reward << " "
 	  << team_fit << " "
+	  << size << " "
 	  << avg_hits << " "
 	  << avg_imp << " ";
 	for(int i = 0; i < NUM_OPS; i++)
