@@ -13,7 +13,7 @@
 class node;
 
 typedef union{
-	node **childs;
+	node *childs[4];
 	vect *the_const;
 } datastore;
 
@@ -45,7 +45,7 @@ private:
 //	vect *the_const;
 //	node *parent;
 	void replace(node*[], int index);
-    unsigned int size;
+	int size;
 };
 
 

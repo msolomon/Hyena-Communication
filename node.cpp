@@ -93,27 +93,23 @@ void node::copy(node *p) {
 	case sum:
 	case subtract:
 	case compare:
-		children = new node*[2];
 		children[0] = new node();
 		children[0]->copy(p->children[0]);
 		children[1] = new node();
 		children[1]->copy(p->children[1]);
 		return;
 	case invert:
-		children = new node*[1];
 		children[0] = new node();
 		children[0]->copy(p->children[0]);
 		return;
 	case iflteMAG:
 	case iflteCLOCKWISE:
-		children = new node*[4];
 		for (int i = 0; i < 4; i++) {
 			children[i] = new node();
 			children[i]->copy(p->children[i]);
 		}
 		return;
 	case ifVectorZero:
-		children = new node*[3];
 		for (int i = 0; i < 3; i++) {
 			children[i] = new node();
 			children[i]->copy(p->children[i]);
@@ -177,7 +173,6 @@ void node::clear(void) {
 		children[i]->clear();
 		delete children[i];
 	}
-	delete[] children;
 }
 
 void node::mutate(void) {
@@ -241,14 +236,14 @@ void node::mutate(void) {
 }
 
 vect node::evaluate(agent_info *the_indiv, int depth) {
-	vect temp;
-	if (this == NULL) {
-		ofstream error;
-		error.open("error.txt", ios_base::app);
-		error << "error in evaluate: evaluating null" << endl;
-		error.close();
-		return (temp);
-	}
+//	if (this == NULL) {
+//		vect temp;
+//		ofstream error;
+//		error.open("error.txt", ios_base::app);
+//		error << "error in evaluate: evaluating null" << endl;
+//		error.close();
+//		return (temp);
+//	}
 
 	depth++;
 	// count the size of the tree that is hit
@@ -268,34 +263,42 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 	case nearest_calling:
 		the_indiv->importance[nearest_calling] += BASE_IMPORTANCE / depth;
 		return (the_indiv->nearest_calling);
-	case north:
+	case north: {
+		vect temp;
 		the_indiv->importance[north] += BASE_IMPORTANCE / depth;
         temp.direction = 0;
 		temp.magnitude = 1;
 		return (temp);
-	case randm:
+	}
+	case randm: {
+		vect temp;
 		the_indiv->importance[randm] += BASE_IMPORTANCE / depth;
 		temp.random();
 		return temp;
+	}
 	case last_move:
 		the_indiv->importance[last_move] += BASE_IMPORTANCE / depth;
 		return (the_indiv->last_move);
 	case constant:
 		the_indiv->importance[constant] += BASE_IMPORTANCE / depth;
 		return (*the_const);
-	case number_calling:
+	case number_calling: {
+		vect temp;
 		the_indiv->importance[number_calling] += BASE_IMPORTANCE / depth;
 		temp.direction = 0;
 		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
 		return temp;
+	}
 	case mirror_nearest:
 		the_indiv->importance[mirror_nearest] += BASE_IMPORTANCE / depth;
 		return (the_indiv->mirrored);
-	case last_pen:
+	case last_pen: {
+		vect temp;
 		the_indiv->importance[last_pen] += BASE_IMPORTANCE / depth;
 		temp.direction = 0;
 		temp.magnitude = the_indiv->last_pen;
 		return temp;
+	}
 	case named:
 		the_indiv->importance[named] += BASE_IMPORTANCE / depth;
 		return the_indiv->named;
@@ -307,22 +310,26 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		the_indiv->importance[sum] += BASE_IMPORTANCE / depth;
 		return children[0]->evaluate(the_indiv, depth) +
 				children[1]->evaluate(the_indiv, depth);
-    case subtract:
+	case subtract: {
+		vect temp;
         the_indiv->importance[subtract] += BASE_IMPORTANCE / depth;
 		// get second input and invert it
 		temp = children[1]->evaluate(the_indiv, depth);
         temp.direction > 0 ? temp.direction -= PI : temp.direction += PI;
 		// add it to the first input
 		return (temp + children[0]->evaluate(the_indiv, depth));
+	}
     case compare:
 		the_indiv->importance[compare] += BASE_IMPORTANCE / depth;
 		return compare_vectors(children[0]->evaluate(the_indiv, depth),
 							   children[1]->evaluate(the_indiv, depth));
-	case invert:
+	case invert: {
+		vect temp;
 		the_indiv->importance[invert] += BASE_IMPORTANCE / depth;
         temp = children[0]->evaluate(the_indiv, depth);
         temp.direction > 0 ? temp.direction -= PI : temp.direction += PI;
 		return (temp);
+	}
 	case iflteMAG:
 		the_indiv->importance[iflteMAG] += BASE_IMPORTANCE / depth;
 		if (children[0]->evaluate(the_indiv, depth).magnitude <=
@@ -337,19 +344,23 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 			return (children[2]->evaluate(the_indiv, depth));
 		else
 			return (children[3]->evaluate(the_indiv, depth));
-	case ifVectorZero:
+	case ifVectorZero: {
+		vect temp;
 		the_indiv->importance[ifVectorZero] += BASE_IMPORTANCE / depth;
 		temp = children[0]->evaluate(the_indiv, depth);
 		if (temp.magnitude == 0)
 			return (children[1]->evaluate(the_indiv, depth));
 		else
 			return (children[2]->evaluate(the_indiv, depth));
-	default:
+	}
+	default: {
+		vect temp;
 		ofstream error;
 		error.open("error.txt", ios_base::app);
 		error << "error in evaluate: " << operation << endl;
 		error.close();
 		return temp;
+	}
 	}
 }
 
@@ -414,20 +425,17 @@ void node::grow(int max_d, int depth){
         case sum:
 		case subtract:
 		case compare:
-			children = new node*[2];
 			children[0] = new node();
 			children[0]->grow(max_d,depth+1);
 			children[1] = new node();
 			children[1]->grow(max_d,depth+1);
             break;
         case invert:
-			children = new node*[1];
 			children[0] = new node();
 			children[0]->grow(max_d,depth+1);
             break;
         case iflteMAG:
         case iflteCLOCKWISE:
-			children = new node*[4];
 			children[0] = new node();
 			children[0]->grow(max_d,depth+1);
 			children[1] = new node();
@@ -438,7 +446,6 @@ void node::grow(int max_d, int depth){
 			children[3]->grow(max_d,depth+1);
             break;
         case ifVectorZero:
-			children = new node*[3];
 			children[0] = new node();
 			children[0]->grow(max_d,depth+1);
 			children[1] = new node();
@@ -459,12 +466,12 @@ void node::grow(int max_d, int depth){
 }
 
 int node::get_size() {
-	if (this == NULL) {
-		ofstream error;
-		error.open("error.txt", ios_base::app);
-		error << "error in calc size: evaluating null" << endl;
-		error.close();
-	}
+//	if (this == NULL) {
+//		ofstream error;
+//		error.open("error.txt", ios_base::app);
+//		error << "error in calc size: evaluating null" << endl;
+//		error.close();
+//	}
 
     if(size > 0){
         return size;

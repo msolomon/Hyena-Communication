@@ -316,6 +316,7 @@ void pop::final_test(int trial){
 
         the_pop[pop_bestteam]->write_team_fit_final(f, trial, test, testnum, p);
 	}
+	free(ENV->fname);
 	f.close();
 }
 

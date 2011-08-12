@@ -23,7 +23,7 @@ const bool FINAL_TEST_MEAN = true; // use mean fitness to pick final best team
 const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const int TREE_MAX_SIZE = INT_MAX; // size, not depth
-const float PARSIMONY_COEFF = 0.05;
+const float PARSIMONY_COEFF = 0.01;
 const ops DISABLED_OPS[] = {};
 const selection_method SELECTION_METHOD = mean;
 // 0 to disable, else start hyenas within X units: exactly 1 non-named inside
