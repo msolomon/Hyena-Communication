@@ -267,13 +267,16 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		vect temp;
 		the_indiv->importance[north] += BASE_IMPORTANCE / depth;
         temp.direction = 0;
-		temp.magnitude = 1;
+		temp.magnitude = the_indiv->north_enabled ? 1 : 0;
 		return (temp);
 	}
 	case randm: {
 		vect temp;
 		the_indiv->importance[randm] += BASE_IMPORTANCE / depth;
-		temp.random();
+        if(the_indiv->randm_enabled)
+			temp.random();
+		else
+			temp.reset();
 		return temp;
 	}
 	case last_move:
@@ -281,7 +284,13 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		return (the_indiv->last_move);
 	case constant:
 		the_indiv->importance[constant] += BASE_IMPORTANCE / depth;
-		return (*the_const);
+		if(the_indiv->constant_enabled)
+			return (*the_const);
+		else{
+			vect temp;
+			temp.reset();
+			return temp;
+		}
 	case number_calling: {
 		vect temp;
 		the_indiv->importance[number_calling] += BASE_IMPORTANCE / depth;

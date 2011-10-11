@@ -355,3 +355,78 @@ void environment::draw(DrawHelper* helper, int itera) {
 	f << list.join(" ").toStdString();
 	f.close();
 }
+
+using namespace std;
+
+void environment::knockout_genes(const ops disabled[], int disabled_len){
+    vect zero;
+    zero.reset();
+    // knockout genes as appropriate
+    for(unsigned int i = 0; i < (disabled_len); i++){
+        for(int j = 0; j < NUM_HYENAS; j++){
+            switch(disabled[i]){
+            // terminals
+            case zebra:
+                agents->hyenas[j].set_zebra(zero);
+                break;
+            case nearest_hyena:
+                agents->hyenas[j].set_nearest_hyena(zero);
+                break;
+            case nearest_lion:
+                agents->hyenas[j].set_nearest_lion(zero);
+                break;
+            case nearest_calling:
+                agents->hyenas[j].set_nearestcalling(zero);
+                break;
+            case north:
+                agents->hyenas[j].set_north_enabled(false);
+                break;
+            case randm:
+                agents->hyenas[j].set_randm_enabled(false);
+                break;
+            case last_move:
+                agents->hyenas[j].set_last_move(zero);
+                break;
+            case constant:
+                agents->hyenas[j].set_constant_enabled(false);
+                break;
+            case number_calling:
+                agents->hyenas[j].set_num_hyenas(0);
+                break;
+            case mirror_nearest:
+                agents->hyenas[j].set_mirrored(zero);
+                break;
+            case last_pen:
+                agents->hyenas[j].reset_pen_input();
+                break;
+            case named:
+                agents->hyenas[j].set_named(zero);
+                break;
+            case landmark:
+                agents->hyenas[j].set_landmark(zero);
+                break;
+                // non-terminals
+            case sum:
+            case subtract:
+            case compare:
+            case invert:
+            case iflteMAG:
+            case iflteCLOCKWISE:
+            case ifVectorZero:{
+                ofstream error;
+                error.open("error.txt", ios_base::app);
+                error << "nonterminal in knockout: " << disabled[i] << endl;
+                error.close();
+                break;
+            }
+            default:{
+                ofstream error;
+                error.open("error.txt", ios_base::app);
+                error << "error in knockout: " << disabled[i] << endl;
+                error.close();
+                break;
+            }
+            }
+        }
+    }
+}

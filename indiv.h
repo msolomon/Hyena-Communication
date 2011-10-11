@@ -23,7 +23,22 @@ public:
 		the_info.num_hyenas = 0;
 		the_info.hits = 0;
 		the_info.last_pen = 0;
+        the_info.randm_enabled = true;
+		the_info.constant_enabled = true;
+		the_info.north_enabled = true;
 	}
+
+    void set_north_enabled(bool set){
+        the_info.north_enabled = set;
+    }
+
+    void set_randm_enabled(bool set){
+        the_info.randm_enabled = set;
+    }
+
+    void set_constant_enabled(bool set){
+        the_info.constant_enabled = set;
+    }
 
 	void set_landmark(vect v){
 		the_info.landmark = v;
@@ -75,6 +90,10 @@ public:
 	vect get_last_move(){
 		return the_info.last_move;
 	}
+
+    void set_last_move(vect set){
+        the_info.last_move = set;
+    }
 
 	inline float getX(void) {
 		return x;

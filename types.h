@@ -53,7 +53,11 @@ typedef struct {
     int hits;
 	float last_pen;
 //	int uses[NUM_OPS];
+	// the rest can be turned off by zeroing out above vectors
 	double importance[NUM_OPS];
+	bool north_enabled;
+	bool constant_enabled;
+    bool randm_enabled;
 } agent_info;
 
 //enum agent_type {

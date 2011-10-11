@@ -21,10 +21,12 @@ const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat tests to prevent luck
 const bool FINAL_TEST_MEAN = true; // use mean fitness to pick final best team
 const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
+const int KNOCKOUT_TESTS = 2000; // as above, but with a given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const int TREE_MAX_SIZE = INT_MAX; // size, not depth
-const float PARSIMONY_COEFF = 0.01;
+const float PARSIMONY_COEFF = 0.001;
 const ops DISABLED_OPS[] = {};
+const ops KNOCKOUT_OPS[] = {};
 const selection_method SELECTION_METHOD = mean;
 // 0 to disable, else start hyenas within X units: exactly 1 non-named inside
 // the calling radius
@@ -47,6 +49,8 @@ const char* const DATA_TEMPLATE = "data_%1.txt";
 const char* const GRAPHVIZ_TEMPLATE = "hyena_%1.gv";
 const char* const FINAL_TEMPLATE = "final_%1.txt";
 const char* const FINAL_VIDEO_TEMPLATE = "finalvideo_%1.txt";
+const char* const KNOCKOUT_TEMPLATE = "knockout_%1.txt";
+const char* const KNOCKOUT_VIDEO_TEMPLATE = "knockoutvideo_%1.txt";
 
 //// Other settings
 // Selection and reproduction

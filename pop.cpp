@@ -263,15 +263,30 @@ void pop::evolve(int trial) {
 	f.close();
 
     // retest the best team of the last gen FINAL_TESTS times and save the data
-	final_test(trial);
+    if(FINAL_TESTS > 0){
+        cout << "Retesting..." << endl;
+        final_test(trial, FINAL_VIDEO_TEMPLATE, FINAL_TEMPLATE, NULL, 0);
+    }
+
+    // retest with genes knocked out
+    if(sizeof(KNOCKOUT_OPS) > 0 && KNOCKOUT_TESTS > 0){
+        cout << "Retesting with knockout..." << endl;
+        final_test(trial, KNOCKOUT_VIDEO_TEMPLATE,
+                   KNOCKOUT_TEMPLATE, KNOCKOUT_OPS,
+                   sizeof(KNOCKOUT_OPS) / sizeof(ops));
+    }
 
 }
 
-void pop::final_test(int trial){
+void pop::final_test(int trial,
+                     const char* const video_template,
+                     const char* const data_template,
+                     const ops disabled[],
+                     int disabled_len){
 	// set the draw video name
 	free(ENV->fname);
-	ENV->fname = strdup(QString(FINAL_VIDEO_TEMPLATE).arg(trial+1).toStdString().c_str());
-	QString fname = QString(FINAL_TEMPLATE).arg(trial+1);
+    ENV->fname = strdup(QString(video_template).arg(trial+1).toStdString().c_str());
+    QString fname = QString(data_template).arg(trial+1);
 	ofstream f, f2;
 	f.open(fname.toStdString().c_str());
 	// provide column labels
@@ -310,6 +325,8 @@ void pop::final_test(int trial){
 
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
+            if(disabled_len > 0 && disabled != NULL)
+                ENV->knockout_genes(disabled, disabled_len);
 			if(test % (DRAW_EVERY*NUM_TESTS) == ((DRAW_EVERY*NUM_TESTS) - 1))
 				ENV->draw(helper, test);
 			ENV->move();

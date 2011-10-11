@@ -39,7 +39,11 @@ FORMS += qthyena.ui \
 
 RESOURCES += 
 
-LIBS += -lRandom -ltcmalloc_minimal
+LIBS += -lRandom
+
+unix{
+	LIBS += -ltcmalloc_minimal
+}
 
 CONFIG(release):
 QMAKE_CXXFLAGS_RELEASE += -march=amdfam10 -ffunction-sections -fdata-sections

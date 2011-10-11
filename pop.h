@@ -1,6 +1,8 @@
 #ifndef POP_H
 #define POP_H
 
+#include <vector>
+
 #include "globals.h"
 #include "indiv.h"
 #include "team.h"
@@ -34,7 +36,11 @@ public:
 	int member_select(int, int);
 	void add_blank_nodes();
 	void draw_best(int, int);
-	void final_test(int);
+    void final_test(int trial,
+                    const char* const video_template,
+                    const char* const data_template,
+                    const ops disabled[],
+                    int disabled_len);
 	qint64 trialstarttime;
 	DrawHelper *helper;
 	environment *ENV;

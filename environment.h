@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <string>
+#include <vector>
 
 #include "team.h"
 #include "drawhelper.h"
@@ -23,6 +24,7 @@ public:
 	char *fname;
 	void generate_positions();
 	void place_agents(int);
+    void knockout_genes(const ops disabled[], int disabled_len);
 	float landmarkcoord[NUM_TESTS][2];
 	float hyenacoord[NUM_TESTS][NUM_HYENAS][2];
 	float lioncoord[NUM_TESTS][NUM_LIONS][2];

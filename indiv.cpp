@@ -19,10 +19,9 @@ void indiv::xOver(indiv *p2) {
 		temp = 0;
 		xOver2 = p2->tree->get_point(point2, temp, tempP2);
         tmp2 = xOver2->get_size();
-    } while (size1 + tmp2 - tmp1 > TREE_MAX_SIZE ||
-             size2 + tmp1 - tmp2 > TREE_MAX_SIZE);
-//	tempP1 = xOver1->get_parent();
-//	tempP2 = xOver2->get_parent();
+	} while (TREE_MAX_SIZE != INT_MAX && // INT_MAX means unbounded trees
+			 (size1 + tmp2 - tmp1 > TREE_MAX_SIZE ||
+			  size2 + tmp1 - tmp2 > TREE_MAX_SIZE));
 	if (tempP1 != NULL) { // not root
 		if (tempP2 != NULL) { // not root
             short c1 = tempP1->find_child(xOver1);
