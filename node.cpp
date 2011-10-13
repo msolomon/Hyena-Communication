@@ -615,84 +615,55 @@ QString node::graphviz(node *parent, QString extraLabel){
 	switch (operation) {
 	// terminals
 	case zebra:
-        output += "zebra\", shape=plaintext]\n";
-		break;
 	case nearest_hyena:
-        output += "nearest_hyena\", shape=plaintext]\n";
-		break;
 	case nearest_lion:
-        output += "nearest_lion\", shape=plaintext]\n";
-		break;
 	case nearest_calling:
-        output += "nearest_calling\", shape=plaintext]\n";
-		break;
 	case north:
-        output += "north\", shape=plaintext]\n";
-		break;
 	case randm:
-        output += "randm\", shape=plaintext]\n";
-		break;
 	case last_move:
-        output += "last_move\", shape=plaintext]\n";
+		output += ops_names[operation];
+		output += "\", shape=plaintext]\n";
 		break;
 	case constant:
         output += QString("constant (mag=%1 dir=%2)\", shape=plaintext]\n")
                 .arg(the_const->magnitude).arg(the_const->direction);
 		break;
 	case number_calling:
-        output += "num_hyenas\", shape=plaintext]\n";
-		break;
 	case mirror_nearest:
-        output += "mirror_nearest\", shape=plaintext]\n";
-		break;
 	case last_pen:
-		output += "last_pen\", shape=plaintext]\n";
-		break;
 	case named:
-		output += "named\", shape=plaintext]\n";
-		break;
 	case landmark:
-		output += "landmark\", shape=plaintext]\n";
+		output += ops_names[operation];
+		output += "\", shape=plaintext]\n";
 		break;
 	// non-terminals
 	case sum:
-        output += "sum\", shape=plaintext]\n";
-		for (int i = 0; i < 2; i++) {
-            output += children[i]->graphviz(this, QString::number(i));
-		}
-		break;
 	case subtract:
-		output += "subtract\", shape=plaintext]\n";
-		for (int i = 0; i < 2; i++) {
-			output += children[i]->graphviz(this, QString::number(i));
-		}
-		break;
 	case compare:
-		output += "compare\", shape=plaintext]\n";
+		output += ops_names[operation];
+		output += "\", shape=plaintext]\n";
 		for (int i = 0; i < 2; i++) {
 			output += children[i]->graphviz(this, QString::number(i));
 		}
 		break;
 	case invert:
-        output += "invert\", shape=plaintext]\n";
+		output += ops_names[operation];
+		output += "\", shape=plaintext]\n";
 		for (int i = 0; i < 1; i++) {
             output += children[i]->graphviz(this, QString::number(i));
 		}
 		break;
 	case iflteMAG:
-        output += "iflteMAG\", shape=plaintext]\n";
-		for (int i = 0; i < 4; i++) {
-            output += children[i]->graphviz(this, QString::number(i));
-		}
-		break;
 	case iflteCLOCKWISE:
-        output += "iflteCLOCKWISE\", shape=plaintext]\n";
+		output += ops_names[operation];
+		output += "\", shape=plaintext]\n";
 		for (int i = 0; i < 4; i++) {
             output += children[i]->graphviz(this, QString::number(i));
 		}
 		break;
 	case ifVectorZero:
-        output += "ifVectorZero\", shape=plaintext]\n";
+		output += ops_names[operation];
+		output += "\", shape=plaintext]\n";
 		for (int i = 0; i < 3; i++) {
             output += children[i]->graphviz(this, QString::number(i));
 		}
@@ -730,7 +701,7 @@ QStringList node::serialize(){
 		output += QString("%1 ").arg(operation);
 		break;
 	case constant:
-		output += QString("%1:%2:%3 ").arg(constant).arg(the_const->magnitude).
+		output += QString("%1 %2 %3 ").arg(constant).arg(the_const->magnitude).
 				arg(the_const->direction);
 		break;
 	case number_calling:
@@ -775,6 +746,73 @@ QStringList node::serialize(){
 		error.close();
 	}
 	return output;
+}
+
+node* node::deserialize(QStringList &input){
+	if(input.isEmpty())
+		return NULL;
+
+	ops op = (ops) input.takeFirst().toInt();
+	if(op < 0 || op > NUM_OPS)
+		return NULL; // error
+	operation = op;
+
+	switch (op) {
+	// terminals
+	case zebra:
+	case nearest_hyena:
+	case nearest_lion:
+	case nearest_calling:
+	case north:
+	case randm:
+	case last_move:
+		break;
+	case constant:
+		the_const = new vect();
+		the_const->magnitude = input.takeFirst().toDouble();
+		the_const->direction = input.takeFirst().toDouble();
+		break;
+	case number_calling:
+	case mirror_nearest:
+	case last_pen:
+	case named:
+	case landmark:
+		break;
+	// non-terminals
+	case sum:
+	case subtract:
+	case compare:
+		for (int i = 0; i < 2; i++) {
+			node* child = new node();
+			children[i] = child->deserialize(input);
+		}
+		break;
+	case invert:
+		for (int i = 0; i < 1; i++) {
+			node* child = new node();
+			children[i] = child->deserialize(input);
+		}
+		break;
+	case iflteMAG:
+	case iflteCLOCKWISE:
+		for (int i = 0; i < 4; i++) {
+			node* child = new node();
+			children[i] = child->deserialize(input);
+		}
+		break;
+	case ifVectorZero:
+		for (int i = 0; i < 3; i++) {
+			node* child = new node();
+			children[i] = child->deserialize(input);
+		}
+		break;
+	default:
+		ofstream error;
+		error.open("error.txt");
+		error << "error in deserialize" << endl;
+		error.close();
+	}
+	return this;
 }
 
 #undef children

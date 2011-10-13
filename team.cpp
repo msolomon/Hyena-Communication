@@ -227,3 +227,53 @@ QStringList team::serialize(){
 	}
 	return output;
 }
+
+void team::deserialize(QStringList input){
+	/* input should be a list of lines, one per hyena */
+	if(input.length() != NUM_HYENAS){
+		std::ofstream error;
+		error.open("error.txt");
+		error << "error in team::deserialize: given " << input.length() <<
+				 " hyenas but was expecting " << NUM_HYENAS << std::endl;
+		error.close();
+	}
+
+	// deserialize each hyena in the team
+	for(int i = 0; i < NUM_HYENAS; i++){
+		hyenas[i].deserialize(input.takeFirst().split(' ',
+													  QString::SkipEmptyParts));
+	}
+}
+
+void team::load_team(QString filename){
+	QFile f(filename);
+	QStringList list;
+
+	if(f.open(QIODevice::ReadOnly | QIODevice::Text)){
+		QTextStream in(&f);
+		QString line = in.readLine();
+		while(!line.isNull()){
+			list.append(line);
+			line = in.readLine();
+		}
+		f.close();
+	} else {
+		std::ofstream error;
+		error.open("error.txt");
+		error << "error in load_team" << std::endl;
+		error.close();
+		return;
+	}
+
+	QString names = list.takeFirst();
+	if(names.split(' ', QString::SkipEmptyParts).length() !=
+			(sizeof(ops_names) / sizeof(ops))){
+		std::ofstream error;
+		error.open("error.txt");
+		error << "error in load_team: wrong number of operations" << std::endl;
+		error.close();
+		return;
+	} else {
+		deserialize(list);
+	}
+}

@@ -32,6 +32,7 @@ public:
 	void set_child(int c2, node *);
 	node *get_point(int, int &, node *&);
 	QStringList serialize();
+	node* deserialize(QStringList&);
 	QString graphviz(node *, QString);
 private:
 	datastore data;

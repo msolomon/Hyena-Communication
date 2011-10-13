@@ -181,11 +181,19 @@ void pop::evolve_repeat(int trial){
 	trial--;
 	for(int i = 0; i < TRIALS; i++){
 		generate();
+		// read a team from disk, if present
+		if(RETEST_GIVEN != NULL){
+			the_pop[0]->clear();
+			the_pop[0]->load_team(QString(RETEST_GIVEN));
+			the_pop[0]->force_fitness(1000000); // very high so distinguishable
+			for(int i = 1; i < POP_SIZE; i++){
+				the_pop[0]->reset_fitness();
+			}
+		}
 		calc_trial(QString::number(trial+i+1));
 		calc_trial_total(QString::number(TRIALS+trial));
 		trialstarttime = QDateTime::currentMSecsSinceEpoch();
 		evolve(trial+i);
-//		exit(0);
 	}
 	for(int i = 0; i < POP_SIZE; i++){
 		the_pop[i]->clear();

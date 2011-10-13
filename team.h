@@ -4,6 +4,8 @@
 #include "globals.h"
 #include "indiv.h"
 #include <fstream>
+#include <QFile>
+#include <QTextStream>
 
 class team {
 public:
@@ -53,9 +55,15 @@ public:
 	double* get_importance(){
 		return (double*) &importance;
 	}
+	void force_fitness(double fit){
+		team_fit = fit;
+	}
+
 	void reset_fitness(void);
 	void reset_calling();
 	QStringList serialize();
+	void deserialize(QStringList);
+	void load_team(QString filename);
 	indiv hyenas[NUM_HYENAS];
 	indiv lions[NUM_LIONS];
 	float hyena_fits[NUM_HYENAS];

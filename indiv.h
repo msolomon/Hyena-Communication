@@ -183,6 +183,7 @@ public:
 	}
 
 	QStringList serialize();
+	void deserialize(QStringList);
 
 	void xOver(indiv*);
 

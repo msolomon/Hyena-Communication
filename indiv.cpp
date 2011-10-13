@@ -139,3 +139,10 @@ QStringList indiv::serialize(){
 	return tree->serialize();
 }
 
+void indiv::deserialize(QStringList input){
+	tree->clear();
+	tree = NULL;
+	node* child = new node();
+	tree = child->deserialize(input);
+}
+

@@ -13,8 +13,8 @@ using RandomLib::Random;
 #include "types.h"
 
 //// Common settings
-const int GENERATIONS = 10;
-const int POP_SIZE = 80;
+const int GENERATIONS = 0;
+const int POP_SIZE = 1;
 const int NUM_HYENAS = 15;
 const int NUM_LIONS = 2;
 const int TIME_STEPS = 100;
@@ -27,7 +27,7 @@ const float PARSIMONY_COEFF = 0.001;
 const ops DISABLED_OPS[] = {};
 const ops KNOCKOUT_OPS[] = {};
 const selection_method SELECTION_METHOD = mean;
-const char* const RETEST_GIVEN = NULL; // NULL to disable, else filename
+const char* const RETEST_GIVEN = "inputteam.txt"; // NULL to disable, else filename
 // 0 to disable, else start hyenas within X units: exactly 1 non-named inside
 // the calling radius
 const float RADIUS_START = 0;
