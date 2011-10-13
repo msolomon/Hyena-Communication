@@ -262,6 +262,9 @@ void pop::evolve(int trial) {
     f << the_pop[pop_bestteam]->hyenas[0].tree->graphviz(NULL, "").toStdString() << endl;
 	f.close();
 
+	// serialize the best team
+	serialize_best(QString(BEST_TEAM_TEMPLATE).arg(trial+1).toStdString().c_str());
+
     // retest the best team of the last gen FINAL_TESTS times and save the data
     if(FINAL_TESTS > 0){
         cout << "Retesting..." << endl;
@@ -578,4 +581,20 @@ int pop::select_best_team(int c) { // or worst if c = -1
 		}
 	}
 	return best;
+}
+
+void pop::serialize_best(const char* filename){
+	QStringList output;
+	// build a list of the operation names
+	for(int i = 0; i < NUM_OPS; i++){
+		output += ops_names[i];
+		output += " ";
+	}
+	output += "\n";
+	output += the_pop[pop_bestteam]->serialize();
+	// now write it to a file
+	ofstream f;
+	f.open(filename);
+	f << output.join("").toStdString();
+	f.close();
 }

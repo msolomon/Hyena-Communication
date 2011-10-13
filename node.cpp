@@ -712,5 +712,70 @@ QString node::graphviz(node *parent, QString extraLabel){
 	}
 	return output;
 }
+
+QStringList node::serialize(){
+	QStringList output;
+	if(this == NULL)
+		return output;
+
+	switch (operation) {
+	// terminals
+	case zebra:
+	case nearest_hyena:
+	case nearest_lion:
+	case nearest_calling:
+	case north:
+	case randm:
+	case last_move:
+		output += QString("%1 ").arg(operation);
+		break;
+	case constant:
+		output += QString("%1:%2:%3 ").arg(constant).arg(the_const->magnitude).
+				arg(the_const->direction);
+		break;
+	case number_calling:
+	case mirror_nearest:
+	case last_pen:
+	case named:
+	case landmark:
+		output += QString("%1 ").arg(operation);
+		break;
+	// non-terminals
+	case sum:
+	case subtract:
+	case compare:
+		output += QString("%1 ").arg(operation);
+		for (int i = 0; i < 2; i++) {
+			output += children[i]->serialize();
+		}
+		break;
+	case invert:
+		output += QString("%1 ").arg(invert);
+		for (int i = 0; i < 1; i++) {
+			output += children[i]->serialize();
+		}
+		break;
+	case iflteMAG:
+	case iflteCLOCKWISE:
+		output += QString("%1 ").arg(operation);
+		for (int i = 0; i < 4; i++) {
+			output += children[i]->serialize();
+		}
+		break;
+	case ifVectorZero:
+		output += QString("%1 ").arg(ifVectorZero);
+		for (int i = 0; i < 3; i++) {
+			output += children[i]->serialize();
+		}
+		break;
+	default:
+		ofstream error;
+		error.open("error.txt");
+		error << "error in serialize" << endl;
+		error.close();
+	}
+	return output;
+}
+
 #undef children
 #undef the_const

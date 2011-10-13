@@ -13,7 +13,7 @@ using RandomLib::Random;
 #include "types.h"
 
 //// Common settings
-const int GENERATIONS = 1500;
+const int GENERATIONS = 10;
 const int POP_SIZE = 80;
 const int NUM_HYENAS = 15;
 const int NUM_LIONS = 2;
@@ -23,11 +23,11 @@ const bool FINAL_TEST_MEAN = true; // use mean fitness to pick final best team
 const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const int KNOCKOUT_TESTS = 2000; // as above, but with a given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
-const int TREE_MAX_SIZE = INT_MAX; // size, not depth
 const float PARSIMONY_COEFF = 0.001;
 const ops DISABLED_OPS[] = {};
 const ops KNOCKOUT_OPS[] = {};
 const selection_method SELECTION_METHOD = mean;
+const char* const RETEST_GIVEN = NULL; // NULL to disable, else filename
 // 0 to disable, else start hyenas within X units: exactly 1 non-named inside
 // the calling radius
 const float RADIUS_START = 0;
@@ -51,6 +51,7 @@ const char* const FINAL_TEMPLATE = "final_%1.txt";
 const char* const FINAL_VIDEO_TEMPLATE = "finalvideo_%1.txt";
 const char* const KNOCKOUT_TEMPLATE = "knockout_%1.txt";
 const char* const KNOCKOUT_VIDEO_TEMPLATE = "knockoutvideo_%1.txt";
+const char* const BEST_TEAM_TEMPLATE = "bestteam_%1.txt";
 
 //// Other settings
 // Selection and reproduction
@@ -59,6 +60,7 @@ const float MUTATION_CHANCE = 10; // % chance of mutation
 const bool FULL = true; // false = GROW (for initial trees)
 const int GROW_DEPTH = 4;
 const int TRIALS = 1; // leaks memory; do via script
+const int TREE_MAX_SIZE = INT_MAX; // size, not depth
 // Model
 const int X = 32;
 const int Y = X;

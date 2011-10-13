@@ -55,6 +55,7 @@ public:
 	}
 	void reset_fitness(void);
 	void reset_calling();
+	QStringList serialize();
 	indiv hyenas[NUM_HYENAS];
 	indiv lions[NUM_LIONS];
 	float hyena_fits[NUM_HYENAS];

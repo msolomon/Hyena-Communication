@@ -27,6 +27,30 @@ enum ops {
 	ifVectorZero // if mag of input 1 == 0 return input 2 else input 3
 };
 
+// names of ops used for serialization (manually keep in sync with above)
+const char* const ops_names[] = {
+	"zebra",
+	"nearest_hyena",
+	"nearest_lion",
+	"nearest_calling",
+	"north",
+	"randm",
+	"last_move",
+	"constant",
+	"number_calling",
+	"mirror_nearest",
+	"last_pen",
+	"named",
+	"landmark",
+	"sum",
+	"subtract",
+	"compare",
+	"invert",
+	"iflteMAG",
+	"iflteCLOCKWISE",
+	"ifVectorZero"
+};
+
 const int NUM_TERMS = 13;
 const int NUM_NON_TERMS = 7;
 const int NUM_OPS = NUM_TERMS + NUM_NON_TERMS;

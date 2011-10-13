@@ -217,3 +217,13 @@ float team::calc_team_fit(void) {
 	avg_reward /= NUM_TESTS;
 	return team_fit;
 }
+
+QStringList team::serialize(){
+	QStringList output;
+	for(int i = 0; i < NUM_HYENAS; i++){
+//		output += QString("%1 ").arg(get_hyena_fit(i));
+		output += hyenas[i].serialize();
+		output += "\n";
+	}
+	return output;
+}

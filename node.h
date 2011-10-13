@@ -7,6 +7,7 @@
 #include <cmath>
 
 #include <QString>
+#include <QStringList>
 
 #include "globals.h"
 
@@ -30,6 +31,7 @@ public:
 	int find_child(node *);
 	void set_child(int c2, node *);
 	node *get_point(int, int &, node *&);
+	QStringList serialize();
 	QString graphviz(node *, QString);
 private:
 	datastore data;

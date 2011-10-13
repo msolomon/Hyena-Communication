@@ -5,6 +5,7 @@
 
 #include "globals.h"
 #include "node.h"
+#include <QStringList>
 
 class indiv {
 public:
@@ -180,6 +181,8 @@ public:
 	int get_hits(){
 		return the_info.hits;
 	}
+
+	QStringList serialize();
 
 	void xOver(indiv*);
 

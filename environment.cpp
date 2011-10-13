@@ -362,7 +362,7 @@ void environment::knockout_genes(const ops disabled[], int disabled_len){
     vect zero;
     zero.reset();
     // knockout genes as appropriate
-    for(unsigned int i = 0; i < (disabled_len); i++){
+	for(int i = 0; i < (disabled_len); i++){
         for(int j = 0; j < NUM_HYENAS; j++){
             switch(disabled[i]){
             // terminals

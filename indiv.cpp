@@ -135,3 +135,7 @@ void indiv::move(void) {
 indiv::indiv(void) {
 }
 
+QStringList indiv::serialize(){
+	return tree->serialize();
+}
+
