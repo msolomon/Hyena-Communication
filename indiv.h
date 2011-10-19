@@ -66,6 +66,9 @@ public:
 	void set_mirrored(vect v){
 		the_info.mirrored = v;
 	}
+	void set_hyena_vect(int hyena_num, vect v){
+		the_info.hyenas[hyena_num] = v;
+	}
 	void set_num_lions(int n) {
 		the_info.num_lions = n;
 	}
@@ -128,6 +131,9 @@ public:
     float get_penalty(void) {
         return attack_pen;
     }
+	vect get_hyena_vect(int hyena_num){
+		return the_info.hyenas[hyena_num];
+	}
 	void inc_dist_to_zebra(float d) {
 		avg_dist_to_zebra += (d / TIME_STEPS);
 	}

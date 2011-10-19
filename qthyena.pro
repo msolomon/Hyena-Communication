@@ -19,7 +19,8 @@ HEADERS += qthyena.h \
     widget.h \
     drawhelper.h \
     playback.h \
-    types.h
+    types.h \
+    agent_info.h
     
 SOURCES += qthyena.cpp \
     environment.cpp \

@@ -40,3 +40,10 @@ void vect::reset(){
 	direction = 0;
 	magnitude = 0;
 }
+
+void vect::invert(){
+	if(direction > 0)
+		direction -= PI;
+	else
+		direction += PI;
+}

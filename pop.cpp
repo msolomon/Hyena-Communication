@@ -52,28 +52,6 @@ void pop::save_data(int iteration){
 		data[iteration][10] += imp[i] / (NUM_OPS);
 	}
 
-	/*
-	//// Average hits per hyena on each node type, for entire generation
-	float uses[NUM_OPS] = {};
-	for(int i = 0; i < POP_SIZE; i++){
-		float *h_uses = the_pop[i]->get_uses();
-		for(int j = 0; j < NUM_OPS; j++){
-			uses[j] += h_uses[j];
-		}
-	}
-
-	// Write the values
-	for(int i = 0; i < NUM_OPS; i++){
-		data[iteration][i+NUM_EXTRA] = uses[i] / (float)(POP_SIZE);
-	}
-	*/
-/*
-	// Best team hits per hyena on each node type
-	float *uses = the_pop[pop_bestteam]->get_uses();
-	for(int i = 0; i < NUM_OPS; i++){
-		data[iteration][i+NUM_EXTRA] = uses[i];
-	}
-*/
 	// Best team average importance for each node type
 	for(int i = 0; i < NUM_OPS; i++){
 		data[iteration][i+NUM_EXTRA] = imp[i];
@@ -84,21 +62,7 @@ void pop::save_data(int iteration){
 		data[iteration][i + (NUM_OPS) + NUM_EXTRA] =
 				the_pop[pop_bestteam]->get_hyena_fit(i);
 	}
-/*
-	// Best team individual tree hits
-	for(int i = 0; i < NUM_HYENAS; i++){
-		data[iteration][i +2*(NUM_OPS)+NUM_EXTRA+NUM_HYENAS] =
-				the_pop[pop_bestteam]->hyenas[i].get_hits() /
-				(float) (NUM_TESTS * TIME_STEPS);
-	}
 
-	// Best team individual named counts
-	for(int i = 0; i < NUM_HYENAS; i++){
-		data[iteration][i +2*(NUM_OPS)+NUM_EXTRA+2*NUM_HYENAS] =
-				the_pop[pop_bestteam]->hyenas[i].get_uses()[TRACKED_OP] /
-				(float) (NUM_TESTS * TIME_STEPS);
-	}
-*/
 }
 
 void pop::write_data(int trial){
@@ -150,7 +114,7 @@ void pop::evaluate_team(int member){
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
 			ENV->move();
-            ENV->evaluate(test, g);
+			ENV->evaluate(test);
 		}
 	}
     the_pop[member]->apply_parsimony(); // *before* calc_team_fit
@@ -168,7 +132,7 @@ void pop::draw_best(int member, int iteration){
 		ENV->update_vectors();
 		ENV->draw(helper, iteration);
 		ENV->move();
-        ENV->evaluate(0, g);
+		ENV->evaluate(0);
 	}
 	best.clear();
 }
@@ -341,7 +305,7 @@ void pop::final_test(int trial,
 			if(test % (DRAW_EVERY*NUM_TESTS) == ((DRAW_EVERY*NUM_TESTS) - 1))
 				ENV->draw(helper, test);
 			ENV->move();
-			ENV->evaluate(testnum, g);
+			ENV->evaluate(testnum);
 		}
 
 		the_pop[pop_bestteam]->write_team_fit_final(f, trial, test, testnum, size);
@@ -593,8 +557,8 @@ int pop::select_best_team(int c) { // or worst if c = -1
 
 void pop::serialize_best(const char* filename){
 	QStringList output;
-	// build a list of the operation names
-	for(int i = 0; i < NUM_OPS; i++){
+	// build a list of the operation names (omitting numbered hyena inputs)
+	for(int i = 0; i < NUM_UNIQUE_OPS; i++){
 		output += ops_names[i];
 		output += " ";
 	}

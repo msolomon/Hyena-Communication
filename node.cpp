@@ -116,6 +116,10 @@ void node::copy(node *p) {
 		}
 		return;
 	default:
+		// handle hyena input case
+		if(operation < NUM_OPS){
+			return; // don't need to do anything
+		}
 		ofstream error;
 		error.open("error.txt");
 		error << "error in copy" << endl;
@@ -163,6 +167,10 @@ void node::clear(void) {
 		num = 3;
 		break;
 	default:
+		// handle hyena input case
+		if(operation < NUM_OPS){
+			return; // don't need to do anything
+		}
 		ofstream error;
 		error.open("error.txt", ios_base::app);
 		error << "error in clear: " << (int)operation << endl;
@@ -177,33 +185,6 @@ void node::clear(void) {
 
 void node::mutate(void) {
 	switch (operation) {
-	// terminals
-	case zebra:
-	case nearest_hyena:
-	case nearest_lion:
-	case nearest_calling:
-	case north:
-	case randm:
-	case last_move:
-	case constant:
-	case number_calling:
-	case mirror_nearest:
-	case last_pen:
-	case named:
-	case landmark:
-		if (Random::Global.Integer(100) < MUTATION_CHANCE){
-			if(operation == constant)
-				delete the_const;
-
-			do operation = (ops) (Random::Global.Integer(NUM_TERMS));
-			while(is_disabled(operation));
-
-			if(operation == constant){
-				the_const = new vect();
-				the_const->random();
-			}
-		}
-		break;
 	// non-terminals
 	case sum:
     case subtract:
@@ -226,53 +207,81 @@ void node::mutate(void) {
 		children[1]->mutate();
 		children[2]->mutate();
 		break;
+	// terminals
+	case zebra:
+	case nearest_hyena:
+	case nearest_lion:
+	case nearest_calling:
+	case north:
+	case randm:
+	case last_move:
+	case constant:
+	case number_calling:
+	case mirror_nearest:
+	case last_pen:
+	case named:
+	case landmark:
 	default:
-		ofstream error;
-		error.open("error.txt", ios_base::app);
-		error << "error in mutate: " << operation << endl;
-		error.close();
-		return;
+		// handle hyena input case as well as terminals
+		if(operation < NUM_OPS){
+			if (Random::Global.Integer(100) < MUTATION_CHANCE){
+				if(operation == constant)
+					delete the_const;
+
+				operation = get_rand_terminal();
+
+				if(operation == constant){
+					the_const = new vect();
+					the_const->random();
+				}
+			}
+		} else {
+			ofstream error;
+			error.open("error.txt", ios_base::app);
+			error << "error in mutate: " << operation << endl;
+			error.close();
+			return;
+		}
 	}
 }
 
 vect node::evaluate(agent_info *the_indiv, int depth) {
-//	if (this == NULL) {
-//		vect temp;
-//		ofstream error;
-//		error.open("error.txt", ios_base::app);
-//		error << "error in evaluate: evaluating null" << endl;
-//		error.close();
-//		return (temp);
-//	}
+/*
+	if (this == NULL) {
+		vect temp;
+		ofstream error;
+		error.open("error.txt", ios_base::app);
+		error << "error in evaluate: evaluating null" << endl;
+		error.close();
+		return (temp);
+	}
+*/
 
 	depth++;
 	// count the size of the tree that is hit
 	the_indiv->hits++;
 
+	the_indiv->importance[operation] += BASE_IMPORTANCE / depth;
+
 	switch (operation) {
 	// terminals
 	case zebra:
-		the_indiv->importance[zebra] += BASE_IMPORTANCE / depth;
 		return (the_indiv->zebra);
 	case nearest_hyena:
-		the_indiv->importance[nearest_hyena] += BASE_IMPORTANCE / depth;
 		return (the_indiv->nearest_hyena);
 	case nearest_lion:
-		the_indiv->importance[nearest_lion] += BASE_IMPORTANCE / depth;
 		return (the_indiv->nearest_lion);
 	case nearest_calling:
-		the_indiv->importance[nearest_calling] += BASE_IMPORTANCE / depth;
+
 		return (the_indiv->nearest_calling);
 	case north: {
 		vect temp;
-		the_indiv->importance[north] += BASE_IMPORTANCE / depth;
         temp.direction = 0;
 		temp.magnitude = the_indiv->north_enabled ? 1 : 0;
 		return (temp);
 	}
 	case randm: {
 		vect temp;
-		the_indiv->importance[randm] += BASE_IMPORTANCE / depth;
         if(the_indiv->randm_enabled)
 			temp.random();
 		else
@@ -280,10 +289,8 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		return temp;
 	}
 	case last_move:
-		the_indiv->importance[last_move] += BASE_IMPORTANCE / depth;
 		return (the_indiv->last_move);
 	case constant:
-		the_indiv->importance[constant] += BASE_IMPORTANCE / depth;
 		if(the_indiv->constant_enabled)
 			return (*the_const);
 		else{
@@ -293,61 +300,50 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		}
 	case number_calling: {
 		vect temp;
-		the_indiv->importance[number_calling] += BASE_IMPORTANCE / depth;
 		temp.direction = 0;
 		temp.magnitude = the_indiv->num_hyenas; // only magnitude matters
 		return temp;
 	}
 	case mirror_nearest:
-		the_indiv->importance[mirror_nearest] += BASE_IMPORTANCE / depth;
 		return (the_indiv->mirrored);
 	case last_pen: {
 		vect temp;
-		the_indiv->importance[last_pen] += BASE_IMPORTANCE / depth;
 		temp.direction = 0;
 		temp.magnitude = the_indiv->last_pen;
 		return temp;
 	}
 	case named:
-		the_indiv->importance[named] += BASE_IMPORTANCE / depth;
 		return the_indiv->named;
 	case landmark:
-		the_indiv->importance[landmark] += BASE_IMPORTANCE / depth;
 		return the_indiv->landmark;
 	// non-terminals
 	case sum:
-		the_indiv->importance[sum] += BASE_IMPORTANCE / depth;
 		return children[0]->evaluate(the_indiv, depth) +
 				children[1]->evaluate(the_indiv, depth);
 	case subtract: {
 		vect temp;
-        the_indiv->importance[subtract] += BASE_IMPORTANCE / depth;
 		// get second input and invert it
 		temp = children[1]->evaluate(the_indiv, depth);
-        temp.direction > 0 ? temp.direction -= PI : temp.direction += PI;
+		temp.invert();
 		// add it to the first input
 		return (temp + children[0]->evaluate(the_indiv, depth));
 	}
     case compare:
-		the_indiv->importance[compare] += BASE_IMPORTANCE / depth;
 		return compare_vectors(children[0]->evaluate(the_indiv, depth),
 							   children[1]->evaluate(the_indiv, depth));
 	case invert: {
 		vect temp;
-		the_indiv->importance[invert] += BASE_IMPORTANCE / depth;
         temp = children[0]->evaluate(the_indiv, depth);
-        temp.direction > 0 ? temp.direction -= PI : temp.direction += PI;
+		temp.invert();
 		return (temp);
 	}
 	case iflteMAG:
-		the_indiv->importance[iflteMAG] += BASE_IMPORTANCE / depth;
 		if (children[0]->evaluate(the_indiv, depth).magnitude <=
 				children[1]->evaluate(the_indiv, depth).magnitude)
 			return (children[2]->evaluate(the_indiv, depth));
 		else
 			return (children[3]->evaluate(the_indiv, depth));
 	case iflteCLOCKWISE:
-		the_indiv->importance[iflteCLOCKWISE] += BASE_IMPORTANCE / depth;
 		if (children[0]->evaluate(the_indiv, depth).direction <=
 				children[1]->evaluate(the_indiv, depth).direction)
 			return (children[2]->evaluate(the_indiv, depth));
@@ -355,7 +351,6 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 			return (children[3]->evaluate(the_indiv, depth));
 	case ifVectorZero: {
 		vect temp;
-		the_indiv->importance[ifVectorZero] += BASE_IMPORTANCE / depth;
 		temp = children[0]->evaluate(the_indiv, depth);
 		if (temp.magnitude == 0)
 			return (children[1]->evaluate(the_indiv, depth));
@@ -363,6 +358,10 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 			return (children[2]->evaluate(the_indiv, depth));
 	}
 	default: {
+		// handle hyena input case
+		if(operation < NUM_OPS){
+			return the_indiv->hyenas[operation - NUM_UNIQUE_OPS];
+		}
 		vect temp;
 		ofstream error;
 		error.open("error.txt", ios_base::app);
@@ -395,8 +394,7 @@ vect node::compare_vectors(vect a, vect b){
 void node::grow(int max_d, int depth){
 //    parent = pare;
 	if(depth == max_d){ // bottomed out, use terminals
-		do operation = (ops) (Random::Global.Integer(NUM_TERMS));
-		while(is_disabled(operation));
+		operation = get_rand_terminal();
 
 		if(operation == constant){
 			the_const = new vect();
@@ -404,13 +402,11 @@ void node::grow(int max_d, int depth){
 		}
 	}
 	else{ // haven't reached bottom, use FULL or GROW algo. as appropriate
-		if(FULL){
-			do operation = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
-			while(is_disabled(operation));
-		} else { // grow
-			do operation = (ops) (Random::Global.Integer(NUM_OPS));
-			while(is_disabled(operation));
-		}
+		if(FULL)
+			operation = get_rand_nonterminal();
+		else // grow
+			operation = get_rand_op();
+
         switch(operation){
 		// terminals
 		case zebra:
@@ -463,6 +459,10 @@ void node::grow(int max_d, int depth){
 			children[2]->grow(max_d,depth+1);
             break;
         default:
+			// handle hyena input case
+			if(operation < NUM_OPS){
+				break;
+			}
             ofstream error;
             error.open("error.txt", ios_base::app);
             error << "error in grow: " << operation << endl;
@@ -475,13 +475,14 @@ void node::grow(int max_d, int depth){
 }
 
 int node::get_size() {
-//	if (this == NULL) {
-//		ofstream error;
-//		error.open("error.txt", ios_base::app);
-//		error << "error in calc size: evaluating null" << endl;
-//		error.close();
-//	}
-
+/*
+	if (this == NULL) {
+		ofstream error;
+		error.open("error.txt", ios_base::app);
+		error << "error in calc size: evaluating null" << endl;
+		error.close();
+	}
+*/
     if(size > 0){
         return size;
     }
@@ -527,6 +528,10 @@ int node::get_size() {
         size += children[2]->get_size();
         break;
 	default:
+		// handle hyena input case
+		if(operation < NUM_OPS){
+			break;
+		}
 		ofstream error;
 		error.open("error.txt", ios_base::app);
 		error << "error in calc size: unknown operator" << endl;
@@ -592,6 +597,10 @@ node *node::get_point(int pn, int &current, node *&parent) {
 		}
 		return answer;
 	default:
+		// handle hyena input case
+		if(operation < NUM_OPS){
+			return this;
+		}
 		ofstream error;
 		error.open("error.txt");
 		error << "error in get point" << endl;
@@ -669,6 +678,12 @@ QString node::graphviz(node *parent, QString extraLabel){
 		}
 		break;
 	default:
+		// handle hyena input case
+		if(operation < NUM_OPS){
+			output += QString("hyena_%1").arg(operation - NUM_OPS);
+			output += "\", shape=plaintext]\n";
+			break;
+		}
 		ofstream error;
 		error.open("error.txt");
 		error << "error in graphviz" << endl;
@@ -740,6 +755,11 @@ QStringList node::serialize(){
 		}
 		break;
 	default:
+		// handle hyena input case
+		if(operation < NUM_OPS){
+			output += QString("%1 ").arg(operation);
+			break;
+		}
 		ofstream error;
 		error.open("error.txt");
 		error << "error in serialize" << endl;
@@ -753,8 +773,6 @@ node* node::deserialize(QStringList &input){
 		return NULL;
 
 	ops op = (ops) input.takeFirst().toInt();
-	if(op < 0 || op > NUM_OPS)
-		return NULL; // error
 	operation = op;
 
 	switch (op) {
@@ -807,6 +825,10 @@ node* node::deserialize(QStringList &input){
 		}
 		break;
 	default:
+		// handle hyena input case
+		if(operation < NUM_OPS){
+			break; // don't need to do anything else
+		}
 		ofstream error;
 		error.open("error.txt");
 		error << "error in deserialize" << endl;

@@ -53,7 +53,7 @@ const char* const ops_names[] = {
 
 const int NUM_TERMS = 13;
 const int NUM_NON_TERMS = 7;
-const int NUM_OPS = NUM_TERMS + NUM_NON_TERMS;
+const int NUM_UNIQUE_OPS = NUM_TERMS + NUM_NON_TERMS;
 
 // how to combine results from retesting, at both the individual and team levels
 enum selection_method{
@@ -63,26 +63,6 @@ enum selection_method{
 	maximum // O(n)
 };
 
-typedef struct {
-	vect zebra;
-	vect nearest_hyena;
-	vect nearest_lion;
-	vect last_move;
-	vect mirrored;
-	vect nearest_calling;
-	vect named;
-	vect landmark;
-	int num_lions;
-	int num_hyenas;
-    int hits;
-	float last_pen;
-//	int uses[NUM_OPS];
-	// the rest can be turned off by zeroing out above vectors
-	double importance[NUM_OPS];
-	bool north_enabled;
-	bool constant_enabled;
-    bool randm_enabled;
-} agent_info;
 
 //enum agent_type {
 //	hyena, lion

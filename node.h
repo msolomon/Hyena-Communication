@@ -10,6 +10,7 @@
 #include <QStringList>
 
 #include "globals.h"
+#include "agent_info.h"
 
 class node;
 

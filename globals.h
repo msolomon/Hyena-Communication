@@ -13,9 +13,10 @@ using RandomLib::Random;
 #include "types.h"
 
 //// Common settings
-const int GENERATIONS = 0;
-const int POP_SIZE = 1;
+const int GENERATIONS = 10;
+const int POP_SIZE = 80;
 const int NUM_HYENAS = 15;
+const int NUM_HYENA_INPUTS = NUM_HYENAS; // 0 to disable, otherwise first N
 const int NUM_LIONS = 2;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat tests to prevent luck
@@ -24,10 +25,10 @@ const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const int KNOCKOUT_TESTS = 2000; // as above, but with a given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const float PARSIMONY_COEFF = 0.001;
-const ops DISABLED_OPS[] = {};
+const ops DISABLED_OPS[] = {named};
 const ops KNOCKOUT_OPS[] = {};
 const selection_method SELECTION_METHOD = mean;
-const char* const RETEST_GIVEN = "inputteam.txt"; // NULL to disable, else filename
+const char* const RETEST_GIVEN = NULL; // NULL to disable, else filename
 // 0 to disable, else start hyenas within X units: exactly 1 non-named inside
 // the calling radius
 const float RADIUS_START = 0;
@@ -79,6 +80,7 @@ const float HYENA_HYENA_RADIUS = 10;
 const float HYENA_LION_FEAR_RATIO = 3; // greater than
 const float LION_SEES_ZEBRA = CALLING_RANGE;
 const float LION_NEAR_ZEBRA = 1;
+const int NUM_OPS = NUM_UNIQUE_OPS + NUM_HYENA_INPUTS;
 // Squared versions of constants (for performance)
 const float LION_ATTACK_RADIUS_SQ = LION_ATTACK_RADIUS * LION_ATTACK_RADIUS;
 const float LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;
@@ -101,6 +103,29 @@ inline bool is_disabled(ops op){
 	for(unsigned int i = 0; i < (sizeof(DISABLED_OPS) / sizeof(ops)); i++)
 		if(op == DISABLED_OPS[i]) return true;
 	return false;
+}
+
+inline ops get_rand_terminal(){
+	ops op;
+	do op = (ops) Random::Global.Integer(NUM_TERMS + NUM_HYENA_INPUTS);
+	while(is_disabled(op));
+	if(op >= NUM_TERMS)
+		op = (ops) (op + NUM_NON_TERMS); // hyena inputs come after both
+	return op;
+}
+
+inline ops get_rand_nonterminal(){
+	ops op;
+	do op = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
+	while(is_disabled(op));
+	return op;
+}
+
+inline ops get_rand_op(){
+	ops op;
+	do op = (ops) (Random::Global.Integer(NUM_OPS));
+	while(is_disabled(op));
+	return op;
 }
 
 // Prototypes
