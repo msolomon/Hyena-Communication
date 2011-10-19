@@ -13,7 +13,7 @@ using RandomLib::Random;
 #include "types.h"
 
 //// Common settings
-const int GENERATIONS = 10;
+const int GENERATIONS = 1500;
 const int POP_SIZE = 80;
 const int NUM_HYENAS = 15;
 const int NUM_HYENA_INPUTS = NUM_HYENAS; // 0 to disable, otherwise first N

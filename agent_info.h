@@ -12,7 +12,7 @@ typedef struct {
 	vect nearest_calling;
 	vect named;
 	vect landmark;
-	vect hyenas[NUM_HYENA_INPUTS];
+	vect hyenas[NUM_HYENAS];
 	int num_lions;
 	int num_hyenas;
 	int hits;
