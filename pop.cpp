@@ -79,6 +79,11 @@ void pop::write_data(int trial){
 		 "last_pen named landmark "
 		 // nonterminals
 		 "sum subtract compare invert iflteMAG iflteCLOCKWISE ifVectorZero ";
+	// hyena inputs (also terminals)
+	for(int i = 1; i < NUM_HYENA_INPUTS; i++){
+		f << "h_" << i << " ";
+	}
+	// individual hyena fitnesses (not an input at all)
 	for(int i = 1; i < NUM_HYENAS; i++){
 		f << "h" << i << " ";
 	}
