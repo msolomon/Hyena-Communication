@@ -21,8 +21,8 @@ public:
 	DrawHelper();
 	void paint(QPainter *painter, QPaintEvent *event);
 	void updateGui();
-	QQueue<QPointF> hyenas[NUM_HYENAS];
-	QQueue<QPointF> lions[NUM_LIONS];
+	QList<QPointF> hyenas[NUM_HYENAS];
+	QList<QPointF> lions[NUM_LIONS];
 	QQueue<QPointF> landmarks;
 
 	QQueue<int> iter;
@@ -38,8 +38,10 @@ private:
 	QPen callRadPen;
 	QPen landmarkPen;
 	QPen radStartPen;
+	QPen* coloredPen[26]; // 26 most visually distinct colors
 	QBrush backgroundBrush;
 	QPointF zeb;
+	QPen *getColor(int); // return a color given a hyena number
 	int timestep;
 	int it;
 

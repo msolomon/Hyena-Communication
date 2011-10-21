@@ -33,13 +33,22 @@ void Playback::on_but_play_clicked(){
 	// TODO: make this not depend on compile-time constant num of animals
 	QPointF landmark = landmarks[key];
 	for(int it = 0; it < l->length()/NUM_LIONS; it++){
+		ui->widget->helper.landmarks.clear();
+		ui->widget->helper.step.clear();
+		for(int i = 0; i < NUM_HYENAS; i++)
+			ui->widget->helper.hyenas[i].clear();
+		for(int i = 0; i < NUM_LIONS; i++)
+			ui->widget->helper.lions[i].clear();
+	}
+	for(int it = 0; it < l->length()/NUM_LIONS; it++){
 		ui->widget->helper.landmarks.enqueue(landmark);
 		for(int i = 0; i < NUM_HYENAS; i++){
-			ui->widget->helper.hyenas[i].enqueue(h->at(it * NUM_HYENAS + i));
+			ui->widget->helper.hyenas[i].append(h->at(it * NUM_HYENAS + i));
 		}
 		for(int i = 0; i < NUM_LIONS; i++){
-			ui->widget->helper.lions[i].enqueue(l->at(it * NUM_LIONS + i));
+			ui->widget->helper.lions[i].append(l->at(it * NUM_LIONS + i));
 		}
+		ui->widget->helper.step.enqueue(it);
 	}
 
 	ui->widget->playVideo();

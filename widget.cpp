@@ -15,7 +15,7 @@ void Widget::runTrial(){
 
 void Widget::playVideo(){
 	// abusing recursion a bit, but it works
-	if(!helper.lions[0].isEmpty()){
+	if(!helper.step.isEmpty()){
 		repaint();
 		QTimer::singleShot(playback_ms, this, SLOT(playVideo()));
 	} else{

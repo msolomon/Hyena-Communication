@@ -16,7 +16,7 @@ class environment {
 public:
 	environment();
 	void update_vectors(void);
-	void draw(DrawHelper*, int);
+	void draw(DrawHelper*, int, int);
 	void rand_move(void);
 	void move(void);
 	void evaluate(int);

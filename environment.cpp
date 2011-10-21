@@ -324,10 +324,11 @@ void environment::update_vectors(void){
 	}
 }
 
-void environment::draw(DrawHelper* helper, int itera) {
+void environment::draw(DrawHelper* helper, int itera, int timestep) {
 	if(GUI){
 		helper->iter.enqueue(itera);
 		helper->landmarks.enqueue(QPointF(landmarkx, landmarky));
+		helper->step.enqueue(timestep); // track current timestep
 	}
 
 	QStringList list;
@@ -340,7 +341,7 @@ void environment::draw(DrawHelper* helper, int itera) {
 							agents->lions[i].getY());
 		list.append(QString("%1 %2").arg(p.x()).arg(p.y()));
 		if(GUI)
-			helper->lions[i].enqueue(p);
+			helper->lions[i].append(p);
 	}
 	list.append("\n ");
 
@@ -350,7 +351,7 @@ void environment::draw(DrawHelper* helper, int itera) {
 		list.append(QString("%1 %2").arg(p.x(), 0, 'g', 4)
                     .arg(p.y(), 0, 'g', 4));
 		if(GUI)
-			helper->hyenas[i].enqueue(p);
+			helper->hyenas[i].append(p);
 	}
 	list.append("\n");
 	ofstream f;

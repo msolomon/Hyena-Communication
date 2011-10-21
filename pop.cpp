@@ -135,7 +135,7 @@ void pop::draw_best(int member, int iteration){
 	best.reset_inputs();
 	for (int g = 0; g < TIME_STEPS; g++) {
 		ENV->update_vectors();
-		ENV->draw(helper, iteration);
+		ENV->draw(helper, iteration, g);
 		ENV->move();
 		ENV->evaluate(0);
 	}
@@ -308,7 +308,7 @@ void pop::final_test(int trial,
             if(disabled_len > 0 && disabled != NULL)
                 ENV->knockout_genes(disabled, disabled_len);
 			if(test % (DRAW_EVERY*NUM_TESTS) == ((DRAW_EVERY*NUM_TESTS) - 1))
-				ENV->draw(helper, test);
+				ENV->draw(helper, test, g);
 			ENV->move();
 			ENV->evaluate(testnum);
 		}

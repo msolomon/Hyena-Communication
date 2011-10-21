@@ -42,7 +42,13 @@ const bool GUI = false;
 const bool DRAW = true; // if false, videos are unavailable
 const int DRAW_EVERY = 10; // draw every X generations
 const bool ANTIALIAS = true; // antialias GUI drawing
-const bool HYENA_MARKERS = true; // draw short line to ID different hyenas
+const bool HYENA_MARKERS = false; // draw short line to ID different hyenas
+const bool SMEAR_DRAW = true; // don't erase background between timesteps
+const int SMEAR_LAST = 0; // erase timesteps older than this; 0 for never
+const bool FADE_DRAW = false; // hyenas less opaque toward end (more overlap)
+const bool FADE_OUT = true; // older positions fade with time
+const float ANIMAL_MAX_OPACITY = 0.6;
+const float ANIMAL_MIN_OPACITY = 0.1;
 
 // Use %1 for trial number
 const char* const VIDEO_TEMPLATE = "video_%1.txt";
