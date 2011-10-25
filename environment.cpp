@@ -277,6 +277,22 @@ void environment::update_vectors(void){
 		agents->hyenas[i].set_nearest_lion(temp);
 	}
 
+	/* If we should only get vectors to hyenas that are calling,
+	 * zero out those that aren't. This is not optimized for
+	 * efficiency, or most of them wouldn't be calculated first.
+	*/
+	if(VEC_CALLING_ONLY){
+		temp.reset(); // the zero vector
+		for(int i = 0; i < NUM_HYENAS; i++){
+			// if a hyena isn't calling then zero out vectors to it
+			if(!agents->hyenas[i].get_calling()){
+				for(int j = 0; j < NUM_HYENAS; j++){
+					agents->hyenas[j].set_hyena_vect(i, temp);
+				}
+			}
+		}
+	}
+
 	// lions
 	// get closest hyena, count nearby lions, get vector to zebra
 	for(int i = 0; i < NUM_LIONS; i++){
