@@ -16,12 +16,12 @@ using RandomLib::Random;
 const int GENERATIONS = 1500;
 const int POP_SIZE = 80;
 const int NUM_HYENAS = 15;
-const int NUM_HYENA_INPUTS = NUM_HYENAS; // 0 to disable, otherwise first N
+const int NUM_HYENA_INPUTS = 0; // 0 to disable, otherwise first N
 const bool VEC_CALLING_ONLY = true; // vectors to all calling, or all period?
 const int NUM_LIONS = 2;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat tests to prevent luck
-const bool FINAL_TEST_MEAN = true; // use mean fitness to pick final best team
+const bool FINAL_TEST_MEAN = false; // force mean fitness to pick final best team
 const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const int KNOCKOUT_TESTS = 2000; // as above, but with a given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
@@ -34,9 +34,9 @@ const char* const RETEST_GIVEN = NULL; // NULL to disable, else filename
 // the calling radius
 const float RADIUS_START = 0;
 // Only pick one method below
-const bool OET_GENERATIONAL = true;
-const bool TEAM_GENERATIONAL = false;
-const bool INDIV_GENERATIONAL = false;
+const bool OET_GENERATIONAL = true; // 50% team gen., 50% island gen.
+const bool TEAM_GENERATIONAL = false; // 100% team generational
+const bool INDIV_GENERATIONAL = false; // 100% island generational
 const bool ISLAND_STEADY = false;
 // GUI/Drawing settings
 const bool GUI = false;
