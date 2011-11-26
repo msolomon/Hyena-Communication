@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QSet>
 
 #include <iostream>
 #include <fstream>

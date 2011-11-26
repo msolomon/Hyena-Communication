@@ -58,7 +58,8 @@ public:
 	void force_fitness(double fit){
 		team_fit = fit;
 	}
-
+	void get_leaders(int &leader_idx, int &leader_score,
+					 int &leader2_idx, int &leader2_score);
 	void reset_fitness(void);
 	void reset_calling();
 	QStringList serialize();
@@ -77,6 +78,7 @@ public:
 	float avg_size;
 	float uses[NUM_OPS];
 	double importance[NUM_OPS];
+	int *leadership;
 };
 
 #endif

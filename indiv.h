@@ -27,6 +27,7 @@ public:
         the_info.randm_enabled = true;
 		the_info.constant_enabled = true;
 		the_info.north_enabled = true;
+		the_info.moved_yet = false;
 	}
 
     void set_north_enabled(bool set){
@@ -150,6 +151,9 @@ public:
 	}
 	void reset_pen_input(){
 		the_info.last_pen = 0;
+	}
+	float get_moved(void){
+		return the_info.moved_yet;
 	}
 
 	void rand_move(void);

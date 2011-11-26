@@ -125,6 +125,16 @@ float team::write_team_fit_final(std::ofstream &f, int trial, int test, int test
 		importance[i] = 0;
 	}
 
+	float total_leadership = 0;
+	for(int i = 0; i < NUM_HYENAS; i++){
+		total_leadership += float(leadership[i]);
+	}
+	int leader_idx, leader_score_int, leader2_idx, leader2_score_int;
+	get_leaders(leader_idx, leader_score_int, leader2_idx, leader2_score_int);
+	float leader_score, leader2_score;
+	leader_score = leader_score_int / (total_leadership);
+	leader2_score = leader2_score_int / (total_leadership);
+
 	// sum up importance
 	for(int i = 0; i < NUM_HYENAS; i++){
 		double *h_imp = hyenas[i].get_importance();
@@ -155,7 +165,11 @@ float team::write_team_fit_final(std::ofstream &f, int trial, int test, int test
 	  << team_fit << " "
 	  << size << " "
 	  << avg_hits << " "
-	  << avg_imp << " ";
+	  << avg_imp << " "
+	  << leader_idx << " "
+	  << leader_score << " "
+	  << leader2_idx << " "
+	  << leader2_score << " ";
 	for(int i = 0; i < NUM_OPS; i++)
 		f << importance[i] << " ";
 	for(int i = 0; i < NUM_HYENAS - 1; i++)
@@ -163,6 +177,26 @@ float team::write_team_fit_final(std::ofstream &f, int trial, int test, int test
 	f << hyena_fits[NUM_HYENAS - 1] << "\n";
 
 	return team_fit;
+}
+
+void team::get_leaders(int &leader_idx, int &leader_score,
+							  int &leader2_idx, int &leader2_score){
+	leader_idx = 0;
+	leader_score = leadership[0];
+	for(int i = 1; i < NUM_HYENAS; i++){
+		if(leadership[i] > leader_score){
+			leader_score = leadership[i];
+			leader_idx = i;
+		}
+	}
+	leader2_idx = -1;
+	leader2_score = -100; // minimum score is actually 0
+	for(int i = 0; i < NUM_HYENAS; i++){
+		if(i != leader_idx && leadership[i] > leader2_score){
+			leader2_score = leadership[i];
+			leader2_idx = i;
+		}
+	}
 }
 
 float team::recalc_team_avg_fit(){

@@ -16,8 +16,8 @@ using RandomLib::Random;
 const int GENERATIONS = 1500;
 const int POP_SIZE = 80;
 const int NUM_HYENAS = 15;
-const int NUM_HYENA_INPUTS = 0; // 0 to disable, otherwise first N
-const bool VEC_CALLING_ONLY = true; // vectors to all calling, or all period?
+const int NUM_HYENA_INPUTS = NUM_HYENAS; // 0 to disable, otherwise first N
+const bool VEC_CALLING_ONLY = false; // vectors to all calling, or all period?
 const int NUM_LIONS = 2;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat tests to prevent luck

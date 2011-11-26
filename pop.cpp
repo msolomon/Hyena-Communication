@@ -51,7 +51,20 @@ void pop::save_data(int iteration){
 	for(int i = 0; i < NUM_OPS; i++){
 		data[iteration][10] += imp[i] / (NUM_OPS);
 	}
-
+	// best team leader and 2nd best team leader. indexes and leadership scores
+	int leader_idx, leader_score, leader2_idx, leader2_score, total;
+	the_pop[pop_bestteam]->get_leaders(leader_idx,
+									   leader_score,
+									   leader2_idx,
+									   leader2_score);
+	total = 0;
+	for(int i = 0; i < NUM_HYENAS; i++){
+		total += ENV->leadership[i];
+	}
+	data[iteration][11] = leader_idx;
+	data[iteration][12] = leader_score / float(total);
+	data[iteration][13] = leader2_idx;
+	data[iteration][14] = leader2_score / float(total);
 	// Best team average importance for each node type
 	for(int i = 0; i < NUM_OPS; i++){
 		data[iteration][i+NUM_EXTRA] = imp[i];
@@ -73,6 +86,7 @@ void pop::write_data(int trial){
 	// provide column labels
 	f << "trial gen time avg_fit best_zeb_dist best_num_attacks best_pen "
 		 "best_parsimony best_reward best_fit best_size best_hits best_imp "
+		 "leader_idx leader_score leader2_idx leader2_score "
 		 // terminals
 		 "zebra nearest_hyena nearest_lion nearest_calling "
 		 "north randm last_move constant number_calling mirror_nearest "
@@ -119,6 +133,7 @@ void pop::evaluate_team(int member){
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
 			ENV->move();
+			ENV->update_leadership();
 			ENV->evaluate(test);
 		}
 	}
@@ -137,6 +152,7 @@ void pop::draw_best(int member, int iteration){
 		ENV->update_vectors();
 		ENV->draw(helper, iteration, g);
 		ENV->move();
+		ENV->update_leadership();
 		ENV->evaluate(0);
 	}
 	best.clear();
@@ -272,6 +288,7 @@ void pop::final_test(int trial,
 	// provide column labels
 	f << "trial id best_zeb_dist best_num_attacks best_pen "
 		 "best_parsimony best_reward best_fit best_size best_hits best_imp "
+		 "leader_idx leader_score leader2_idx leader2_score "
 		 // terminals
 		 "zebra nearest_hyena nearest_lion nearest_calling "
 		 "north randm last_move constant number_calling mirror_nearest "
@@ -315,6 +332,7 @@ void pop::final_test(int trial,
 			if(test % (DRAW_EVERY*NUM_TESTS) == ((DRAW_EVERY*NUM_TESTS) - 1))
 				ENV->draw(helper, test, g);
 			ENV->move();
+			ENV->update_leadership();
 			ENV->evaluate(testnum);
 		}
 

@@ -10,11 +10,17 @@ environment::environment(){
 
 void environment::set_up(team *a) {
 	agents = a;
+	agents->leadership = (int*) leadership;
 	if(is_disabled(landmark)){
 		landmarkx = -100;
 		landmarky = -100;
 	}
+	for(int i = 0; i < NUM_HYENAS; i++){
+		leadership[i] = 0;
+	}
 }
+
+
 
 void environment::generate_positions(){
 	for(int i = 0; i < NUM_TESTS; i++){
@@ -96,7 +102,11 @@ void environment::place_agents(int test){
 	for(int i = 0; i < NUM_HYENAS; i++){
 		agents->hyenas[i].set_position(hyenacoord[test][i][0],
 									   hyenacoord[test][i][1]);
+		unmoved.insert(i); // reset set of unmoved hyenas
+		uncalled.insert(i); // reset set of hyenas that haven't called
 	}
+	just_moved.clear(); // these should both also be cleared after each timestep
+	just_called.clear();
 
 	if(!is_disabled(landmark)){
 		landmarkx = landmarkcoord[test][0];
@@ -141,6 +151,22 @@ float invert_direction(float d){
 	else return d - PI;
 }
 
+void environment::update_leadership(){
+	foreach(int mover, unmoved){
+		if(agents->hyenas[mover].get_moved()){
+			unmoved.remove(mover); // this does remove from original unmoved set
+			just_moved.insert(mover);
+		}
+	}
+	foreach(int caller, just_called){
+		leadership[caller] += just_moved.size();
+	}
+	// clear set of those that just moved
+	just_moved.clear();
+	// clear set of those that just called
+	just_called.clear();
+}
+
 void environment::update_vectors(void){
 	int the_j = 0;
 	int calling_j = 0;
@@ -167,6 +193,10 @@ void environment::update_vectors(void){
 			temp.magnitude = sqrt(temp.magnitude); // now calculate sqrt
 			temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
 			if(CALLING_ENABLED){
+				if(uncalled.contains(i)){ // first time calling
+					just_called.insert(i);
+					uncalled.remove(i);
+				}
 				agents->hyenas[i].set_calling(true);
 				num_calling++;
 			} else {

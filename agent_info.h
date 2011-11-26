@@ -23,6 +23,7 @@ typedef struct {
 	bool north_enabled;
 	bool constant_enabled;
 	bool randm_enabled;
+	bool moved_yet;
 } agent_info;
 
 #endif // AGENT_INFO_H
