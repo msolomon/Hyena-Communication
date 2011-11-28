@@ -151,6 +151,15 @@ float invert_direction(float d){
 	else return d - PI;
 }
 
+void environment::clear_last_moves(){
+	foreach(int mover, unmoved){
+		if(agents->hyenas[mover].get_moved())
+			unmoved.remove(mover);
+	}
+	just_moved.clear();
+	just_called.clear();
+}
+
 void environment::update_leadership(){
 	foreach(int mover, unmoved){
 		if(agents->hyenas[mover].get_moved()){

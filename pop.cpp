@@ -133,7 +133,10 @@ void pop::evaluate_team(int member){
 		for (int g = 0; g < TIME_STEPS; g++) {
 			ENV->update_vectors();
 			ENV->move();
-			ENV->update_leadership();
+			if(g == 0)
+				ENV->clear_last_moves();
+			else
+				ENV->update_leadership();
 			ENV->evaluate(test);
 		}
 	}
@@ -152,7 +155,10 @@ void pop::draw_best(int member, int iteration){
 		ENV->update_vectors();
 		ENV->draw(helper, iteration, g);
 		ENV->move();
-		ENV->update_leadership();
+		if(g == 0)
+			ENV->clear_last_moves();
+		else
+			ENV->update_leadership();
 		ENV->evaluate(0);
 	}
 	best.clear();
@@ -332,7 +338,10 @@ void pop::final_test(int trial,
 			if(test % (DRAW_EVERY*NUM_TESTS) == ((DRAW_EVERY*NUM_TESTS) - 1))
 				ENV->draw(helper, test, g);
 			ENV->move();
-			ENV->update_leadership();
+			if(g == 0)
+				ENV->clear_last_moves();
+			else
+				ENV->update_leadership();
 			ENV->evaluate(testnum);
 		}
 

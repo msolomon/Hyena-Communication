@@ -26,6 +26,7 @@ public:
 	void place_agents(int);
     void knockout_genes(const ops disabled[], int disabled_len);
 	void update_leadership();
+	void clear_last_moves();
 	float landmarkcoord[NUM_TESTS][2];
 	float hyenacoord[NUM_TESTS][NUM_HYENAS][2];
 	float lioncoord[NUM_TESTS][NUM_LIONS][2];
