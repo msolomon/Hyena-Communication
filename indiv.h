@@ -9,8 +9,6 @@
 
 class indiv {
 public:
-	indiv(void);
-
 	void reset_inputs(){
 		the_info.zebra.reset();
 		the_info.nearest_hyena.reset();

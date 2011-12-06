@@ -99,19 +99,25 @@ void indiv::rand_move() {
 
 void indiv::lion_move(void) {
 	if (the_info.num_hyenas > (the_info.num_lions * HYENA_LION_FEAR_RATIO)) {
-		float mag = tanh((the_info.num_hyenas /
-						  (the_info.num_lions * HYENA_LION_FEAR_RATIO)));
+		float mag = MAX_HYENA_MOVE -
+				(the_info.num_hyenas /
+				 (the_info.num_lions * HYENA_LION_FEAR_RATIO));
+		if(mag < -MAX_HYENA_MOVE)
+			mag = -MAX_HYENA_MOVE;
 		x += mag * sin(the_info.nearest_hyena.direction);
 		y += mag * cos(the_info.nearest_hyena.direction);
 	}
 	else if(LIONS_RETURN &&
 			the_info.zebra.magnitude < LION_SEES_ZEBRA &&
 			the_info.zebra.magnitude > LION_NEAR_ZEBRA){
-		float mag = 1.0 - (the_info.num_hyenas /
-				(the_info.num_lions * HYENA_LION_FEAR_RATIO));
-	 x -= mag * sin(the_info.zebra.direction);
-	 y -= mag * cos(the_info.zebra.direction);
-	 }
+		float mag = MAX_HYENA_MOVE -
+				(the_info.num_hyenas /
+				 (the_info.num_lions * HYENA_LION_FEAR_RATIO));
+		if(mag < -MAX_HYENA_MOVE)
+			mag = -MAX_HYENA_MOVE;
+		x -= mag * sin(the_info.zebra.direction);
+		y -= mag * cos(the_info.zebra.direction);
+	}
 }
 
 void indiv::move(void) {
@@ -121,8 +127,8 @@ void indiv::move(void) {
 		return;
 	}
 	v = tree->evaluate(&the_info, 0);
-	if (v.magnitude > 1){ // trying to move too far
-		v.magnitude = 1;
+	if (v.magnitude > MAX_HYENA_MOVE){ // trying to move too far
+		v.magnitude = MAX_HYENA_MOVE;
 
 		the_info.last_move.direction = v.direction;
 		the_info.last_move.magnitude = v.magnitude;
@@ -133,9 +139,6 @@ void indiv::move(void) {
 		x += v.magnitude * sin(v.direction);
 		y += v.magnitude * cos(v.direction);
 	}
-}
-
-indiv::indiv(void) {
 }
 
 QStringList indiv::serialize(){

@@ -77,7 +77,7 @@ const float ZEBRAY = Y / 2.0;
 const bool CALLING_ENABLED = true;
 const float CALLING_RANGE = 8; // hyenas call when close to zebra
 const bool START_ONE_INSIDE = true; // at least one hyena inside calling radius
-const bool START_OUTSIDE_ZEBRA = false;
+const bool START_OUTSIDE_ZEBRA = false; // doesn't apply to radius placement
 const double BASE_IMPORTANCE = 5000.0;
 const float LION_ATTACK_RADIUS = 3;
 const float LION_ATTACK_PENALTY = 3;
@@ -88,6 +88,8 @@ const float HYENA_LION_FEAR_RATIO = 3; // greater than
 const float LION_SEES_ZEBRA = CALLING_RANGE;
 const float LION_NEAR_ZEBRA = 1;
 const int NUM_OPS = NUM_UNIQUE_OPS + NUM_HYENA_INPUTS;
+const float MAX_HYENA_MOVE = 1.0;
+const float MAX_LION_MOVE = 1.0;
 // Squared versions of constants (for performance)
 const float LION_ATTACK_RADIUS_SQ = LION_ATTACK_RADIUS * LION_ATTACK_RADIUS;
 const float LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;

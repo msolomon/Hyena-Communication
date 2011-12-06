@@ -33,7 +33,7 @@ void environment::generate_positions(){
 			lioncoord[i][j][1] = ZEBRAY + cos(dir) * mag;
 		}
 
-		if(RADIUS_START > 0){
+		if(RADIUS_START > 0){ // place within given distance of zebra
 			// pick a random non-named hyena
 			int inside = Random::Global.IntegerC(1, NUM_HYENAS - 1);
 			dir = Random::Global.FixedS<float>() * 2 * PI;
@@ -128,7 +128,7 @@ void environment::evaluate(int test) {
 		for (int j = 0; j < NUM_LIONS; j++) {
 			radius = distance_sq(tempx - agents->lions[j].getX(),
 								 tempy - agents->lions[j].getY());
-            if (radius < LION_ATTACK_RADIUS_SQ) { // not too close to lions
+			if (radius < LION_ATTACK_RADIUS_SQ) { // too close to lions
                 float penalty = LION_ATTACK_PENALTY *
                         (sqrt(radius) - LION_ATTACK_RADIUS);
 				agents->hyenas[i].changeFit(penalty, test); // near lion

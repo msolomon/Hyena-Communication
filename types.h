@@ -5,6 +5,7 @@
 
 //// Types
 enum ops {
+	// Terminals
 	zebra, // to zebra, only if hyena within CALLING_RADIUS
 	nearest_hyena, // nearest hyena, if within HYENA_HYENA_RADIUS
 	nearest_lion, // nearest lion, if within LION_HYENA_RADIUS
@@ -15,9 +16,11 @@ enum ops {
 	constant, // a once-randomized vect, otherwise as randm
 	number_calling, // dir=0, mag=(number of calling hyenas), unlimited range
 	mirror_nearest, // the previous action of the nearest hyena (if seen)
-	last_pen, // absolute value of penalty from last timestep
-	named, // only get vector if named hyena calls, unlimited range
+	last_pen, // mag=absolute value of penalty from last timestep, dir=0
+	named, // only get vector if named hyena calls, unlimited range: flag-bearer
 	landmark, // a vector to a landmark, unlimited range
+
+	// Non-terminals
 	sum, // sum of 2 inputs
     subtract, // subtract two inputs
 	compare, // mag=(distance between two points) dir=(|angle between vectors|)
@@ -25,6 +28,7 @@ enum ops {
 	iflteMAG, // if input 1 <= input 2, return input 3 else return input 4 (mag)
 	iflteCLOCKWISE, // if input 1 <= input 2, return in. 3 else in. 4 (dir)
 	ifVectorZero // if mag of input 1 == 0 return input 2 else input 3
+	// More terminal "ops" are used during runtime, but not listed here
 };
 
 // names of ops used for serialization (manually keep in sync with above)
@@ -63,12 +67,8 @@ enum selection_method{
 	maximum // O(n)
 };
 
-
-//enum agent_type {
-//	hyena, lion
-//};
-typedef bool agent_type;
-const agent_type hyena = true;
-const agent_type lion = false;
+enum agent_type {
+	hyena, lion
+};
 
 #endif // TYPES_H
