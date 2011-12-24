@@ -68,12 +68,16 @@ void team::copy(team *p2, int i) {
 }
 
 void team::xOver(team *p2, int i) {
-	hyenas[i].xOver(&(p2->hyenas[i]));
+    if(USE_90_10_XOVER)
+        hyenas[i].xOver_90_10(&(p2->hyenas[i]));
+    else
+        hyenas[i].xOver(&(p2->hyenas[i]));
 }
 
 void team::xOver(team *p2) {
-	for (int i = 0; i < NUM_HYENAS; i++)
-		hyenas[i].xOver(&(p2->hyenas[i]));
+    for (int i = 0; i < NUM_HYENAS; i++){
+        xOver(p2, i);
+    }
 }
 
 int team::get_size(void) {

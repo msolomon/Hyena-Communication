@@ -26,6 +26,7 @@ const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const int KNOCKOUT_TESTS = 2000; // as above, but with a given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const float PARSIMONY_COEFF = 0.001;
+const bool USE_90_10_XOVER = true;
 const ops DISABLED_OPS[] = {};
 const ops KNOCKOUT_OPS[] = {};
 const selection_method SELECTION_METHOD = mean;

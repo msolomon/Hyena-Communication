@@ -176,6 +176,10 @@ public:
 	int get_size(void) {
         return tree->get_size();
 	}
+    void count_nodes(int &internal, int &leaf){
+        tree->count_nodes(internal, leaf);
+    }
+
 	void set_position(float x_in, float y_in){
 		x = x_in;
 		y = y_in;
@@ -194,6 +198,7 @@ public:
 	void deserialize(QStringList);
 
 	void xOver(indiv*);
+    void xOver_90_10(indiv *p2);
 
 	node *tree;
 	float x;

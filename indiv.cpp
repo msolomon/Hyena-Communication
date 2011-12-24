@@ -24,12 +24,56 @@ void indiv::xOver(indiv *p2) {
 			  size2 + tmp1 - tmp2 > TREE_MAX_SIZE));
 	if (tempP1 != NULL) { // not root
 		if (tempP2 != NULL) { // not root
-            short c1 = tempP1->find_child(xOver1);
-            short c2 = tempP2->find_child(xOver2);
+            int c1 = tempP1->find_child(xOver1);
+            int c2 = tempP2->find_child(xOver2);
 			tempP2->set_child(c2, xOver1);
 			tempP1->set_child(c1, xOver2);
 		}
 	}
+}
+
+void indiv::xOver_90_10(indiv *p2) {
+    int temp = 0;
+    int point1, point2, tmp1, tmp2, internal1, internal2, leaf1, leaf2;
+    node *tempP1 = NULL;
+    node *xOver1;
+    node *tempP2 = NULL;
+    node *xOver2;
+    internal1 = internal2 = leaf1 = leaf2 = tmp1 = tmp2 = 0;
+    count_nodes(internal1, leaf1);
+    p2->count_nodes(internal2, leaf2);
+
+    do{
+        // pick an internal node 90% of the time and leaf node 10% of the time
+        if (Random::Global.Integer(100) < 90){ // then pick internal
+            point1 = Random::Global.Integer(internal1 + 1);
+        } else{
+            point1 = internal1 + Random::Global.Integer(leaf1 + 1);
+        }
+        // repeat independently for point on second parent
+        if (Random::Global.Integer(100) < 90){ // then pick internal
+            point2 = Random::Global.Integer(internal2 + 1);
+        } else{
+            point2 = internal2 + Random::Global.Integer(leaf2 + 1);
+        }
+
+        temp = 0;
+        xOver1 = tree->get_point(point1, temp, tempP1);
+        tmp1 = xOver1->get_size();
+        temp = 0;
+        xOver2 = p2->tree->get_point(point2, temp, tempP2);
+        tmp2 = xOver2->get_size();
+    } while (TREE_MAX_SIZE != INT_MAX && // INT_MAX means unbounded trees
+             (internal1 + leaf1 + tmp2 - tmp1 > TREE_MAX_SIZE ||
+              internal2 + leaf2 + tmp1 - tmp2 > TREE_MAX_SIZE));
+    if (tempP1 != NULL) { // not root
+        if (tempP2 != NULL) { // not root
+            int c1 = tempP1->find_child(xOver1);
+            int c2 = tempP2->find_child(xOver2);
+            tempP2->set_child(c2, xOver1);
+            tempP1->set_child(c1, xOver2);
+        }
+    }
 }
 
 void indiv::reset_fitness() {

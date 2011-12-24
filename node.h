@@ -29,6 +29,7 @@ public:
 	void clear(void);
 	void copy(node *);
     int get_size();
+    void count_nodes(int &internal, int&leaf);
 	int find_child(node *);
 	void set_child(int c2, node *);
 	node *get_point(int, int &, node *&);

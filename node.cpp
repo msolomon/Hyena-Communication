@@ -541,6 +541,64 @@ int node::get_size() {
     return size;
 }
 
+// count internal and leaf nodes seperately (for 90/10 crossover)
+void node::count_nodes(int &internal, int &leaf) {
+
+    switch (operation) {
+    // terminals
+    case zebra:
+    case nearest_hyena:
+    case nearest_lion:
+    case nearest_calling:
+    case north:
+    case randm:
+    case last_move:
+    case constant:
+    case number_calling:
+    case mirror_nearest:
+    case last_pen:
+    case named:
+    case landmark:
+        leaf += 1;
+        return;
+    // non-terminals
+    case sum:
+    case subtract:
+    case compare:
+        children[0]->count_nodes(internal, leaf);
+        children[1]->count_nodes(internal, leaf);
+        break;
+    case invert:
+        children[0]->count_nodes(internal, leaf);
+        break;
+    case iflteMAG:
+    case iflteCLOCKWISE:
+        children[0]->count_nodes(internal, leaf);
+        children[1]->count_nodes(internal, leaf);
+        children[2]->count_nodes(internal, leaf);
+        children[3]->count_nodes(internal, leaf);
+        break;
+    case ifVectorZero:
+        children[0]->count_nodes(internal, leaf);
+        children[1]->count_nodes(internal, leaf);
+        children[2]->count_nodes(internal, leaf);
+        break;
+    default:
+        // handle hyena input case
+        if(operation < NUM_OPS){
+            leaf += 1;
+            return;
+        }
+        ofstream error;
+        error.open("error.txt", ios_base::app);
+        error << "error in count_nodes: unknown operator" << endl;
+        error.close();
+        break;
+    }
+    internal += 1;
+    return;
+}
+
 node *node::get_point(int pn, int &current, node *&parent) {
 	current++;
 	node *answer;
