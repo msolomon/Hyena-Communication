@@ -14,8 +14,8 @@ using RandomLib::Random;
 
 //// Common settings
 const int GENERATIONS = 1500;
-const int POP_SIZE = 80;
-const int NUM_HYENAS = 15;
+const int POP_SIZE = 100;
+const int NUM_HYENAS = 14;
 const int NUM_HYENA_INPUTS = NUM_HYENAS; // 0 to disable, otherwise first N
 const bool VEC_CALLING_ONLY = false; // vectors to all calling, or all period?
 const int NUM_LIONS = 2;
@@ -33,11 +33,11 @@ const selection_method SELECTION_METHOD = mean;
 const char* const RETEST_GIVEN = NULL; // NULL to disable, else filename
 // 0 to disable, else start hyenas within X units: exactly 1 non-named inside
 // the calling radius
-const float RADIUS_START = 0;
+const float RADIUS_START = 16;
 // Only pick one method below
-const bool OET_GENERATIONAL = true; // 50% team gen., 50% island gen.
+const bool OET_GENERATIONAL = false; // 50% team gen., 50% island gen.
 const bool TEAM_GENERATIONAL = false; // 100% team generational
-const bool INDIV_GENERATIONAL = false; // 100% island generational
+const bool INDIV_GENERATIONAL = true; // 100% island generational
 const bool ISLAND_STEADY = false;
 // GUI/Drawing settings
 const bool GUI = false;
@@ -64,7 +64,7 @@ const char* const BEST_TEAM_TEMPLATE = "bestteam_%1.txt";
 
 //// Other settings
 // Selection and reproduction
-const int TOURNAMENT_SIZE = 5;
+const int TOURNAMENT_SIZE = 3;
 const float MUTATION_CHANCE = 10; // % chance of mutation
 const bool FULL = true; // false = GROW (for initial trees)
 const int GROW_DEPTH = 4;
