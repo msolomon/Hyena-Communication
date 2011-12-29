@@ -25,7 +25,7 @@ public:
 	void grow(int, int);
 	vect evaluate(agent_info *, int);
 	vect compare_vectors(vect, vect);
-	void mutate(void);
+	void mutate(double chance);
 	void clear(void);
 	void copy(node *);
     int get_size();

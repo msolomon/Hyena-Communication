@@ -183,29 +183,41 @@ void node::clear(void) {
 	}
 }
 
-void node::mutate(void) {
+/* chance of mutation on [0, 1] per node*/
+void node::mutate(double chance) {
+	bool mut_this = (Random::Global.FixedN() < chance);
 	switch (operation) {
 	// non-terminals
 	case sum:
     case subtract:
     case compare:
-		children[0]->mutate();
-		children[1]->mutate();
+		if(mut_this){
+			const ops same_arity[] = {sum, subtract, compare};
+			operation = same_arity[Random::Global.Integer(sizeof(same_arity)/sizeof(ops))];
+		}
+		children[0]->mutate(chance);
+		children[1]->mutate(chance);
 		break;
 	case invert:
-		children[0]->mutate();
+		// can't mutate: no other nodes of same arity
+		children[0]->mutate(chance);
 		break;
 	case iflteMAG:
 	case iflteCLOCKWISE:
-		children[0]->mutate();
-		children[1]->mutate();
-		children[2]->mutate();
-		children[3]->mutate();
+		if(mut_this){
+			const ops same_arity[] = {iflteMAG, iflteCLOCKWISE};
+			operation = same_arity[Random::Global.Integer(sizeof(same_arity)/sizeof(ops))];
+		}
+		children[0]->mutate(chance);
+		children[1]->mutate(chance);
+		children[2]->mutate(chance);
+		children[3]->mutate(chance);
 		break;
 	case ifVectorZero:
-		children[0]->mutate();
-		children[1]->mutate();
-		children[2]->mutate();
+		// can't mutate: no other nodes of same arity
+		children[0]->mutate(chance);
+		children[1]->mutate(chance);
+		children[2]->mutate(chance);
 		break;
 	// terminals
 	case zebra:
@@ -224,7 +236,7 @@ void node::mutate(void) {
 	default:
 		// handle hyena input case as well as terminals
 		if(operation < NUM_OPS){
-			if (Random::Global.Integer(100) < MUTATION_CHANCE){
+			if (mut_this){
 				if(operation == constant)
 					delete the_const;
 

@@ -65,7 +65,9 @@ const char* const BEST_TEAM_TEMPLATE = "bestteam_%1.txt";
 //// Other settings
 // Selection and reproduction
 const int TOURNAMENT_SIZE = 3;
-const float MUTATION_CHANCE = 10; // % chance of mutation
+const float MUTATION_CHANCE = 1.0; // % chance of mutation
+   // NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
+const float NUM_OVER_SIZE_MUTATION = 1.0;
 const bool FULL = true; // false = GROW (for initial trees)
 const int GROW_DEPTH = 4;
 const int TRIALS = 1; // leaks memory; do via script

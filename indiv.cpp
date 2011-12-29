@@ -133,7 +133,13 @@ void indiv::clear(void) {
 }
 
 void indiv::mutate(void) {
-	tree->mutate();
+	double chance;
+	if(NUM_OVER_SIZE_MUTATION > 0){
+		chance = NUM_OVER_SIZE_MUTATION / tree->get_size();
+	} else{
+		chance = MUTATION_CHANCE / 100.0;
+	}
+	tree->mutate(chance);
 }
 
 void indiv::rand_move() {
