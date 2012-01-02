@@ -22,7 +22,7 @@ void pop::save_data(int iteration){
 	// total ms from start
 	data[iteration][0] = QDateTime::currentMSecsSinceEpoch() - trialstarttime;
 	// generation's average team fitnesses
-	float team_fit = 0;
+	double team_fit = 0;
 	for (int i = 0; i < POP_SIZE; i++) {
 		team_fit += the_pop[i]->get_team_fit();
 	}
@@ -42,7 +42,7 @@ void pop::save_data(int iteration){
 	// fitness for best team (for whole team per test, not per hyena)
     data[iteration][7] = the_pop[pop_bestteam]->get_team_fit();
 	// best team average tree size
-	data[iteration][8] = the_pop[pop_bestteam]->get_size() / (float) NUM_HYENAS;
+	data[iteration][8] = the_pop[pop_bestteam]->get_size() / (double) NUM_HYENAS;
 	// best team average number of hits
 	data[iteration][9] = the_pop[pop_bestteam]->get_avg_hits();
 	// best team average importance of a given node type
@@ -62,9 +62,9 @@ void pop::save_data(int iteration){
 		total += ENV->leadership[i];
 	}
 	data[iteration][11] = leader_idx;
-	data[iteration][12] = leader_score / float(total);
+	data[iteration][12] = leader_score / double(total);
 	data[iteration][13] = leader2_idx;
-	data[iteration][14] = leader2_score / float(total);
+	data[iteration][14] = leader2_score / double(total);
 	// Best team average importance for each node type
 	for(int i = 0; i < NUM_OPS; i++){
 		data[iteration][i+NUM_EXTRA] = imp[i];
@@ -239,7 +239,7 @@ void pop::evolve(int trial) {
 			f << "generation " << i + 1 << "\n";
 			f.close();
             cout << "Generation " << i + 1 << " of " << GENERATIONS <<
-					" (" << (i+1)/(float)GENERATIONS * 100 << "% of trial " <<
+					" (" << (i+1)/(double)GENERATIONS * 100 << "% of trial " <<
 					trial + 1 << ")" << endl;
 			draw_best(pop_bestteam, i);
 		}
@@ -311,7 +311,7 @@ void pop::final_test(int trial,
 	}
     f << "h" << (int)NUM_HYENAS << "\n";
 	// calculate the  tree size
-	float size = the_pop[pop_bestteam]->get_size() / (float) NUM_HYENAS;
+	double size = the_pop[pop_bestteam]->get_size() / (double) NUM_HYENAS;
 
 	ENV->set_up(the_pop[pop_bestteam]);
 	int testnum = -1;
@@ -327,7 +327,7 @@ void pop::final_test(int trial,
 			f2 << "generation " << test + 1 << "\n";
 			f2.close();
 			cout << "Retest " << test + 1 << " of " << FINAL_TESTS <<
-					" (" << (test+1)/(float)FINAL_TESTS * 100 << "% of trial " <<
+					" (" << (test+1)/(double)FINAL_TESTS * 100 << "% of trial " <<
 					trial + 1 << ")" << endl;
 		}
 
@@ -524,8 +524,8 @@ void pop::team_reproduce() {
 
 int pop::member_select(int c, int member) {
 	int best = 0, current;
-	float current_fit;
-	float best_fit;
+	double current_fit;
+	double best_fit;
 	best = Random::Global.Integer(POP_SIZE);
 	best_fit = the_pop[best]->get_hyena_fit(member);
 	for (int i = 1; i < TOURNAMENT_SIZE; i++) {
@@ -548,8 +548,8 @@ int pop::member_select(int c, int member) {
 
 int pop::tourn_select(int c) { // or worst if c = -1
 	int best = 0, current;
-	float current_fit;
-	float best_fit;
+	double current_fit;
+	double best_fit;
 	best = Random::Global.Integer(POP_SIZE);
 
 	best_fit = the_pop[best]->get_team_fit();
@@ -573,8 +573,8 @@ int pop::tourn_select(int c) { // or worst if c = -1
 
 int pop::select_best_team(int c) { // or worst if c = -1
 	int best = 0;
-	float current_fit;
-	float best_fit = the_pop[0]->get_team_fit();
+	double current_fit;
+	double best_fit = the_pop[0]->get_team_fit();
 	for (int i = 1; i < POP_SIZE; i++) {
 		current_fit = the_pop[i]->get_team_fit();
 		if (c == 1) {

@@ -16,7 +16,7 @@ typedef struct {
 	int num_lions;
 	int num_hyenas;
 	int hits;
-	float last_pen;
+	double last_pen;
 //	int uses[NUM_OPS];
 	// the rest can be turned off by zeroing out above vectors
 	double importance[NUM_OPS];

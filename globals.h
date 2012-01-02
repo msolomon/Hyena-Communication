@@ -25,7 +25,7 @@ const bool FINAL_TEST_MEAN = false; // force mean fitness to pick final best tea
 const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const int KNOCKOUT_TESTS = 2000; // as above, but with a given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
-const float PARSIMONY_COEFF = 0.001;
+const double PARSIMONY_COEFF = 0.001;
 const bool USE_90_10_XOVER = true;
 const ops DISABLED_OPS[] = {};
 const ops KNOCKOUT_OPS[] = {};
@@ -33,7 +33,7 @@ const selection_method SELECTION_METHOD = mean;
 const char* const RETEST_GIVEN = NULL; // NULL to disable, else filename
 // 0 to disable, else start hyenas within X units: exactly 1 non-named inside
 // the calling radius
-const float RADIUS_START = 16;
+const double RADIUS_START = 16;
 // Only pick one method below
 const bool OET_GENERATIONAL = false; // 50% team gen., 50% island gen.
 const bool TEAM_GENERATIONAL = false; // 100% team generational
@@ -49,8 +49,8 @@ const bool SMEAR_DRAW = true; // don't erase background between timesteps
 const int SMEAR_LAST = 10; // erase timesteps older than this; 0 for never
 const bool FADE_DRAW = true; // hyenas less opaque toward end (more overlap)
 const bool FADE_OUT = false; // older positions fade with time
-const float ANIMAL_MAX_OPACITY = 0.6;
-const float ANIMAL_MIN_OPACITY = 0.1;
+const double ANIMAL_MAX_OPACITY = 0.6;
+const double ANIMAL_MIN_OPACITY = 0.1;
 
 // Use %1 for trial number
 const char* const VIDEO_TEMPLATE = "video_%1.txt";
@@ -65,11 +65,11 @@ const char* const BEST_TEAM_TEMPLATE = "bestteam_%1.txt";
 //// Other settings
 // Selection and reproduction
 const int TOURNAMENT_SIZE = 3;
-const float MUTATION_CHANCE = 1.0; // % chance of mutation
+const double MUTATION_CHANCE = 1.0; // % chance of mutation
    // NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
-const float CONST_MUT_MAG_SIGMA = 1.0;
-const float CONST_MUT_DIR_SIGMA = 1.0;
-const float NUM_OVER_SIZE_MUTATION = 1.0;
+const double CONST_MUT_MAG_SIGMA = 1.0;
+const double CONST_MUT_DIR_SIGMA = 1.0;
+const double NUM_OVER_SIZE_MUTATION = 1.0;
 const bool FULL = true; // false = GROW (for initial trees)
 const int GROW_DEPTH = 4;
 const int TRIALS = 1; // leaks memory; do via script
@@ -77,39 +77,39 @@ const int TREE_MAX_SIZE = INT_MAX; // size, not depth
 // Model
 const int X = 32;
 const int Y = X;
-const float ZEBRAX = X / 2.0;
-const float ZEBRAY = Y / 2.0;
+const double ZEBRAX = X / 2.0;
+const double ZEBRAY = Y / 2.0;
 const bool CALLING_ENABLED = true;
-const float CALLING_RANGE = 8; // hyenas call when close to zebra
+const double CALLING_RANGE = 8; // hyenas call when close to zebra
 const bool START_ONE_INSIDE = true; // at least one hyena inside calling radius
 const bool START_OUTSIDE_ZEBRA = false; // doesn't apply to radius placement
 const double BASE_IMPORTANCE = 5000.0;
-const float LION_ATTACK_RADIUS = 3;
-const float LION_ATTACK_PENALTY = 3;
-const float LION_LION_RADIUS = 5;
-const float LION_HYENA_RADIUS = 5; // both ways
-const float HYENA_HYENA_RADIUS = 10;
-const float HYENA_LION_FEAR_RATIO = 3; // greater than
-const float LION_SEES_ZEBRA = CALLING_RANGE;
-const float LION_NEAR_ZEBRA = 1;
+const double LION_ATTACK_RADIUS = 3;
+const double LION_ATTACK_PENALTY = 3;
+const double LION_LION_RADIUS = 5;
+const double LION_HYENA_RADIUS = 5; // both ways
+const double HYENA_HYENA_RADIUS = 10;
+const double HYENA_LION_FEAR_RATIO = 3; // greater than
+const double LION_SEES_ZEBRA = CALLING_RANGE;
+const double LION_NEAR_ZEBRA = 1;
 const int NUM_OPS = NUM_UNIQUE_OPS + NUM_HYENA_INPUTS;
-const float MAX_HYENA_MOVE = 1.0;
-const float MAX_LION_MOVE = 1.0;
+const double MAX_HYENA_MOVE = 1.0;
+const double MAX_LION_MOVE = 1.0;
 // Squared versions of constants (for performance)
-const float LION_ATTACK_RADIUS_SQ = LION_ATTACK_RADIUS * LION_ATTACK_RADIUS;
-const float LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;
-const float LION_HYENA_RADIUS_SQ = LION_HYENA_RADIUS * LION_HYENA_RADIUS;
-const float HYENA_HYENA_RADIUS_SQ = HYENA_HYENA_RADIUS * HYENA_HYENA_RADIUS;
-const float CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
+const double LION_ATTACK_RADIUS_SQ = LION_ATTACK_RADIUS * LION_ATTACK_RADIUS;
+const double LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;
+const double LION_HYENA_RADIUS_SQ = LION_HYENA_RADIUS * LION_HYENA_RADIUS;
+const double HYENA_HYENA_RADIUS_SQ = HYENA_HYENA_RADIUS * HYENA_HYENA_RADIUS;
+const double CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
 // General constants
-const float PI = 3.141592654;
+const double PI = 3.141592654;
 
 //// Global functions
-inline float dist(float x, float y){  // 'distance' is a built-in function
+inline double dist(double x, double y){  // 'distance' is a built-in function
 	return sqrt((x * x) + (y * y));
 }
 
-inline float distance_sq(float x, float y){
+inline double distance_sq(double x, double y){
 	return x * x + y * y;
 }
 
@@ -143,6 +143,6 @@ inline ops get_rand_op(){
 }
 
 // Prototypes
-float select_from_numtests(float fitnesses[NUM_TESTS]);
+double select_from_numtests(double fitnesses[NUM_TESTS]);
 
 #endif

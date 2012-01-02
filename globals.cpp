@@ -2,10 +2,10 @@
 
 //// Global function definitions
 
-float select_from_numtests(float fitnesses[NUM_TESTS]){
+double select_from_numtests(double fitnesses[NUM_TESTS]){
 	const int end = (int) ceil(NUM_TESTS/2.0);
 	const bool odd = ((NUM_TESTS % 2) == 1);
-	float fit;
+	double fit;
 	switch(SELECTION_METHOD){
 	case mean:
 		fit = 0;
@@ -15,7 +15,7 @@ float select_from_numtests(float fitnesses[NUM_TESTS]){
 		fit /= NUM_TESTS;
 		break;
 	case median: // do a partial selection sort
-		float currval;
+		double currval;
 		int currloc;
 		for(int i = 0; i < end; i++){
 			currloc = i;

@@ -98,48 +98,48 @@ public:
         the_info.last_move = set;
     }
 
-	inline float getX(void) {
+	inline double getX(void) {
 		return x;
 	}
-	inline float getY(void) {
+	inline double getY(void) {
 		return y;
 	}
-	float get_mean_fitness(void){
-		float fit = 0;
+	double get_mean_fitness(void){
+		double fit = 0;
 		for(int i = 0; i < NUM_TESTS; i++){
 			fit += fitnesses[i];
 		}
 		return fit;
 	}
-	float get_fitness(){
+	double get_fitness(){
 		return select_from_numtests(fitnesses);
 	}
 
-    float get_fitness(int test) {
+    double get_fitness(int test) {
         return fitnesses[test];
     }
-	float get_reward(void) {
+	double get_reward(void) {
 		return reward;
 	}
-	float get_avg_dist_to_zebra(void) {
+	double get_avg_dist_to_zebra(void) {
 		return avg_dist_to_zebra;
 	}
-	float get_lion_attacks(void) {
+	double get_lion_attacks(void) {
 		return lion_attacks;
 	}
-    float get_penalty(void) {
+    double get_penalty(void) {
         return attack_pen;
     }
 	vect get_hyena_vect(int hyena_num){
 		return the_info.hyenas[hyena_num];
 	}
-	void inc_dist_to_zebra(float d) {
+	void inc_dist_to_zebra(double d) {
 		avg_dist_to_zebra += (d / TIME_STEPS);
 	}
-	void set_avg_dist_to_zebra(float d) {
+	void set_avg_dist_to_zebra(double d) {
 		avg_dist_to_zebra = d;
 	}
-    void inc_lion_attacks(float penalty) {
+    void inc_lion_attacks(double penalty) {
 		lion_attacks++;
 		the_info.last_pen = -penalty; // unary - to make positive
         attack_pen += penalty;
@@ -150,7 +150,7 @@ public:
 	void reset_pen_input(){
 		the_info.last_pen = 0;
 	}
-	float get_moved(void){
+	double get_moved(void){
 		return the_info.moved_yet;
 	}
 
@@ -158,7 +158,7 @@ public:
 	void lion_move(void);
 	void move(void);
 	indiv &operator=(const indiv &);
-    void changeFit(float f, int test) {
+    void changeFit(double f, int test) {
 		if(f > 0) reward += f;
         fitnesses[test] += f;
 	}
@@ -180,7 +180,7 @@ public:
         tree->count_nodes(internal, leaf);
     }
 
-	void set_position(float x_in, float y_in){
+	void set_position(double x_in, double y_in){
 		x = x_in;
 		y = y_in;
 	}
@@ -201,14 +201,14 @@ public:
     void xOver_90_10(indiv *p2);
 
 	node *tree;
-	float x;
-	float y;
+	double x;
+	double y;
 private:
 	agent_info the_info;
-    float fitnesses[NUM_TESTS];
-	float reward;
-	float avg_dist_to_zebra;
-    float attack_pen;
+    double fitnesses[NUM_TESTS];
+	double reward;
+	double avg_dist_to_zebra;
+    double attack_pen;
 	int lion_attacks;
 	agent_type type;
 	bool calling;

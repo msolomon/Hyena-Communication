@@ -13,8 +13,8 @@ public:
 	vect& operator+=(const vect&);
 	const vect operator+(const vect&) const;
 	void invert();
-    float direction;
-    float magnitude;
+    double direction;
+    double magnitude;
 };
 
 #endif

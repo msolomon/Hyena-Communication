@@ -101,8 +101,8 @@ void indiv::reset(void) {
 		while (distance_sq(x, y) < (
 				   (LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1)
 				   )){
-			x = Random::Global() / ((float)Random::max / (float)X);
-			y = Random::Global() / ((float)Random::max / (float)Y);
+			x = Random::Global() / ((double)Random::max / (double)X);
+			y = Random::Global() / ((double)Random::max / (double)Y);
 		}
 	}
 }
@@ -149,7 +149,7 @@ void indiv::rand_move() {
 
 void indiv::lion_move(void) {
 	if (the_info.num_hyenas > (the_info.num_lions * HYENA_LION_FEAR_RATIO)) {
-		float mag = MAX_HYENA_MOVE -
+		double mag = MAX_HYENA_MOVE -
 				(the_info.num_hyenas /
 				 (the_info.num_lions * HYENA_LION_FEAR_RATIO));
 		if(mag < -MAX_HYENA_MOVE)
@@ -160,7 +160,7 @@ void indiv::lion_move(void) {
 	else if(LIONS_RETURN &&
 			the_info.zebra.magnitude < LION_SEES_ZEBRA &&
 			the_info.zebra.magnitude > LION_NEAR_ZEBRA){
-		float mag = MAX_HYENA_MOVE -
+		double mag = MAX_HYENA_MOVE -
 				(the_info.num_hyenas /
 				 (the_info.num_lions * HYENA_LION_FEAR_RATIO));
 		if(mag < -MAX_HYENA_MOVE)

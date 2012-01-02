@@ -90,7 +90,7 @@ int team::get_size(void) {
 void team::apply_parsimony(){
     avg_parsimony = 0;
     for(int i = 0; i < NUM_HYENAS; i++){
-        float penalty = hyenas[i].get_size() * -PARSIMONY_COEFF;
+        double penalty = hyenas[i].get_size() * -PARSIMONY_COEFF;
         for(int j = 0; j < NUM_TESTS; j++) // must do for each test
             hyenas[i].changeFit(penalty, j);
         avg_parsimony += penalty;
@@ -107,7 +107,7 @@ void team::mutate(int member) {
 	hyenas[member].mutate();
 }
 
-float team::write_team_fit_final(std::ofstream &f, int trial, int test, int testnum, int size) {
+double team::write_team_fit_final(std::ofstream &f, int trial, int test, int testnum, int size) {
 	team_fit = 0;
 	avg_lion_attacks = 0;
 	avg_penalty = 0;
@@ -129,13 +129,13 @@ float team::write_team_fit_final(std::ofstream &f, int trial, int test, int test
 		importance[i] = 0;
 	}
 
-	float total_leadership = 0;
+	double total_leadership = 0;
 	for(int i = 0; i < NUM_HYENAS; i++){
-		total_leadership += float(leadership[i]);
+		total_leadership += double(leadership[i]);
 	}
 	int leader_idx, leader_score_int, leader2_idx, leader2_score_int;
 	get_leaders(leader_idx, leader_score_int, leader2_idx, leader2_score_int);
-	float leader_score, leader2_score;
+	double leader_score, leader2_score;
 	leader_score = leader_score_int / (total_leadership);
 	leader2_score = leader2_score_int / (total_leadership);
 
@@ -148,7 +148,7 @@ float team::write_team_fit_final(std::ofstream &f, int trial, int test, int test
 	}
 
 	// divide out each importance
-	float avg_imp = 0;
+	double avg_imp = 0;
 	for(int i = 0; i < NUM_OPS; i++){
 		importance[i] /= NUM_HYENAS * TIME_STEPS;
 		avg_imp += importance[i];
@@ -203,7 +203,7 @@ void team::get_leaders(int &leader_idx, int &leader_score,
 	}
 }
 
-float team::recalc_team_avg_fit(){
+double team::recalc_team_avg_fit(){
     team_fit = 0;
     for(int i = 0; i < NUM_HYENAS; i++){
         for(int j = 0; j < NUM_TESTS; j++)
@@ -212,8 +212,8 @@ float team::recalc_team_avg_fit(){
 	return team_fit;
 }
 
-float team::calc_team_fit(void) {
-	float run_fits[NUM_TESTS] = {0};
+double team::calc_team_fit(void) {
+	double run_fits[NUM_TESTS] = {0};
 	avg_lion_attacks = 0;
     avg_penalty = 0;
 	avg_reward = 0;

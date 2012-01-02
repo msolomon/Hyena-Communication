@@ -1,6 +1,6 @@
 #include "drawhelper.h"
 
-const float hyenaSize = .8;
+const double hyenaSize = .8;
 
 DrawHelper::DrawHelper() {
 	backgroundBrush = QBrush(QColor(130, 200, 110));
@@ -83,10 +83,10 @@ void DrawHelper::updateGui(){
 }
 
 void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
-	const float zebraOpacity = 1;
-	const float radiusOpacity = .2;
-	const float animalOpacity = ANIMAL_MAX_OPACITY;
-	const float endOpacity = ANIMAL_MIN_OPACITY;
+	const double zebraOpacity = 1;
+	const double radiusOpacity = .2;
+	const double animalOpacity = ANIMAL_MAX_OPACITY;
+	const double endOpacity = ANIMAL_MIN_OPACITY;
 	QPen *pen;
 	painter->fillRect(event->rect(), backgroundBrush);
 
@@ -123,8 +123,8 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 	// draw lions
 	painter->setPen(lionPen);
 	for(int j = start; j <= current_timestep; j++){
-		float modifier = (current_timestep - j) / (current_timestep + 1.0);
-		float nowOpacity = (modifier*animalOpacity) + endOpacity;
+		double modifier = (current_timestep - j) / (current_timestep + 1.0);
+		double nowOpacity = (modifier*animalOpacity) + endOpacity;
 		if(!FADE_DRAW) nowOpacity = animalOpacity;
 		if(FADE_OUT) nowOpacity = ((nowOpacity-endOpacity)*(j+1.0)/(current_timestep + 1.0)) + endOpacity;
 		painter->setOpacity(nowOpacity);
@@ -141,15 +141,15 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 		}
 	}
 	for(int j = start; j <= current_timestep; j++){
-		float modifier = (current_timestep - j) / (current_timestep + 1.0);
-		float nowOpacity = (modifier*animalOpacity) + endOpacity;
+		double modifier = (current_timestep - j) / (current_timestep + 1.0);
+		double nowOpacity = (modifier*animalOpacity) + endOpacity;
 		if(!FADE_DRAW) nowOpacity = animalOpacity;
 		if(FADE_OUT) nowOpacity = ((nowOpacity-endOpacity)*(j+1.0)/(current_timestep + 1.0)) + endOpacity;
 		painter->setOpacity(nowOpacity);
 		for (int i = 0; i < NUM_HYENAS; i++) {
 			QPointF h = hyenas[i][j];
 			if(HYENA_MARKERS){
-				const float increment = (360*16)/((float)NUM_HYENAS);
+				const double increment = (360*16)/((double)NUM_HYENAS);
 				QRectF rect = QRectF(h.x()-hyenaSize,
 									 h.y()-hyenaSize,
 									 2*hyenaSize,

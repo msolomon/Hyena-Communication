@@ -415,7 +415,7 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 
 vect node::compare_vectors(vect a, vect b){
     vect temp;
-	float ax, ay, bx, by;
+	double ax, ay, bx, by;
     ax = sin(a.direction) * a.magnitude;
     ay = cos(a.direction) * a.magnitude;
 

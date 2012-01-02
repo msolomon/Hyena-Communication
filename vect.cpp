@@ -13,7 +13,7 @@ vect& vect::operator=(const vect &v2) {
 }
 
 vect& vect::operator+=(const vect &v2){
-	float x, y;
+	double x, y;
 	x = sin(direction) * magnitude;
 	y = cos(direction) * magnitude;
 
@@ -33,7 +33,7 @@ const vect vect::operator+(const vect& v2) const {
 
 void vect::random(void) {
 	direction = Random::Global.FixedW() * PI;
-	magnitude = Random::Global() / (Random::max / (float) X); // proportion of map
+	magnitude = Random::Global() / (Random::max / (double) X); // proportion of map
 }
 
 void vect::reset(){

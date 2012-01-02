@@ -82,15 +82,15 @@ void Playback::parse_video(){
 			} else if(s.startsWith("  ")){ // hyena section
 				QList<QString> coords = s.split(" ", QString::SkipEmptyParts);
 				while(!coords.isEmpty()){
-					float x = coords.takeFirst().toFloat();
-					float y = coords.takeFirst().toFloat();
+					double x = coords.takeFirst().toFloat();
+					double y = coords.takeFirst().toFloat();
 					hyenas[key].append(QPointF(x, y));
 				}
 			} else { // lion section
 				QList<QString> coords = s.split(" ", QString::SkipEmptyParts);
 				while(!coords.isEmpty()){
-					float x = coords.takeFirst().toFloat();
-					float y = coords.takeFirst().toFloat();
+					double x = coords.takeFirst().toFloat();
+					double y = coords.takeFirst().toFloat();
 					lions[key].append(QPointF(x, y));
 				}
 			}

@@ -24,11 +24,11 @@ void environment::set_up(team *a) {
 
 void environment::generate_positions(){
 	for(int i = 0; i < NUM_TESTS; i++){
-		float dir, mag;
+		double dir, mag;
 		for(int j = 0; j < NUM_LIONS; j++){
 			// place lions within 1 unit of zebra
-			dir = Random::Global.FixedS<float>() * 2 * PI;
-			mag = Random::Global.Fixed<float>();
+			dir = Random::Global.FixedS() * 2 * PI;
+			mag = Random::Global.Fixed();
 			lioncoord[i][j][0] = ZEBRAX + sin(dir) * mag;
 			lioncoord[i][j][1] = ZEBRAY + cos(dir) * mag;
 		}
@@ -36,16 +36,16 @@ void environment::generate_positions(){
 		if(RADIUS_START > 0){ // place within given distance of zebra
 			// pick a random non-named hyena
 			int inside = Random::Global.IntegerC(1, NUM_HYENAS - 1);
-			dir = Random::Global.FixedS<float>() * 2 * PI;
-			mag = Random::Global.Fixed<float>() * CALLING_RANGE;
+			dir = Random::Global.FixedS() * 2 * PI;
+			mag = Random::Global.Fixed() * CALLING_RANGE;
 			hyenacoord[i][inside][0] = ZEBRAX + sin(dir) * mag;
 			hyenacoord[i][inside][1] = ZEBRAY + cos(dir) * mag;
 
 			// place the rest outside CALLING_RANGE and inside RADIUS_START
 			for(int j = 0; j < NUM_HYENAS; j++){
 				if(j == inside) continue;
-				dir = Random::Global.FixedS<float>() * 2 * PI;
-				mag = Random::Global.Fixed<float>() *
+				dir = Random::Global.FixedS() * 2 * PI;
+				mag = Random::Global.Fixed() *
 						(RADIUS_START - CALLING_RANGE) + CALLING_RANGE;
 				hyenacoord[i][j][0] = ZEBRAX + sin(dir) * mag;
 				hyenacoord[i][j][1] = ZEBRAY + cos(dir) * mag;
@@ -53,20 +53,20 @@ void environment::generate_positions(){
 		} else{ // randomize x,y seperately (non-uniform w.r.t. radius)
 			bool one_inside = false;
 			for(int j = 0; j < NUM_HYENAS; j++){
-				float x, y;
+				double x, y;
 				x = ZEBRAX;
 				y = ZEBRAY;
 				if(START_OUTSIDE_ZEBRA){
 					while(distance_sq(ZEBRAX - x, ZEBRAY - y) < CALLING_RANGE_SQ){
-						x = Random::Global.Fixed<float>() * X;
-						y = Random::Global.Fixed<float>() * Y;
+						x = Random::Global.Fixed() * X;
+						y = Random::Global.Fixed() * Y;
 					}
 				} else{ // start outside lion radius instead
-					float distnce = 0;
+					double distnce = 0;
 					while (distnce <
 						   ((LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1))){
-						x = Random::Global.Fixed<float>() * X;
-						y = Random::Global.Fixed<float>() * Y;
+						x = Random::Global.Fixed() * X;
+						y = Random::Global.Fixed() * Y;
 						distnce = distance_sq(ZEBRAX - x, ZEBRAY - y);
 					}
 					if(distnce < CALLING_RANGE_SQ){
@@ -86,8 +86,8 @@ void environment::generate_positions(){
 
 		// place the landmark inside the calling radius
 		if(!is_disabled(landmark)){
-			dir = Random::Global.FixedS<float>() * 2 * PI;
-			mag = Random::Global.Fixed<float>() * CALLING_RANGE;
+			dir = Random::Global.FixedS() * 2 * PI;
+			mag = Random::Global.Fixed() * CALLING_RANGE;
 			landmarkcoord[i][0] = ZEBRAX + sin(dir) * mag;
 			landmarkcoord[i][1] = ZEBRAY + cos(dir) * mag;
 		}
@@ -115,8 +115,8 @@ void environment::place_agents(int test){
 }
 
 void environment::evaluate(int test) {
-	float tempx, tempy;
-	float radius;
+	double tempx, tempy;
+	double radius;
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		tempx = agents->hyenas[i].getX();
 		tempy = agents->hyenas[i].getY();
@@ -129,7 +129,7 @@ void environment::evaluate(int test) {
 			radius = distance_sq(tempx - agents->lions[j].getX(),
 								 tempy - agents->lions[j].getY());
 			if (radius < LION_ATTACK_RADIUS_SQ) { // too close to lions
-                float penalty = LION_ATTACK_PENALTY *
+                double penalty = LION_ATTACK_PENALTY *
                         (sqrt(radius) - LION_ATTACK_RADIUS);
 				agents->hyenas[i].changeFit(penalty, test); // near lion
                 agents->hyenas[i].inc_lion_attacks(penalty);
@@ -146,7 +146,7 @@ void environment::move(void) {
 		agents->lions[i].move();
 }
 
-float invert_direction(float d){
+double invert_direction(double d){
 	if(d < 0) return d + PI;
 	else return d - PI;
 }
@@ -179,9 +179,9 @@ void environment::update_leadership(){
 void environment::update_vectors(void){
 	int the_j = 0;
 	int calling_j = 0;
-	float magnitude, min_mag, nearest_calling;
+	double magnitude, min_mag, nearest_calling;
 	vect temp;
-	float agentx, agenty;
+	double agentx, agenty;
 	int num_calling = 0;
 
 	// set calling hyenas and if they call, set vectors toward zebra
@@ -224,7 +224,7 @@ void environment::update_vectors(void){
 		agenty = agents->hyenas[i].getY();
 		agents->hyenas[i].set_num_hyenas(num_calling);
 		min_mag = HYENA_HYENA_RADIUS_SQ;
-		nearest_calling = FLT_MAX;
+		nearest_calling = DBL_MAX;
 
 		// don't recalculate already-calculated vectors
 		for(int j = 0; j < i; j++){
@@ -288,7 +288,7 @@ void environment::update_vectors(void){
 			agents->hyenas[i].set_named(agents->hyenas[i].get_hyena_vect(0));
 
 		// if nobody is calling, zero vector; else set nearest calling
-		if(nearest_calling == FLT_MAX){
+		if(nearest_calling == DBL_MAX){
 			temp.reset();
 			agents->hyenas[i].set_nearestcalling(temp);
 		} else { // set to nearest calling hyena

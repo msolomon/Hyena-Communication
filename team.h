@@ -10,10 +10,10 @@
 class team {
 public:
 	team();
-    float recalc_team_avg_fit();
-	float calc_team_fit();
-	float write_team_fit_final(std::ofstream&, int, int, int, int);
-	float get_team_fit() {
+    double recalc_team_avg_fit();
+	double calc_team_fit();
+	double write_team_fit_final(std::ofstream&, int, int, int, int);
+	double get_team_fit() {
 		return this->team_fit;
 	}
     int get_size();
@@ -28,29 +28,29 @@ public:
 	void reset_team(void);
 	void reset_inputs();
     void apply_parsimony();
-	float get_hyena_fit(int i) {
+	double get_hyena_fit(int i) {
 		return hyena_fits[i];
 	}
-	float get_avg_dist_to_zebra() {
+	double get_avg_dist_to_zebra() {
 		return avg_dist_to_zebra;
 	}
-	float get_avg_lion_attacks() {
+	double get_avg_lion_attacks() {
 		return avg_lion_attacks;
 	}
-    float get_avg_penalty() {
+    double get_avg_penalty() {
         return avg_penalty;
     }
-	float get_avg_reward() {
+	double get_avg_reward() {
 		return avg_reward;
 	}
-    float get_avg_parsimony() {
+    double get_avg_parsimony() {
         return avg_parsimony;
     }
-	float get_avg_hits() {
+	double get_avg_hits() {
 		return avg_hits;
 	}
-	float* get_uses(){
-		return (float*) &uses;
+	double* get_uses(){
+		return (double*) &uses;
 	}
 	double* get_importance(){
 		return (double*) &importance;
@@ -67,16 +67,16 @@ public:
 	void load_team(QString filename);
 	indiv hyenas[NUM_HYENAS];
 	indiv lions[NUM_LIONS];
-	float hyena_fits[NUM_HYENAS];
-	float team_fit; // SELECTION_METHOD team fitness
-	float avg_lion_attacks;
-    float avg_penalty;
-	float avg_reward;
-    float avg_parsimony;
-	float avg_dist_to_zebra;
-	float avg_hits;
-	float avg_size;
-	float uses[NUM_OPS];
+	double hyena_fits[NUM_HYENAS];
+	double team_fit; // SELECTION_METHOD team fitness
+	double avg_lion_attacks;
+    double avg_penalty;
+	double avg_reward;
+    double avg_parsimony;
+	double avg_dist_to_zebra;
+	double avg_hits;
+	double avg_size;
+	double uses[NUM_OPS];
 	double importance[NUM_OPS];
 	int *leadership;
 };

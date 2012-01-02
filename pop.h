@@ -46,14 +46,14 @@ public:
 	DrawHelper *helper;
 	environment *ENV;
 private:
-	//     float fitnesses_scouts[POP_SIZE];
-	//    float fitnesses_investigators[POP_SIZE];
+	//     double fitnesses_scouts[POP_SIZE];
+	//    double fitnesses_investigators[POP_SIZE];
 	team *the_pop[POP_SIZE];
-//        float data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
+//        double data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
 	// data. all team fitnesses plus 8 iteration attributes (avg. and soforth)
 	static const int NUM_EXTRA = 15;
-	float data[GENERATIONS][NUM_EXTRA + NUM_OPS + 3*NUM_HYENAS];
-	float pop_bestfitness;
+	double data[GENERATIONS][NUM_EXTRA + NUM_OPS + 3*NUM_HYENAS];
+	double pop_bestfitness;
 	int pop_bestteam;
 
 signals:
