@@ -67,6 +67,8 @@ const char* const BEST_TEAM_TEMPLATE = "bestteam_%1.txt";
 const int TOURNAMENT_SIZE = 3;
 const float MUTATION_CHANCE = 1.0; // % chance of mutation
    // NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
+const float CONST_MUT_MAG_SIGMA = 1.0;
+const float CONST_MUT_DIR_SIGMA = 1.0;
 const float NUM_OVER_SIZE_MUTATION = 1.0;
 const bool FULL = true; // false = GROW (for initial trees)
 const int GROW_DEPTH = 4;
