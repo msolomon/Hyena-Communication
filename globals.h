@@ -27,6 +27,7 @@ const int KNOCKOUT_TESTS = 2000; // as above, but with a given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const double PARSIMONY_COEFF = 0.001;
 const bool USE_90_10_XOVER = true;
+const bool ALLOW_INTERNAL_MUTATION = true;
 const ops DISABLED_OPS[] = {nearest_calling, number_calling, named, landmark};
 const ops KNOCKOUT_OPS[] = {};
 const selection_method SELECTION_METHOD = mean;
@@ -119,19 +120,19 @@ inline bool is_disabled(ops op){
 	return false;
 }
 
-inline ops get_rand_terminal(){
+inline ops get_rand_terminal(ops except=(ops)255){
 	ops op;
 	do op = (ops) Random::Global.Integer(NUM_TERMS + NUM_HYENA_INPUTS);
-	while(is_disabled(op));
+	while(is_disabled(op) || op == except);
 	if(op >= NUM_TERMS)
 		op = (ops) (op + NUM_NON_TERMS); // hyena inputs come after both
 	return op;
 }
 
-inline ops get_rand_nonterminal(){
+inline ops get_rand_nonterminal(ops except=(ops)255){
 	ops op;
 	do op = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
-	while(is_disabled(op));
+	while(is_disabled(op) || op == except);
 	return op;
 }
 

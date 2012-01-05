@@ -205,6 +205,14 @@ double normal_sample(double mu, double sigma){
 	return mu + sigma * u * sqrt(-2.0 * (log(s) / s));
 }
 
+ops mutate_internal(const ops choices[], ops except=(ops)255){
+	ops choice;
+	do
+		choice = choices[Random::Global.Integer(sizeof(choices)/sizeof(ops))];
+	while(choice == except);
+	return choice;
+}
+
 /* chance of mutation on [0, 1] per node*/
 void node::mutate(double chance) {
 	bool mut_this = (Random::Global.FixedN() < chance);
@@ -213,9 +221,9 @@ void node::mutate(double chance) {
 	case sum:
     case subtract:
     case compare:
-		if(mut_this){
+		if(mut_this && ALLOW_INTERNAL_MUTATION){
 			const ops same_arity[] = {sum, subtract, compare};
-			operation = same_arity[Random::Global.Integer(sizeof(same_arity)/sizeof(ops))];
+			operation = mutate_internal(same_arity, operation);
 		}
 		children[0]->mutate(chance);
 		children[1]->mutate(chance);
@@ -226,9 +234,9 @@ void node::mutate(double chance) {
 		break;
 	case iflteMAG:
 	case iflteCLOCKWISE:
-		if(mut_this){
+		if(mut_this && ALLOW_INTERNAL_MUTATION){
 			const ops same_arity[] = {iflteMAG, iflteCLOCKWISE};
-			operation = same_arity[Random::Global.Integer(sizeof(same_arity)/sizeof(ops))];
+			operation = mutate_internal(same_arity, operation);
 		}
 		children[0]->mutate(chance);
 		children[1]->mutate(chance);
@@ -270,7 +278,7 @@ void node::mutate(double chance) {
 		// handle hyena input case as well as terminals
 		if(operation < NUM_OPS){
 			if (mut_this){
-				operation = get_rand_terminal();
+				operation = get_rand_terminal(operation);
 				if(operation == constant){
 					the_const = new vect();
 					the_const->random();
