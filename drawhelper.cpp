@@ -110,9 +110,8 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 	int current_timestep = -1;
 	if(!step.isEmpty())
 		current_timestep = step.dequeue();
-	int start;
+	int start = 0;
 	if(SMEAR_DRAW){
-		start = 0;
 		if((SMEAR_LAST > 0) && (current_timestep - SMEAR_LAST) > 0)
 			start = current_timestep - SMEAR_LAST;
 	}

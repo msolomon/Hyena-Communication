@@ -101,8 +101,8 @@ void indiv::reset(void) {
 		while (distance_sq(x, y) < (
 				   (LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1)
 				   )){
-			x = Random::Global() / ((double)Random::max / (double)X);
-			y = Random::Global() / ((double)Random::max / (double)Y);
+			x = Random::Global.FixedN() * X;
+			y = Random::Global.FixedN() * Y;
 		}
 	}
 }

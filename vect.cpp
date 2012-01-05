@@ -33,7 +33,7 @@ const vect vect::operator+(const vect& v2) const {
 
 void vect::random(void) {
 	direction = Random::Global.FixedW() * PI;
-	magnitude = Random::Global() / (Random::max / (double) X); // proportion of map
+	magnitude = Random::Global.FixedN() * X; // proportion of map
 }
 
 void vect::reset(){
