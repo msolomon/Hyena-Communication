@@ -28,7 +28,7 @@ const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const double PARSIMONY_COEFF = 0.001;
 const bool USE_90_10_XOVER = true;
 const bool ALLOW_INTERNAL_MUTATION = true;
-const ops DISABLED_OPS[] = {nearest_calling, number_calling, named, landmark};
+const ops DISABLED_OPS[] = {};
 const ops KNOCKOUT_OPS[] = {};
 const selection_method SELECTION_METHOD = mean;
 const char* const RETEST_GIVEN = NULL; // NULL to disable, else filename
@@ -68,9 +68,10 @@ const char* const BEST_TEAM_TEMPLATE = "bestteam_%1.txt";
 const int TOURNAMENT_SIZE = 3;
 const double MUTATION_CHANCE = 1.0; // % chance of mutation
    // NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
+const double NUM_OVER_SIZE_MUTATION = 1.0;
+const bool SPECIALIZED_CONST_MUT = true;
 const double CONST_MUT_MAG_SIGMA = 1.0;
 const double CONST_MUT_DIR_SIGMA = 1.0;
-const double NUM_OVER_SIZE_MUTATION = 1.0;
 const bool FULL = true; // false = GROW (for initial trees)
 const int GROW_DEPTH = 4;
 const int TRIALS = 1; // leaks memory; do via script

@@ -252,16 +252,18 @@ void node::mutate(double chance) {
 
 	// terminals
 	case constant:
-		// specialized "gaussian shift" constant mutation
-		if(mut_this){
-			the_const->magnitude += normal_sample(0.0, CONST_MUT_MAG_SIGMA);
-			if(the_const->magnitude < 0.0) the_const->magnitude = 0.0;
+		if(SPECIALIZED_CONST_MUT){
+			// specialized "gaussian shift" constant mutation
+			if(mut_this){
+				the_const->magnitude += normal_sample(0.0, CONST_MUT_MAG_SIGMA);
+				if(the_const->magnitude < 0.0) the_const->magnitude = 0.0;
 
-			the_const->direction += normal_sample(0.0, CONST_MUT_DIR_SIGMA);
-			if(the_const->direction > PI) the_const->direction -= 2*PI;
-			else if(the_const->direction < -PI) the_const->direction += 2*PI;
-		}
+				the_const->direction += normal_sample(0.0, CONST_MUT_DIR_SIGMA);
+				if(the_const->direction > PI) the_const->direction -= 2*PI;
+				else if(the_const->direction < -PI) the_const->direction += 2*PI;
+			}
 		break;
+		}
 	case zebra:
 	case nearest_hyena:
 	case nearest_lion:
@@ -278,6 +280,9 @@ void node::mutate(double chance) {
 		// handle hyena input case as well as terminals
 		if(operation < NUM_OPS){
 			if (mut_this){
+				if(!SPECIALIZED_CONST_MUT && operation == constant){
+					delete the_const;
+				}
 				operation = get_rand_terminal(operation);
 				if(operation == constant){
 					the_const = new vect();
