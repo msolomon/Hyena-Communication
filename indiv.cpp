@@ -149,24 +149,14 @@ void indiv::rand_move() {
 
 void indiv::lion_move(void) {
 	if (the_info.num_hyenas > (the_info.num_lions * HYENA_LION_FEAR_RATIO)) {
-		double mag = MAX_HYENA_MOVE -
-				(the_info.num_hyenas /
-				 (the_info.num_lions * HYENA_LION_FEAR_RATIO));
-		if(mag < -MAX_HYENA_MOVE)
-			mag = -MAX_HYENA_MOVE;
-		x += mag * sin(the_info.nearest_hyena.direction);
-		y += mag * cos(the_info.nearest_hyena.direction);
+		x += LION_MOVE * sin(the_info.nearest_hyena.direction);
+		y += LION_MOVE * cos(the_info.nearest_hyena.direction);
 	}
 	else if(LIONS_RETURN &&
 			the_info.zebra.magnitude < LION_SEES_ZEBRA &&
 			the_info.zebra.magnitude > LION_NEAR_ZEBRA){
-		double mag = MAX_HYENA_MOVE -
-				(the_info.num_hyenas /
-				 (the_info.num_lions * HYENA_LION_FEAR_RATIO));
-		if(mag < -MAX_HYENA_MOVE)
-			mag = -MAX_HYENA_MOVE;
-		x -= mag * sin(the_info.zebra.direction);
-		y -= mag * cos(the_info.zebra.direction);
+		x -= LION_MOVE * sin(the_info.zebra.direction);
+		y -= LION_MOVE * cos(the_info.zebra.direction);
 	}
 }
 

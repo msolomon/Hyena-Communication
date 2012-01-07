@@ -96,7 +96,7 @@ const double LION_SEES_ZEBRA = CALLING_RANGE;
 const double LION_NEAR_ZEBRA = 1;
 const int NUM_OPS = NUM_UNIQUE_OPS + NUM_HYENA_INPUTS;
 const double MAX_HYENA_MOVE = 1.0;
-const double MAX_LION_MOVE = 1.0;
+const double LION_MOVE = 1.0; // distance
 // Squared versions of constants (for performance)
 const double LION_ATTACK_RADIUS_SQ = LION_ATTACK_RADIUS * LION_ATTACK_RADIUS;
 const double LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;
