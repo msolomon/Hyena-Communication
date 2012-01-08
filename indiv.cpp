@@ -167,18 +167,19 @@ void indiv::move(void) {
 		return;
 	}
 	v = tree->evaluate(&the_info, 0);
+
+	the_info.last_move.direction = v.direction;
+	the_info.last_move.magnitude = v.magnitude;
+
 	if (v.magnitude > MAX_HYENA_MOVE){ // trying to move too far
 		v.magnitude = MAX_HYENA_MOVE;
-
-		the_info.last_move.direction = v.direction;
-		the_info.last_move.magnitude = v.magnitude;
-
-		if(v.magnitude != 0) // if moving
-			the_info.moved_yet = true;
-
-		x += v.magnitude * sin(v.direction);
-		y += v.magnitude * cos(v.direction);
 	}
+
+	if(v.magnitude != 0) // if moving
+		the_info.moved_yet = true;
+
+	x += v.magnitude * sin(v.direction);
+	y += v.magnitude * cos(v.direction);
 }
 
 QStringList indiv::serialize(){
