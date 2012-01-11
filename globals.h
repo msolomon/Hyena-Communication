@@ -87,6 +87,7 @@ const double PI = 3.1415926535897932384626433832795028842;
 // Set GUI to true to enable visualizer; set to false for running simulations
 const bool GUI = false;
 const bool DRAW = true; // if false, videos are unavailable
+const bool COLOR_HYENAS = true; // if false, all hyenas are brown
 const int DRAW_EVERY = 10; // draw every X generations
 const bool ANTIALIAS = true; // antialias GUI drawing
 const bool HYENA_MARKERS = false; // draw short line to ID different hyenas

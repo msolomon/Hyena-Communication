@@ -166,7 +166,7 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 }
 
 QPen* DrawHelper::getColor(int hyenaNumber){
-	if(0 <= hyenaNumber && hyenaNumber < 26){
+	if(0 <= hyenaNumber && hyenaNumber < 26 && COLOR_HYENAS){
 		return coloredPen[hyenaNumber];
 	} else {
 		return &hyenaPen;
