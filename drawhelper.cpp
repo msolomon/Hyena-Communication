@@ -116,7 +116,7 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 			start = current_timestep - SMEAR_LAST;
 	}
 
-	else
+	else if(current_timestep >= 0)
 		start = current_timestep;
 
 	// draw lions
