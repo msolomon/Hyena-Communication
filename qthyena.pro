@@ -20,7 +20,8 @@ HEADERS += qthyena.h \
     drawhelper.h \
     playback.h \
     types.h \
-    agent_info.h
+    agent_info.h \
+    indiv_nn.h
     
 SOURCES += qthyena.cpp \
     environment.cpp \
@@ -33,22 +34,23 @@ SOURCES += qthyena.cpp \
     widget.cpp \
     drawhelper.cpp \
     playback.cpp \
-    globals.cpp
+    globals.cpp \
+    indiv_nn.cpp
     
 FORMS += qthyena.ui \
     playback.ui
 
 RESOURCES += 
 
-LIBS += -lRandom
+LIBS += -lacml -lRandom
 
 unix{
 	LIBS += -ltcmalloc_minimal
 }
 
 CONFIG(release):
-QMAKE_CXXFLAGS_RELEASE += -march=amdfam10 -ffunction-sections -fdata-sections
-QMAKE_LFLAGS += -march=amdfam10 --gc-sections
+QMAKE_CXXFLAGS_RELEASE += -march=amdfam10 -flto
+QMAKE_LFLAGS += -march=amdfam10 -flto -fwhole-program
 
 #CONFIG(release, debug|release):
 #QMAKE_CFLAGS+=-pg
