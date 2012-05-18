@@ -41,12 +41,22 @@ const double NUM_OVER_SIZE_MUTATION = 1.0;
 const bool SPECIALIZED_CONST_MUT = true;
 const double CONST_MUT_MAG_SIGMA = 1.0;
 const double CONST_MUT_DIR_SIGMA = 1.0;
+
+// Vector expression trees or artificial neural networks
+const bool USE_ANN = true;  // true: ANN, false: vector expression trees
+// ANN only
+const int NETWORK_NUM_INPUT = 10; // # of input nodes
+const int NETWORK_NUM_OUTPUT = 2; // # of output nodes
+const int NETWORK[] = {NETWORK_NUM_INPUT,
+                       5,  // # of nodes in each hidden layer, e.g. 3, 2, 2
+                       NETWORK_NUM_OUTPUT};
+// Vector expression trees only
 const bool USE_90_10_XOVER = true;
 const bool ALLOW_INTERNAL_MUTATION = true;
 const bool FULL = true; // false = GROW (for initial trees)
 const int GROW_DEPTH = 4;
-const int TRIALS = 1; // leaks memory; do via script
 const int TREE_MAX_SIZE = INT_MAX; // size, not depth: INT_MAX for unlimited
+
 // Only pick one method below
 const bool OET_GENERATIONAL = false; // 50% team gen., 50% island gen.
 const bool TEAM_GENERATIONAL = false; // 100% team generational
@@ -54,6 +64,7 @@ const bool INDIV_GENERATIONAL = true; // 100% island generational
 const bool ISLAND_STEADY = false;
 
 // Model
+const int TRIALS = 1; // leaks memory; do via script
 const int X = 32;
 const int Y = X;
 const double ZEBRAX = X / 2.0;

@@ -21,7 +21,9 @@ HEADERS += qthyena.h \
     playback.h \
     types.h \
     agent_info.h \
-    indiv_nn.h
+    indiv_nn.h \
+    indiv_base.h \
+    weightset.h
     
 SOURCES += qthyena.cpp \
     environment.cpp \
@@ -35,7 +37,8 @@ SOURCES += qthyena.cpp \
     drawhelper.cpp \
     playback.cpp \
     globals.cpp \
-    indiv_nn.cpp
+    indiv_nn.cpp \
+    indiv_base.cpp
     
 FORMS += qthyena.ui \
     playback.ui
