@@ -1,5 +1,3 @@
-#include <bitset>
-#include <QStringList>
 #include "environment.h"
 
 using namespace std;

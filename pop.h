@@ -5,6 +5,7 @@
 
 #include "globals.h"
 #include "indiv.h"
+#include "indiv_nn.h"
 #include "team.h"
 #include "environment.h"
 #include "drawhelper.h"

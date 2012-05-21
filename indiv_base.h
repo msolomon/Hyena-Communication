@@ -4,11 +4,11 @@
 #include "globals.h"
 #include "node.h"
 #include <cmath>
+#include <QString>
 #include <QStringList>
 
 class indiv_base {
 public:
-	indiv_base();
 	double x;
 	double y;
 
@@ -184,9 +184,17 @@ public:
 		return type;
 	}
 
-	virtual QStringList serialize() = 0;
+    virtual QStringList serialize() = 0;
 	virtual void deserialize(QStringList input) = 0;
+    virtual vect eval_me() = 0;
+    virtual QString graphviz() = 0;
+    virtual void clear() = 0;
+    virtual void generate() = 0;
 
+    void move();
+    void lion_move();
+    void reset_fitness();
+    void reset();
 protected:
 	agent_info the_info;
 	double fitnesses[NUM_TESTS];

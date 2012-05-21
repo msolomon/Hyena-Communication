@@ -1,9 +1,12 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+// #define NDEBUG // disable assert statements
+
 #include <cmath>
 #include <cfloat>
 #include <climits>
+#include <cassert>
 
 // include fast random library (randomlib.sourceforge.net)
 #define RANDOMLIB_DEFAULT_GENERATOR SRandomGenerator64
@@ -11,6 +14,7 @@
 using RandomLib::Random;
 
 #include "types.h"
+class indiv_nn;
 
 //// Settings
 const int GENERATIONS = 1500;

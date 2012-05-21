@@ -2,6 +2,7 @@
 #define TEAM_H
 
 #include "globals.h"
+#include "indiv_nn.h"
 #include "indiv.h"
 #include <fstream>
 #include <QFile>
@@ -10,6 +11,7 @@
 class team {
 public:
 	team();
+    ~team();
     double recalc_team_avg_fit();
 	double calc_team_fit();
 	double write_team_fit_final(std::ofstream&, int, int, int, int);
@@ -65,8 +67,8 @@ public:
 	QStringList serialize();
 	void deserialize(QStringList);
 	void load_team(QString filename);
-	indiv hyenas[NUM_HYENAS];
-	indiv lions[NUM_LIONS];
+    indiv_base *hyenas;
+    indiv_base *lions;
 	double hyena_fits[NUM_HYENAS];
 	double team_fit; // SELECTION_METHOD team fitness
 	double avg_lion_attacks;

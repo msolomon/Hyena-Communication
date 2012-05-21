@@ -1,5 +1,11 @@
 #include "indiv.h"
 
+indiv::indiv_(){
+    for (int i = 0; i < NUM_HYENAS; i++) {
+        hyenas[i].tree = NULL;
+    }
+}
+
 void indiv::xOver(indiv *p2) {
 	int temp = 0;
     int point1, point2, tmp1, tmp2, size1, size2;
@@ -76,42 +82,13 @@ void indiv::xOver_90_10(indiv *p2) {
     }
 }
 
-void indiv::reset_fitness() {
-    for(int i = 0; i < NUM_TESTS; i++){
-        fitnesses[i] = 0;
-    }
-	reward = 0;
-	lion_attacks = 0;
-    attack_pen = 0;
-	avg_dist_to_zebra = 0;
-	the_info.hits = 0;
-	for(int i = 0; i < NUM_OPS; i++){
-		the_info.importance[i] = 0;
-	}
-}
 
-void indiv::reset(void) {
-	calling = false;
-	if (type == lion) {
-		// place lions within 1 unit of zebra
-		x = ZEBRAX + Random::Global.FloatW();
-		y = ZEBRAY + Random::Global.FloatW();
-	} else {
-		x = y = 0;
-		while (distance_sq(x, y) < (
-				   (LION_ATTACK_RADIUS + 1) * (LION_ATTACK_RADIUS + 1)
-				   )){
-			x = Random::Global.FixedN() * X;
-			y = Random::Global.FixedN() * Y;
-		}
-	}
-}
 
 indiv &indiv::operator=(const indiv &source) {
 	x=source.x;
 	y=source.y;
 	the_info = source.the_info;
-	clear(); // this deletes tree
+    clear(); // this deletes tree
 	if(source.type == hyena){
 		tree = new node();
 		tree->copy(source.tree);
@@ -147,43 +124,18 @@ void indiv::rand_move() {
 	//   y+=((rand()%3-1)/50.0);
 }
 
-void indiv::lion_move(void) {
-	if (the_info.num_hyenas > (the_info.num_lions * HYENA_LION_FEAR_RATIO)) {
-		x += LION_MOVE * sin(the_info.nearest_hyena.direction);
-		y += LION_MOVE * cos(the_info.nearest_hyena.direction);
-	}
-	else if(LIONS_RETURN &&
-			the_info.zebra.magnitude < LION_SEES_ZEBRA &&
-			the_info.zebra.magnitude > LION_NEAR_ZEBRA){
-		x -= LION_MOVE * sin(the_info.zebra.direction);
-		y -= LION_MOVE * cos(the_info.zebra.direction);
-	}
+
+
+vect indiv::eval_me(){
+    return tree->evaluate(&the_info, 0);
 }
 
-void indiv::move(void) {
-	vect v;
-	if (type == lion) {
-		lion_move();
-		return;
-	}
-	v = tree->evaluate(&the_info, 0);
-
-	the_info.last_move.direction = v.direction;
-	the_info.last_move.magnitude = v.magnitude;
-
-	if (v.magnitude > MAX_HYENA_MOVE){ // trying to move too far
-		v.magnitude = MAX_HYENA_MOVE;
-	}
-
-	if(v.magnitude != 0) // if moving
-		the_info.moved_yet = true;
-
-	x += v.magnitude * sin(v.direction);
-	y += v.magnitude * cos(v.direction);
+string indiv::graphviz(){
+    return tree->graphviz(NULL, "").toStdString();
 }
 
 QStringList indiv::serialize(){
-	return tree->serialize();
+    return tree->serialize();
 }
 
 void indiv::deserialize(QStringList input){
@@ -193,3 +145,8 @@ void indiv::deserialize(QStringList input){
 	tree = child->deserialize(input);
 }
 
+
+
+void indiv::generate(){
+    grow();
+}

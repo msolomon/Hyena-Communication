@@ -8,9 +8,10 @@ public:
     int rows;
 
     weightset(int rows, int cols){
-        weights = new double[rows * cols];
+        // the weights matrix is stored in row-major form
+        weights = new double[(rows + 1) * cols]; // +1 for bias accommodation
         this->cols = cols;
-        this->rows = rows;
+        this->rows = rows + 1;
     }
 
     ~weightset(){
@@ -18,8 +19,9 @@ public:
     }
 
     void randomize_weights(){
-        for(int i = 0; i < (rows * cols); i++){
-            weights[i] = Random::Global.FixedW(); // [-1, 1]
+        for(int i = 0; i < rows * cols; i++){
+            // use initialization adapted from Kim and Ra 1991
+            weights[i] = Random::Global.FixedW() * sqrt(0.5 / rows);
         }
     }
 };

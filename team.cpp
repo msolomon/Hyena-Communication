@@ -1,15 +1,26 @@
 #include "team.h"
 
 team::team(){
+    if(USE_ANN){
+        hyenas = new indiv_nn[NUM_HYENAS];
+        lions = new indiv_nn[NUM_LIONS];
+    } else {
+        hyenas = new indiv[NUM_HYENAS];
+        lions = new indiv[NUM_LIONS];
+    }
 	reset_fitness();
 	for (int i = 0; i < NUM_HYENAS; i++) {
 //		hyenas[i].grow();
 		hyenas[i].set_type(hyena);
-		hyenas[i].tree = NULL;
 	}
 	for (int i = 0; i < NUM_LIONS; i++) {
 		lions[i].set_type(lion);
 	}
+}
+
+team::~team(){
+    delete[] hyenas;
+    delete[] lions;
 }
 
 void team::reset_team(void) {
@@ -50,7 +61,7 @@ void team::clear(void) {
 void team::generate(void) {
 	reset_fitness();
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		hyenas[i].grow();
+        hyenas[i].generate();
 	}
 }
 

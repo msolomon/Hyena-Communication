@@ -256,11 +256,12 @@ void pop::evolve(int trial) {
     }
 
 	// graphviz output of the first hyena in best team of last generation's tree
-	fname_s = QString(GRAPHVIZ_TEMPLATE).arg(trial+1).toStdString();
-	f.open(fname_s.c_str());
-    f << the_pop[pop_bestteam]->hyenas[0].tree->graphviz(NULL, "").toStdString() << endl;
-	f.close();
-
+    if(!USE_ANN){
+        fname_s = QString(GRAPHVIZ_TEMPLATE).arg(trial+1).toStdString();
+        f.open(fname_s.c_str());
+        f << the_pop[pop_bestteam]->hyenas[0].graphviz().toStdString() << endl;
+        f.close();
+    }
 	// serialize the best team
 	serialize_best(QString(BEST_TEAM_TEMPLATE).arg(trial+1).toStdString().c_str());
 

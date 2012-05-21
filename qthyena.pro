@@ -14,7 +14,6 @@ HEADERS += qthyena.h \
     node.h \
     team.h \
     vect.h \
-    indiv.h \
     pop.h \
     widget.h \
     drawhelper.h \
@@ -23,11 +22,11 @@ HEADERS += qthyena.h \
     agent_info.h \
     indiv_nn.h \
     indiv_base.h \
-    weightset.h
+    weightset.h \
+    indiv.h
     
 SOURCES += qthyena.cpp \
     environment.cpp \
-    indiv.cpp \
     main.cpp \
     node.cpp \
     pop.cpp \
@@ -38,17 +37,22 @@ SOURCES += qthyena.cpp \
     playback.cpp \
     globals.cpp \
     indiv_nn.cpp \
-    indiv_base.cpp
+    indiv_base.cpp \
+    indiv.cpp
     
 FORMS += qthyena.ui \
     playback.ui
 
 RESOURCES += 
 
-LIBS += -lacml -lRandom
+LIBS += -lRandom
 
-unix{
-	LIBS += -ltcmalloc_minimal
+win32 {
+    LIBS += -lacml_dll
+}
+
+unix {
+    LIBS += -ltcmalloc_minimal -lacml
 }
 
 CONFIG(release):

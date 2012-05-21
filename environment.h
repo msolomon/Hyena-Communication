@@ -3,10 +3,12 @@
 
 #include <QPoint>
 #include <QSet>
+#include <QStringList>
 
 #include <cmath>
 #include <string>
 #include <vector>
+#include <bitset>
 
 #include "team.h"
 #include "drawhelper.h"

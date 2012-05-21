@@ -5,34 +5,34 @@
 
 class indiv: public indiv_base {
 public:
+    indiv();
+    void rand_move();
+    void move();
+    indiv &operator=(const indiv &);
 
+    void mutate();
+    void clear();
+    void grow();
+    void reset();
+    void reset_fitness();
+    void generate();
 
-	void rand_move(void);
-	void lion_move(void);
-	void move(void);
-	indiv &operator=(const indiv &);
-
-	void mutate(void);
-	void clear(void);
-	void grow(void);
-	void reset(void);
-	void reset_fitness(void);
-
-	int get_size(void) {
+    int get_size() {
         return tree->get_size();
 	}
     void count_nodes(int &internal, int &leaf){
         tree->count_nodes(internal, leaf);
     }
 
-	void xOver(indiv*);
+    void xOver(indiv*);
     void xOver_90_10(indiv *p2);
 
 	node *tree;
 
 	QStringList serialize();
 	void deserialize(QStringList input);
-
+    vect eval_me();
+    QString graphviz();
 };
 
 #endif
