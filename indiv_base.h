@@ -190,6 +190,9 @@ public:
     virtual QString graphviz() = 0;
     virtual void clear() = 0;
     virtual void generate() = 0;
+    virtual void xOver(indiv_base*) = 0;
+    virtual int get_size() = 0;
+    virtual void mutate() = 0;
 
     void move();
     void lion_move();

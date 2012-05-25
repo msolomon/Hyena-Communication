@@ -1,10 +1,9 @@
 #ifndef INDIV_NN_H
 #define INDIV_NN_H
 
-// include AMD Core Math Library (developer.amd.com/libraries/acml)
-#include <acml/acml.h>
-
+#include <cstring> // for memcpy
 #include <QList>
+#include <QQueue>
 
 #include "globals.h"
 
@@ -15,9 +14,9 @@ class indiv_nn: public indiv_base {
 public:
     indiv_nn();
     ~indiv_nn();
-
-    void evaluate_ann(double input_vector[NETWORK_NUM_INPUT],
-                      double *output_vector);
+    indiv_nn(const indiv_nn &indiv);
+    indiv_nn &operator=(const indiv_nn &other);
+    void evaluate_ann(double input_vector[NETWORK_NUM_INPUT]);
     vect evaluate(agent_info &the_info);
 
     QStringList serialize();
@@ -26,9 +25,28 @@ public:
     QString graphviz();
     void clear();
     void generate();
+    void xOver(indiv_base *p2);
+    int get_size();
+    void mutate();
 
 private:
     QList<weightset> network;
+    double *last_output;
+    inline double activation(double input){
+        return tanh(input / 2.0);
+    }
+    inline double scale_magnitude(double input){
+        return (input / (double) X) * PI;
+    }
+    inline double inverse_scale_magnitude(double input){
+        return input * X / PI;
+    }
+    inline double inverse_scale_direction(double input){
+        return fabs(input * PI);
+    }
+    inline bool inverse_scale_calling(double input){
+        return input > 0; // > 0 calling; < 0 not calling
+    }
 };
 
 #endif // INDIV_NN_H

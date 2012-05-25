@@ -47,3 +47,37 @@ double select_from_numtests(double fitnesses[NUM_TESTS]){
 	}
 	return fit;
 }
+
+int poisson_sample(double lambda){
+    /* sample from poission distribution, from Knuth: runs in O(lambda) */
+    double L = exp(-lambda);
+    int k = 0;
+    double p = 1;
+    do{
+        k++;
+        p *= Random::Global.FixedN();
+    } while(p > L);
+    return k - 1;
+}
+
+static double spare;
+static bool spare_ready = false;
+double normal_sample(double mu, double sigma){
+    /* Generate random samples using the Marsaglia polar method */
+    if(spare_ready){
+        spare_ready = false;
+        return mu + (spare * sigma);
+    }
+
+    double u, v, s;
+    do{
+        u = Random::Global.FixedW();
+        v = Random::Global.FixedW();
+        s = (u * u) + (v * v);
+    } while(s >= 1 || s == 0);
+
+    spare = v * sqrt(-2.0 * (log(s) / s));
+    spare_ready = true;
+
+    return mu + sigma * u * sqrt(-2.0 * (log(s) / s));
+}

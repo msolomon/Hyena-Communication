@@ -49,15 +49,19 @@ LIBS += -lRandom
 
 win32 {
     LIBS += -lacml_dll
+    release{
+        QMAKE_CXXFLAGS_RELEASE += -march=core2
+        QMAKE_LFLAGS += -march=core2
+    }
 }
 
 unix {
     LIBS += -ltcmalloc_minimal -lacml
+    release{
+        QMAKE_CXXFLAGS_RELEASE += -march=amdfam10 -flto
+        QMAKE_LFLAGS += -march=amdfam10 -flto -fwhole-program
+    }
 }
-
-CONFIG(release):
-QMAKE_CXXFLAGS_RELEASE += -march=amdfam10 -flto
-QMAKE_LFLAGS += -march=amdfam10 -flto -fwhole-program
 
 #CONFIG(release, debug|release):
 #QMAKE_CFLAGS+=-pg

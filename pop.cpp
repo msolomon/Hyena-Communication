@@ -259,7 +259,7 @@ void pop::evolve(int trial) {
     if(!USE_ANN){
         fname_s = QString(GRAPHVIZ_TEMPLATE).arg(trial+1).toStdString();
         f.open(fname_s.c_str());
-        f << the_pop[pop_bestteam]->hyenas[0].graphviz().toStdString() << endl;
+        f << the_pop[pop_bestteam]->hyenas[0]->graphviz().toStdString() << endl;
         f.close();
     }
 	// serialize the best team
@@ -490,7 +490,7 @@ void pop::all_generational(){
 	for (int i = 0; i < POP_SIZE; i++) {
 		// delete the old team
 		the_pop[i]->clear();
-		delete the_pop[i];
+        delete the_pop[i];
 		// now point to the new team
 		the_pop[i] = (temp->the_pop[i]);
 	}

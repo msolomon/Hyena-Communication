@@ -183,28 +183,6 @@ void node::clear(void) {
 	}
 }
 
-static double spare;
-static bool spare_ready = false;
-double normal_sample(double mu, double sigma){
-	/* Generate random samples using the Marsaglia polar method */
-	if(spare_ready){
-		spare_ready = false;
-		return mu + (spare * sigma);
-	}
-
-	double u, v, s;
-	do{
-		u = Random::Global.FixedW();
-		v = Random::Global.FixedW();
-		s = (u * u) + (v * v);
-	} while(s >= 1 || s == 0);
-
-	spare = v * sqrt(-2.0 * (log(s) / s));
-	spare_ready = true;
-
-	return mu + sigma * u * sqrt(-2.0 * (log(s) / s));
-}
-
 ops mutate_internal(const ops choices[], ops except=(ops)255){
 	ops choice;
 	do
@@ -330,7 +308,7 @@ vect node::evaluate(agent_info *the_indiv, int depth) {
 		return (the_indiv->nearest_calling);
 	case north: {
 		vect temp;
-        temp.direction = 0;
+        temp.direction = the_indiv->north_enabled ? PI : 0;
 		temp.magnitude = the_indiv->north_enabled ? 1 : 0;
 		return (temp);
 	}

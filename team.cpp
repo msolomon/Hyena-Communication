@@ -1,32 +1,29 @@
 #include "team.h"
 
 team::team(){
-    if(USE_ANN){
-        hyenas = new indiv_nn[NUM_HYENAS];
-        lions = new indiv_nn[NUM_LIONS];
-    } else {
-        hyenas = new indiv[NUM_HYENAS];
-        lions = new indiv[NUM_LIONS];
+    for(int i = 0; i < NUM_HYENAS; i++){
+        if(USE_ANN)
+            hyenas[i] = new indiv_nn;
+        else
+            hyenas[i] = new indiv;
+        hyenas[i]->set_type(hyena);
     }
-	reset_fitness();
-	for (int i = 0; i < NUM_HYENAS; i++) {
-//		hyenas[i].grow();
-		hyenas[i].set_type(hyena);
-	}
-	for (int i = 0; i < NUM_LIONS; i++) {
-		lions[i].set_type(lion);
-	}
+
+    for(int i = 0; i < NUM_LIONS; i++){
+        lions[i].set_type(lion);
+    }
 }
 
 team::~team(){
-    delete[] hyenas;
-    delete[] lions;
+    for(int i = 0; i < NUM_HYENAS; i++){
+        delete hyenas[i];
+    }
 }
 
 void team::reset_team(void) {
 
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		hyenas[i].reset();
+        hyenas[i]->reset();
 	}
 	for (int i = 0; i < NUM_LIONS; i++) {
 		lions[i].reset();
@@ -35,7 +32,7 @@ void team::reset_team(void) {
 
 void team::reset_inputs(){
 	for(int i = 0; i < NUM_HYENAS; i++){
-		hyenas[i].reset_inputs();
+        hyenas[i]->reset_inputs();
 	}
 }
 
@@ -49,40 +46,44 @@ void team::reset_fitness(void) {
 	avg_size = 0;
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		hyena_fits[i] = 0;
-		hyenas[i].reset_fitness();
+        hyenas[i]->reset_fitness();
 	}
 }
 
 void team::clear(void) {
 	for (int i = 0; i < NUM_HYENAS; i++)
-		hyenas[i].clear();
+        hyenas[i]->clear();
 }
 
 void team::generate(void) {
 	reset_fitness();
 	for (int i = 0; i < NUM_HYENAS; i++) {
-        hyenas[i].generate();
+        hyenas[i]->generate();
 	}
 }
 
 void team::copy(team *p2) {
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		hyenas[i] = (p2->hyenas[i]);
-		hyena_fits[i] = p2->hyena_fits[i];
+        copy(p2, i);
 	}
 	team_fit = p2->team_fit;
 }
 
 void team::copy(team *p2, int i) {
-	hyenas[i] = (p2->hyenas[i]);
+    if(USE_ANN){
+        indiv_nn *a = (indiv_nn *) hyenas[i];
+        indiv_nn *b = (indiv_nn *) p2->hyenas[i];
+        *a = *b;
+    } else {
+        indiv *a = (indiv *) hyenas[i];
+        indiv *b = (indiv *) hyenas[i];
+        *a = *b;
+    }
 	hyena_fits[i] = p2->hyena_fits[i];
 }
 
 void team::xOver(team *p2, int i) {
-    if(USE_90_10_XOVER)
-        hyenas[i].xOver_90_10(&(p2->hyenas[i]));
-    else
-        hyenas[i].xOver(&(p2->hyenas[i]));
+    hyenas[i]->xOver(p2->hyenas[i]);
 }
 
 void team::xOver(team *p2) {
@@ -94,28 +95,30 @@ void team::xOver(team *p2) {
 int team::get_size(void) {
     int total = 0;
 	for (int i = 0; i < NUM_HYENAS; i++)
-        total += hyenas[i].get_size();
+        total += hyenas[i]->get_size();
     return total;
 }
 
 void team::apply_parsimony(){
-    avg_parsimony = 0;
-    for(int i = 0; i < NUM_HYENAS; i++){
-        double penalty = hyenas[i].get_size() * -PARSIMONY_COEFF;
-        for(int j = 0; j < NUM_TESTS; j++) // must do for each test
-            hyenas[i].changeFit(penalty, j);
-        avg_parsimony += penalty;
+    if(!USE_ANN){
+        avg_parsimony = 0;
+        for(int i = 0; i < NUM_HYENAS; i++){
+            double penalty = hyenas[i]->get_size() * -PARSIMONY_COEFF;
+            for(int j = 0; j < NUM_TESTS; j++) // must do for each test
+                hyenas[i]->changeFit(penalty, j);
+            avg_parsimony += penalty;
+        }
+        avg_parsimony /= NUM_HYENAS;
     }
-    avg_parsimony /= NUM_HYENAS;
 }
 
 void team::mutate(void) {
 	for (int i = 0; i < NUM_HYENAS; i++)
-		hyenas[i].mutate();
+        hyenas[i]->mutate();
 }
 
 void team::mutate(int member) {
-	hyenas[member].mutate();
+    hyenas[member]->mutate();
 }
 
 double team::write_team_fit_final(std::ofstream &f, int trial, int test, int testnum, int size) {
@@ -126,13 +129,13 @@ double team::write_team_fit_final(std::ofstream &f, int trial, int test, int tes
 	avg_dist_to_zebra = 0;
 	avg_hits = 0;
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		hyena_fits[i] = hyenas[i].get_fitness(testnum);
+        hyena_fits[i] = hyenas[i]->get_fitness(testnum);
 		team_fit += hyena_fits[i];
-		avg_dist_to_zebra += hyenas[i].get_avg_dist_to_zebra();
-		avg_lion_attacks += hyenas[i].get_lion_attacks();
-		avg_penalty += hyenas[i].get_penalty();
-		avg_hits += hyenas[i].get_hits();
-		avg_reward += hyenas[i].get_reward();
+        avg_dist_to_zebra += hyenas[i]->get_avg_dist_to_zebra();
+        avg_lion_attacks += hyenas[i]->get_lion_attacks();
+        avg_penalty += hyenas[i]->get_penalty();
+        avg_hits += hyenas[i]->get_hits();
+        avg_reward += hyenas[i]->get_reward();
 	}
 
 	for(int i = 0; i < NUM_OPS; i++){
@@ -152,7 +155,7 @@ double team::write_team_fit_final(std::ofstream &f, int trial, int test, int tes
 
 	// sum up importance
 	for(int i = 0; i < NUM_HYENAS; i++){
-		double *h_imp = hyenas[i].get_importance();
+        double *h_imp = hyenas[i]->get_importance();
 		for(int j = 0; j < NUM_OPS; j++){
 			importance[j] += h_imp[j];
 		}
@@ -218,7 +221,7 @@ double team::recalc_team_avg_fit(){
     team_fit = 0;
     for(int i = 0; i < NUM_HYENAS; i++){
         for(int j = 0; j < NUM_TESTS; j++)
-            team_fit += hyenas[i].get_fitness(j) / NUM_TESTS;
+            team_fit += hyenas[i]->get_fitness(j) / NUM_TESTS;
     }
 	return team_fit;
 }
@@ -232,13 +235,13 @@ double team::calc_team_fit(void) {
 	avg_hits = 0;
 	for (int i = 0; i < NUM_HYENAS; i++) {
 		for(int j = 0; j < NUM_TESTS; j++)
-			run_fits[j] += hyenas[i].get_fitness(j);
-		hyena_fits[i] = hyenas[i].get_fitness(); // destroys order of fitnesses
-		avg_dist_to_zebra += hyenas[i].get_avg_dist_to_zebra();
-		avg_lion_attacks += hyenas[i].get_lion_attacks();
-        avg_penalty += hyenas[i].get_penalty();
-		avg_hits += hyenas[i].get_hits();
-		avg_reward += hyenas[i].get_reward();
+            run_fits[j] += hyenas[i]->get_fitness(j);
+        hyena_fits[i] = hyenas[i]->get_fitness(); // destroys order of fitnesses
+        avg_dist_to_zebra += hyenas[i]->get_avg_dist_to_zebra();
+        avg_lion_attacks += hyenas[i]->get_lion_attacks();
+        avg_penalty += hyenas[i]->get_penalty();
+        avg_hits += hyenas[i]->get_hits();
+        avg_reward += hyenas[i]->get_reward();
 	}
 	team_fit = select_from_numtests(run_fits);
 
@@ -249,7 +252,7 @@ double team::calc_team_fit(void) {
 
 	// sum up importance
 	for(int i = 0; i < NUM_HYENAS; i++){
-		double *h_imp = hyenas[i].get_importance();
+        double *h_imp = hyenas[i]->get_importance();
 		for(int j = 0; j < NUM_OPS; j++){
 			importance[j] += h_imp[j];
 		}
@@ -271,7 +274,7 @@ QStringList team::serialize(){
 	QStringList output;
 	for(int i = 0; i < NUM_HYENAS; i++){
 //		output += QString("%1 ").arg(get_hyena_fit(i));
-		output += hyenas[i].serialize();
+        output += hyenas[i]->serialize();
 		output += "\n";
 	}
 	return output;
@@ -289,7 +292,7 @@ void team::deserialize(QStringList input){
 
 	// deserialize each hyena in the team
 	for(int i = 0; i < NUM_HYENAS; i++){
-		hyenas[i].deserialize(input.takeFirst().split(' ',
+        hyenas[i]->deserialize(input.takeFirst().split(' ',
 													  QString::SkipEmptyParts));
 	}
 }
@@ -324,5 +327,5 @@ void team::load_team(QString filename){
 		return;
 	} else {
 		deserialize(list);
-	}
+    }
 }

@@ -98,8 +98,8 @@ void environment::place_agents(int test){
 									  lioncoord[test][i][1]);
 	}
 	for(int i = 0; i < NUM_HYENAS; i++){
-		agents->hyenas[i].set_position(hyenacoord[test][i][0],
-									   hyenacoord[test][i][1]);
+        agents->hyenas[i]->set_position(hyenacoord[test][i][0],
+                                        hyenacoord[test][i][1]);
 		unmoved.insert(i); // reset set of unmoved hyenas
 		uncalled.insert(i); // reset set of hyenas that haven't called
 	}
@@ -116,21 +116,21 @@ void environment::evaluate(int test) {
 	double tempx, tempy;
 	double radius;
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		tempx = agents->hyenas[i].getX();
-		tempy = agents->hyenas[i].getY();
+        tempx = agents->hyenas[i]->getX();
+        tempy = agents->hyenas[i]->getY();
 		radius = dist((tempx - ZEBRAX), (tempy - ZEBRAY));
-		agents->hyenas[i].changeFit(1.0/(1.0 + radius), test); // near zebra
+        agents->hyenas[i]->changeFit(1.0/(1.0 + radius), test); // near zebra
 		//		radius = sqrt(radius);
 
-		agents->hyenas[i].inc_dist_to_zebra(radius);
+        agents->hyenas[i]->inc_dist_to_zebra(radius);
 		for (int j = 0; j < NUM_LIONS; j++) {
 			radius = distance_sq(tempx - agents->lions[j].getX(),
 								 tempy - agents->lions[j].getY());
 			if (radius < LION_ATTACK_RADIUS_SQ) { // too close to lions
                 double penalty = LION_ATTACK_PENALTY *
                         (sqrt(radius) - LION_ATTACK_RADIUS);
-				agents->hyenas[i].changeFit(penalty, test); // near lion
-                agents->hyenas[i].inc_lion_attacks(penalty);
+                agents->hyenas[i]->changeFit(penalty, test); // near lion
+                agents->hyenas[i]->inc_lion_attacks(penalty);
 			}
 		}
 	}
@@ -139,7 +139,7 @@ void environment::evaluate(int test) {
 
 void environment::move(void) {
 	for (int i = 0; i < NUM_HYENAS; i++)
-		agents->hyenas[i].move();
+        agents->hyenas[i]->move();
 	for (int i = 0; i < NUM_LIONS; i++)
 		agents->lions[i].move();
 }
@@ -151,7 +151,7 @@ double invert_direction(double d){
 
 void environment::clear_last_moves(){
 	foreach(int mover, unmoved){
-		if(agents->hyenas[mover].get_moved())
+        if(agents->hyenas[mover]->get_moved())
 			unmoved.remove(mover);
 	}
 	just_moved.clear();
@@ -160,7 +160,7 @@ void environment::clear_last_moves(){
 
 void environment::update_leadership(){
 	foreach(int mover, unmoved){
-		if(agents->hyenas[mover].get_moved()){
+        if(agents->hyenas[mover]->get_moved()){
 			unmoved.remove(mover); // this does remove from original unmoved set
 			just_moved.insert(mover);
 		}
@@ -185,50 +185,64 @@ void environment::update_vectors(void){
 	// set calling hyenas and if they call, set vectors toward zebra
 	// and set landmark vector
 	for(int i = 0; i < NUM_HYENAS; i++){
-		agentx = agents->hyenas[i].getX(); //get hyena x,y
-		agenty = agents->hyenas[i].getY();
+        agentx = agents->hyenas[i]->getX(); //get hyena x,y
+        agenty = agents->hyenas[i]->getY();
 
 		// set the landmark, if enabled
 		if(!is_disabled(landmark)){
 			temp.magnitude = dist(agentx - landmarkx, agenty - landmarky);
 			temp.direction = atan2(agentx - landmarkx, agenty - landmarky);
-			agents->hyenas[i].set_landmark(temp);
+            agents->hyenas[i]->set_landmark(temp);
 		}
 
-		temp.magnitude = distance_sq(agentx - ZEBRAX, agenty - ZEBRAY);
-		if (temp.magnitude < CALLING_RANGE_SQ) { // min range to zebra
-			temp.magnitude = sqrt(temp.magnitude); // now calculate sqrt
-			temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
-			if(CALLING_ENABLED){
-				if(uncalled.contains(i)){ // first time calling
-					just_called.insert(i);
-					uncalled.remove(i);
-				}
-				agents->hyenas[i].set_calling(true);
-				num_calling++;
-			} else {
-				agents->hyenas[i].set_calling(false);
-			}
-		} else {
-			temp.reset();
-			agents->hyenas[i].set_calling(false);
-		}
-		agents->hyenas[i].set_zebra(temp);
-	}
+        // set first callers, only if calling not fixed behavior
+        if(USE_ANN && LEARN_CALLING){
+            if(agents->hyenas[i]->get_calling()){ // calling
+                num_calling++;
+                if(uncalled.contains(i)){ // first time calling
+                    just_called.insert(i);
+                    uncalled.remove(i);
+                }
+            }
+        }
+
+        temp.magnitude = distance_sq(agentx - ZEBRAX, agenty - ZEBRAY);
+        if (temp.magnitude < CALLING_RANGE_SQ) { // min range to zebra
+            temp.magnitude = sqrt(temp.magnitude); // now calculate sqrt
+            temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
+            if(CALLING_ENABLED &&
+                    !(USE_ANN && LEARN_CALLING)){ // fixed calling only
+                if(uncalled.contains(i)){ // first time calling
+                    just_called.insert(i);
+                    uncalled.remove(i);
+                }
+                agents->hyenas[i]->set_calling(true);
+                num_calling++;
+            } else {
+                agents->hyenas[i]->set_calling(false);
+            }
+        } else {
+            temp.reset();
+            if(!(USE_ANN && LEARN_CALLING)){
+                agents->hyenas[i]->set_calling(false);
+            }
+        }
+        agents->hyenas[i]->set_zebra(temp);
+    }
 
 	// set hyena vect's as well as nearest, nearest calling, named, nearest lion
 	for(int i = 0; i < NUM_HYENAS; i++){
-		agentx = agents->hyenas[i].getX(); //get hyena x,y
-		agenty = agents->hyenas[i].getY();
-		agents->hyenas[i].set_num_hyenas(num_calling);
+        agentx = agents->hyenas[i]->getX(); //get hyena x,y
+        agenty = agents->hyenas[i]->getY();
+        agents->hyenas[i]->set_num_hyenas(num_calling);
 		min_mag = HYENA_HYENA_RADIUS_SQ;
 		nearest_calling = DBL_MAX;
 
 		// don't recalculate already-calculated vectors
 		for(int j = 0; j < i; j++){
-			temp = agents->hyenas[j].get_hyena_vect(i);
+            temp = agents->hyenas[j]->get_hyena_vect(i);
 			temp.invert();
-			agents->hyenas[i].set_hyena_vect(j, temp);
+            agents->hyenas[i]->set_hyena_vect(j, temp);
 			// check if closest hyena yet
 			magnitude = temp.magnitude;
 			if(magnitude < min_mag){
@@ -236,7 +250,7 @@ void environment::update_vectors(void){
 				the_j = j;
 			}
 			// check if closest calling hyena yet
-			if(agents->hyenas[i].get_calling() && magnitude < nearest_calling){
+            if(agents->hyenas[i]->get_calling() && magnitude < nearest_calling){
 				nearest_calling = magnitude;
 				calling_j = j;
 			}
@@ -246,19 +260,19 @@ void environment::update_vectors(void){
 
 		// calculate vectors that haven't yet been calculated
 		for(int j = i + 1; j < NUM_HYENAS; j++){
-				magnitude = dist(agentx - agents->hyenas[j].getX(),
-								 agenty - agents->hyenas[j].getY());
+                magnitude = dist(agentx - agents->hyenas[j]->getX(),
+                                 agenty - agents->hyenas[j]->getY());
 				temp.magnitude = magnitude;
-				temp.direction = atan2(agentx - agents->hyenas[j].getX(),
-									   agenty - agents->hyenas[j].getY());
-				agents->hyenas[i].set_hyena_vect(j, temp);
+                temp.direction = atan2(agentx - agents->hyenas[j]->getX(),
+                                       agenty - agents->hyenas[j]->getY());
+                agents->hyenas[i]->set_hyena_vect(j, temp);
 				// check if closest hyena yet
 				if(magnitude < min_mag){
 					min_mag = magnitude;
 					the_j = j;
 				}
 				// check if closest calling hyena yet
-				if(agents->hyenas[j].get_calling() && magnitude < nearest_calling){
+                if(agents->hyenas[j]->get_calling() && magnitude < nearest_calling){
 					nearest_calling = magnitude;
 					calling_j = j;
 				}
@@ -269,29 +283,29 @@ void environment::update_vectors(void){
 		// if nearest out of range, zero vector
 		if(min_mag == HYENA_HYENA_RADIUS_SQ){
 			temp.reset();
-			agents->hyenas[i].set_nearest_hyena(temp);
-			agents->hyenas[i].set_mirrored(temp);
+            agents->hyenas[i]->set_nearest_hyena(temp);
+            agents->hyenas[i]->set_mirrored(temp);
 		} else { // set to nearest hyena
 			// set the closest hyena
-			temp = agents->hyenas[i].get_hyena_vect(the_j);
-			agents->hyenas[i].set_nearest_hyena(temp);
+            temp = agents->hyenas[i]->get_hyena_vect(the_j);
+            agents->hyenas[i]->set_nearest_hyena(temp);
 			// set the mirrored input
-			temp = agents->hyenas[the_j].get_last_move();
-			agents->hyenas[i].set_mirrored(temp);
+            temp = agents->hyenas[the_j]->get_last_move();
+            agents->hyenas[i]->set_mirrored(temp);
 		}
 
 		//// Set the named and nearest calling hyena
 		// set the named hyena (always in array position 0)
 		if(!is_disabled(named)) // skip if disabled
-			agents->hyenas[i].set_named(agents->hyenas[i].get_hyena_vect(0));
+            agents->hyenas[i]->set_named(agents->hyenas[i]->get_hyena_vect(0));
 
 		// if nobody is calling, zero vector; else set nearest calling
 		if(nearest_calling == DBL_MAX){
 			temp.reset();
-			agents->hyenas[i].set_nearestcalling(temp);
+            agents->hyenas[i]->set_nearestcalling(temp);
 		} else { // set to nearest calling hyena
-			temp = agents->hyenas[i].get_hyena_vect(calling_j);
-			agents->hyenas[i].set_nearestcalling(temp);
+            temp = agents->hyenas[i]->get_hyena_vect(calling_j);
+            agents->hyenas[i]->set_nearestcalling(temp);
 		}
 
 		//// Find nearest lion
@@ -311,7 +325,7 @@ void environment::update_vectors(void){
 			temp.direction = atan2(agentx - agents->lions[the_j].getX(),
 								   agenty - agents->lions[the_j].getY());
 		}
-		agents->hyenas[i].set_nearest_lion(temp);
+        agents->hyenas[i]->set_nearest_lion(temp);
 	}
 
 	/* If we should only get vectors to hyenas that are calling,
@@ -322,9 +336,9 @@ void environment::update_vectors(void){
 		temp.reset(); // the zero vector
 		for(int i = 0; i < NUM_HYENAS; i++){
 			// if a hyena isn't calling then zero out vectors to it
-			if(!agents->hyenas[i].get_calling()){
+            if(!agents->hyenas[i]->get_calling()){
 				for(int j = 0; j < NUM_HYENAS; j++){
-					agents->hyenas[j].set_hyena_vect(i, temp);
+                    agents->hyenas[j]->set_hyena_vect(i, temp);
 				}
 			}
 		}
@@ -338,8 +352,8 @@ void environment::update_vectors(void){
 		agenty = agents->lions[i].getY();
 		min_mag = LION_HYENA_RADIUS_SQ;
 		for(int j = 0; j < NUM_HYENAS; j++){
-			magnitude = distance_sq(agentx - agents->hyenas[j].getX(),
-									agenty - agents->hyenas[j].getY());
+            magnitude = distance_sq(agentx - agents->hyenas[j]->getX(),
+                                    agenty - agents->hyenas[j]->getY());
 			if (magnitude < LION_HYENA_RADIUS_SQ)
 				n_hyenas++;
 			if(magnitude < min_mag){
@@ -349,8 +363,8 @@ void environment::update_vectors(void){
 		}
 		if(min_mag < LION_HYENA_RADIUS_SQ){ // lion close enough to hyena
 			temp.magnitude = sqrt(min_mag);
-			temp.direction = atan2(agentx - agents->hyenas[the_j].getX(),
-								   agenty - agents->hyenas[the_j].getY());
+            temp.direction = atan2(agentx - agents->hyenas[the_j]->getX(),
+                                   agenty - agents->hyenas[the_j]->getY());
 		}
 		else {
 			temp.reset();
@@ -399,8 +413,8 @@ void environment::draw(DrawHelper* helper, int itera, int timestep) {
 	list.append("\n ");
 
 	for (int i = 0; i < NUM_HYENAS; i++) {
-		QPointF p = QPointF(agents->hyenas[i].getX(),
-							agents->hyenas[i].getY());
+        QPointF p = QPointF(agents->hyenas[i]->getX(),
+                            agents->hyenas[i]->getY());
 		list.append(QString("%1 %2").arg(p.x(), 0, 'g', 4)
                     .arg(p.y(), 0, 'g', 4));
 		if(GUI)
@@ -424,43 +438,43 @@ void environment::knockout_genes(const ops disabled[], int disabled_len){
             switch(disabled[i]){
             // terminals
             case zebra:
-                agents->hyenas[j].set_zebra(zero);
+                agents->hyenas[j]->set_zebra(zero);
                 break;
             case nearest_hyena:
-                agents->hyenas[j].set_nearest_hyena(zero);
+                agents->hyenas[j]->set_nearest_hyena(zero);
                 break;
             case nearest_lion:
-                agents->hyenas[j].set_nearest_lion(zero);
+                agents->hyenas[j]->set_nearest_lion(zero);
                 break;
             case nearest_calling:
-                agents->hyenas[j].set_nearestcalling(zero);
+                agents->hyenas[j]->set_nearestcalling(zero);
                 break;
             case north:
-                agents->hyenas[j].set_north_enabled(false);
+                agents->hyenas[j]->set_north_enabled(false);
                 break;
             case randm:
-                agents->hyenas[j].set_randm_enabled(false);
+                agents->hyenas[j]->set_randm_enabled(false);
                 break;
             case last_move:
-                agents->hyenas[j].set_last_move(zero);
+                agents->hyenas[j]->set_last_move(zero);
                 break;
             case constant:
-                agents->hyenas[j].set_constant_enabled(false);
+                agents->hyenas[j]->set_constant_enabled(false);
                 break;
             case number_calling:
-                agents->hyenas[j].set_num_hyenas(0);
+                agents->hyenas[j]->set_num_hyenas(0);
                 break;
             case mirror_nearest:
-                agents->hyenas[j].set_mirrored(zero);
+                agents->hyenas[j]->set_mirrored(zero);
                 break;
             case last_pen:
-                agents->hyenas[j].reset_pen_input();
+                agents->hyenas[j]->reset_pen_input();
                 break;
             case named:
-                agents->hyenas[j].set_named(zero);
+                agents->hyenas[j]->set_named(zero);
                 break;
             case landmark:
-                agents->hyenas[j].set_landmark(zero);
+                agents->hyenas[j]->set_landmark(zero);
                 break;
                 // non-terminals
             case sum:
@@ -479,7 +493,7 @@ void environment::knockout_genes(const ops disabled[], int disabled_len){
             default:{
 				if(disabled[i] < NUM_OPS){
 					int hyena_num = (disabled[i] - NUM_UNIQUE_OPS);
-					agents->hyenas[j].set_hyena_vect(hyena_num, zero);
+                    agents->hyenas[j]->set_hyena_vect(hyena_num, zero);
 					break;
 				}
                 ofstream error;

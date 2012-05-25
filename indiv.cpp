@@ -1,12 +1,10 @@
 #include "indiv.h"
 
-indiv::indiv_(){
-    for (int i = 0; i < NUM_HYENAS; i++) {
-        hyenas[i].tree = NULL;
-    }
+indiv::indiv(){
+    tree = NULL;
 }
 
-void indiv::xOver(indiv *p2) {
+void indiv::xOver_regular(indiv *p2) {
 	int temp = 0;
     int point1, point2, tmp1, tmp2, size1, size2;
 	point1 = point2 = 0;
@@ -130,8 +128,8 @@ vect indiv::eval_me(){
     return tree->evaluate(&the_info, 0);
 }
 
-string indiv::graphviz(){
-    return tree->graphviz(NULL, "").toStdString();
+QString indiv::graphviz(){
+    return tree->graphviz(NULL, "");
 }
 
 QStringList indiv::serialize(){
@@ -149,4 +147,12 @@ void indiv::deserialize(QStringList input){
 
 void indiv::generate(){
     grow();
+}
+
+void indiv::xOver(indiv_base *p2)
+{
+    if(USE_90_10_XOVER)
+        xOver_90_10((indiv *) p2);
+    else
+        xOver_regular((indiv *) p2);
 }

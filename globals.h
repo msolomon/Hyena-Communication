@@ -1,7 +1,9 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-// #define NDEBUG // disable assert statements
+#ifdef QT_NO_DEBUG // qmake building in release mode
+#define NDEBUG // disable assert statements
+#endif
 
 #include <cmath>
 #include <cfloat>
@@ -12,6 +14,9 @@
 #define RANDOMLIB_DEFAULT_GENERATOR SRandomGenerator64
 #include <RandomLib/Random.hpp>
 using RandomLib::Random;
+
+// include AMD Core Math Library (developer.amd.com/libraries/acml)
+#include <acml/acml.h> // only used in indiv_nn class
 
 #include "types.h"
 class indiv_nn;
@@ -29,7 +34,7 @@ const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const int KNOCKOUT_TESTS = 2000; // as above, but with given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const double PARSIMONY_COEFF = 0.001;
-const ops DISABLED_OPS[] = {nearest_calling, number_calling, named, landmark};
+const ops DISABLED_OPS[] = {};
 const ops KNOCKOUT_OPS[] = {};
 const selection_method SELECTION_METHOD = mean; // mean, median, minimum, maximum
 const bool FINAL_TEST_MEAN = false; // force mean fitness to pick final best team
@@ -41,19 +46,25 @@ const double RADIUS_START = 16;
 const int TOURNAMENT_SIZE = 3;
 const double MUTATION_CHANCE = 1.0; // flat % chance of mutation
    // NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
-const double NUM_OVER_SIZE_MUTATION = 1.0;
+const double NUM_OVER_SIZE_MUTATION = 1.0; // mean number of mutations/iteration
+// Vector expression trees only
 const bool SPECIALIZED_CONST_MUT = true;
 const double CONST_MUT_MAG_SIGMA = 1.0;
 const double CONST_MUT_DIR_SIGMA = 1.0;
+// ANNs only
+const double MUTATION_SIGMA = 0.1;
 
 // Vector expression trees or artificial neural networks
 const bool USE_ANN = true;  // true: ANN, false: vector expression trees
 // ANN only
-const int NETWORK_NUM_INPUT = 10; // # of input nodes
-const int NETWORK_NUM_OUTPUT = 2; // # of output nodes
-const int NETWORK[] = {NETWORK_NUM_INPUT,
-                       5,  // # of nodes in each hidden layer, e.g. 3, 2, 2
-                       NETWORK_NUM_OUTPUT};
+const bool LEARN_CALLING = true;
+const int NETWORK_NUM_INPUT = 2*NUM_HYENAS + 24; // # of input nodes
+const int NETWORK_NUM_OUTPUT = 3; // # of output nodes: 2+, 3+ if LEARN_CALLING
+const int NETWORK[] = {NETWORK_NUM_INPUT, // input layer
+                       // # of nodes in each hidden layer, e.g. 3, 2, 2
+                       NETWORK_NUM_INPUT / 2,
+                       NETWORK_NUM_OUTPUT}; // output layer
+const int NETWORK_LAYERS = sizeof(NETWORK)/sizeof(int);
 // Vector expression trees only
 const bool USE_90_10_XOVER = true;
 const bool ALLOW_INTERNAL_MUTATION = true;
@@ -168,5 +179,7 @@ inline ops get_rand_op(){
 
 // Prototypes
 double select_from_numtests(double fitnesses[NUM_TESTS]);
+int poisson_sample(double lambda);
+double normal_sample(double mu, double sigma);
 
 #endif

@@ -63,12 +63,11 @@ public:
 	void get_leaders(int &leader_idx, int &leader_score,
 					 int &leader2_idx, int &leader2_score);
 	void reset_fitness(void);
-	void reset_calling();
 	QStringList serialize();
 	void deserialize(QStringList);
 	void load_team(QString filename);
-    indiv_base *hyenas;
-    indiv_base *lions;
+    indiv_base *hyenas[NUM_HYENAS];
+    indiv lions[NUM_LIONS]; // internals of ann/vet aren't used anyway
 	double hyena_fits[NUM_HYENAS];
 	double team_fit; // SELECTION_METHOD team fitness
 	double avg_lion_attacks;
