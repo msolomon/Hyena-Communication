@@ -5,8 +5,6 @@ TARGET = qthyena
 QT += core \
 #    opengl \
     gui
-
-#CONFIG += debug
     
 HEADERS += qthyena.h \
     globals.h \
@@ -56,7 +54,7 @@ win32 {
 }
 
 unix {
-    LIBS += -ltcmalloc_minimal -lacml
+    LIBS += -ltcmalloc_minimal -lgfortran -Lacml -lacml
     release{
         QMAKE_CXXFLAGS_RELEASE += -march=amdfam10 -flto
         QMAKE_LFLAGS += -march=amdfam10 -flto -fwhole-program
