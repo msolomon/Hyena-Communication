@@ -25,7 +25,7 @@ void indiv_base::move(void) {
     the_info.last_move.direction = v.direction;
     the_info.last_move.magnitude = v.magnitude;
 
-    if (v.magnitude > MAX_HYENA_MOVE){ // trying to move too far
+    if (!USE_ANN && v.magnitude > MAX_HYENA_MOVE){ // trying to move too far
         v.magnitude = MAX_HYENA_MOVE;
     }
 

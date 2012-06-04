@@ -44,9 +44,9 @@ const double RADIUS_START = 16;
 
 // Selection, crossover, mutation, initial trees
 const int TOURNAMENT_SIZE = 3;
-const double MUTATION_CHANCE = 1.0; // flat % chance of mutation
+const double MUTATION_CHANCE = 5.0; // flat % chance of mutation
    // NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
-const double NUM_OVER_SIZE_MUTATION = 1.0; // mean number of mutations/iteration
+const double NUM_OVER_SIZE_MUTATION = 0; // mean number of mutations/iteration
 // Vector expression trees only
 const bool SPECIALIZED_CONST_MUT = true;
 const double CONST_MUT_MAG_SIGMA = 1.0;
@@ -118,11 +118,11 @@ const int DRAW_EVERY = 10; // draw every X generations
 const bool ANTIALIAS = true; // antialias GUI drawing
 const bool HYENA_MARKERS = false; // draw short line to ID different hyenas
 const bool SMEAR_DRAW = true; // don't erase background between timesteps
-const int SMEAR_LAST = 10; // erase timesteps older than this; 0 for never
-const bool FADE_DRAW = true; // hyenas less opaque toward end (more overlap)
-const bool FADE_OUT = false; // older positions fade with time
-const double ANIMAL_MAX_OPACITY = 0.6;
-const double ANIMAL_MIN_OPACITY = 0.1;
+const int SMEAR_LAST = 3; // erase timesteps older than this; 0 for never
+const bool FADE_DRAW = false; // hyenas less opaque toward end (more overlap)
+const bool FADE_OUT = true; // older positions fade with time
+const double ANIMAL_MAX_OPACITY = 0.8;
+const double ANIMAL_MIN_OPACITY = 0.2;
 
 //// Output file paths
 // Use %1 for trial number

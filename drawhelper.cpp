@@ -1,6 +1,6 @@
 #include "drawhelper.h"
 
-const double hyenaSize = .8;
+const double hyenaSize = 1;
 
 DrawHelper::DrawHelper() {
 	backgroundBrush = QBrush(QColor(130, 200, 110));

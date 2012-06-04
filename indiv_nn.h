@@ -36,16 +36,20 @@ private:
         return tanh(input / 2.0);
     }
     inline double scale_magnitude(double input){
-        return (input / (double) X) * PI;
+        return (input / (double) X);
     }
+    inline double scale_direction(double input){
+        return input / PI;
+    }
+
     inline double inverse_scale_magnitude(double input){
-        return input * X / PI;
+        return fabs(input); // on [0, 1]
     }
     inline double inverse_scale_direction(double input){
-        return fabs(input * PI);
+        return input * PI;
     }
     inline bool inverse_scale_calling(double input){
-        return input > 0; // > 0 calling; < 0 not calling
+        return input > 0; // > 0 calling; <= 0 not calling
     }
 };
 
