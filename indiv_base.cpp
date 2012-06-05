@@ -29,6 +29,13 @@ void indiv_base::move(void) {
         v.magnitude = MAX_HYENA_MOVE;
     }
 
+    assert(v.magnitude >= 0 &&
+           v.magnitude <= MAX_HYENA_MOVE &&
+           "Magnitude outside valid range!");
+    assert(v.direction <= PI &&
+           v.direction >= -PI &&
+           "Direction outside valid range!");
+
     if(v.magnitude != 0) // if moving
         the_info.moved_yet = true;
 

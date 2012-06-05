@@ -43,7 +43,7 @@ private:
     }
 
     inline double inverse_scale_magnitude(double input){
-        return fabs(input); // on [0, 1]
+        return fabs(input) * X; // on [0, X]
     }
     inline double inverse_scale_direction(double input){
         return input * PI;
