@@ -29,7 +29,7 @@ const int NUM_HYENAS = 14;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat tests to prevent luck
 const int NUM_HYENA_INPUTS = 0; // 0 to disable, otherwise first N
-const bool VEC_CALLING_ONLY = false; // vectors to all calling, or all period?
+const bool VEC_CALLING_ONLY = true; // vectors to all calling, or all period?
 const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const int KNOCKOUT_TESTS = 2000; // as above, but with given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
@@ -111,7 +111,7 @@ const double PI = 3.1415926535897932384626433832795028842;
 
 //// GUI/Drawing settings
 // Set GUI to true to enable visualizer; set to false for running simulations
-const bool GUI = true;
+const bool GUI = false;
 const bool DRAW = true; // if false, videos are unavailable
 const bool COLOR_HYENAS = true; // if false, all hyenas are brown
 const int DRAW_EVERY = 10; // draw every X generations
