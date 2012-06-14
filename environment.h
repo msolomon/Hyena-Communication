@@ -29,14 +29,16 @@ public:
     void knockout_genes(const ops disabled[], int disabled_len);
 	void update_leadership();
 	void clear_last_moves();
+    void deploy_lions(int num_lions);
 	double landmarkcoord[NUM_TESTS][2];
 	double hyenacoord[NUM_TESTS][NUM_HYENAS][2];
-	double lioncoord[NUM_TESTS][NUM_LIONS][2];
-	int leadership[NUM_HYENAS];
+    double lioncoord[NUM_TESTS][NUM_LIONS][2];
+    int leadership[NUM_HYENAS];
 private:
 	team *agents;
 	double landmarkx;
 	double landmarky;
+    int deployed_lions;
 	QSet<int> unmoved;
 	QSet<int> uncalled;
 	QSet<int> just_moved;

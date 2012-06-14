@@ -4,6 +4,7 @@ using namespace std;
 
 environment::environment(){
 	fname = NULL;
+    deployed_lions = 0;
 }
 
 void environment::set_up(team *a) {
@@ -23,7 +24,7 @@ void environment::set_up(team *a) {
 void environment::generate_positions(){
 	for(int i = 0; i < NUM_TESTS; i++){
 		double dir, mag;
-		for(int j = 0; j < NUM_LIONS; j++){
+        for(int j = 0; j < deployed_lions; j++){
 			// place lions within 1 unit of zebra
 			dir = Random::Global.FixedS() * 2 * PI;
 			mag = Random::Global.Fixed();
@@ -93,7 +94,7 @@ void environment::generate_positions(){
 }
 
 void environment::place_agents(int test){
-	for(int i = 0; i < NUM_LIONS; i++){
+    for(int i = 0; i < deployed_lions; i++){
 		agents->lions[i].set_position(lioncoord[test][i][0],
 									  lioncoord[test][i][1]);
 	}
@@ -123,7 +124,7 @@ void environment::evaluate(int test) {
 		//		radius = sqrt(radius);
 
         agents->hyenas[i]->inc_dist_to_zebra(radius);
-		for (int j = 0; j < NUM_LIONS; j++) {
+        for (int j = 0; j < deployed_lions; j++) {
 			radius = distance_sq(tempx - agents->lions[j].getX(),
 								 tempy - agents->lions[j].getY());
 			if (radius < LION_ATTACK_RADIUS_SQ) { // too close to lions
@@ -140,7 +141,7 @@ void environment::evaluate(int test) {
 void environment::move(void) {
 	for (int i = 0; i < NUM_HYENAS; i++)
         agents->hyenas[i]->move();
-	for (int i = 0; i < NUM_LIONS; i++)
+    for (int i = 0; i < deployed_lions; i++)
 		agents->lions[i].move();
 }
 
@@ -155,7 +156,11 @@ void environment::clear_last_moves(){
 			unmoved.remove(mover);
 	}
 	just_moved.clear();
-	just_called.clear();
+    just_called.clear();
+}
+
+void environment::deploy_lions(int num_lions){
+    deployed_lions = num_lions;
 }
 
 void environment::update_leadership(){
@@ -310,7 +315,7 @@ void environment::update_vectors(void){
 
 		//// Find nearest lion
 		min_mag = LION_HYENA_RADIUS_SQ;
-		for(int j = 0; j < NUM_LIONS; j++){
+        for(int j = 0; j < deployed_lions; j++){
 			magnitude = distance_sq(agentx - agents->lions[j].getX(),
 									agenty - agents->lions[j].getY());
 			if(magnitude < min_mag){
@@ -346,7 +351,7 @@ void environment::update_vectors(void){
 
 	// lions
 	// get closest hyena, count nearby lions, get vector to zebra
-	for(int i = 0; i < NUM_LIONS; i++){
+    for(int i = 0; i < deployed_lions; i++){
 		int n_hyenas = 0;
 		agentx = agents->lions[i].getX(); //get lion x,y
 		agenty = agents->lions[i].getY();
@@ -375,7 +380,7 @@ void environment::update_vectors(void){
 
 		// find nearest lion.
 		int num_lions = 1; // count self
-		for (int j = 0; j < NUM_LIONS; j++) {
+        for (int j = 0; j < deployed_lions; j++) {
 			if(i == j) continue;
 			magnitude = distance_sq(agentx - agents->lions[j].getX(),
 									agenty - agents->lions[j].getY());
@@ -399,17 +404,25 @@ void environment::draw(DrawHelper* helper, int itera, int timestep) {
 	}
 
 	QStringList list;
-	list.reserve(NUM_LIONS + NUM_HYENAS + 3);
 
 	list.append(QString("l %1 %2\n").arg(landmarkx).arg(landmarky));
 
-	for (int i = 0; i < NUM_LIONS; i++) {
+    for (int i = 0; i < deployed_lions; i++) {
 		QPointF p = QPointF(agents->lions[i].getX(),
 							agents->lions[i].getY());
 		list.append(QString("%1 %2").arg(p.x()).arg(p.y()));
 		if(GUI)
 			helper->lions[i].append(p);
 	}
+
+    // fill in off-screen lions for undeployed lions
+    for (int i = deployed_lions; i < NUM_LIONS; i++) {
+        QPointF p = QPointF(-1000,
+                            -1000);
+        list.append(QString("%1 %2").arg(p.x()).arg(p.y()));
+        if(GUI)
+            helper->lions[i].append(p);
+    }
 	list.append("\n ");
 
 	for (int i = 0; i < NUM_HYENAS; i++) {

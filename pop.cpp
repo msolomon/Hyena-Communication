@@ -5,7 +5,7 @@
 using namespace std;
 
 pop::pop(){
-	ENV = new environment();
+    ENV = new environment();
 }
 
 pop::~pop(){
@@ -223,6 +223,14 @@ void pop::evolve(int trial) {
 
 		// generate a new set of starting positions for all to use
 		ENV->generate_positions();
+
+        // update the number of lions present
+        if(START_LIONS != NUM_LIONS) {
+            const double switch_num = GENERATIONS / (double)
+                                      (NUM_LIONS - START_LIONS + 1);
+            ENV->deploy_lions(floor(i / switch_num) + START_LIONS);
+
+        }
 
 		// only use one method of reproduction
 		if(ISLAND_STEADY)

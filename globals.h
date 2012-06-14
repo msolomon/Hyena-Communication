@@ -24,7 +24,8 @@ class indiv_nn;
 //// Settings
 const int GENERATIONS = 1500;
 const int POP_SIZE = 100;
-const int NUM_LIONS = 2;
+const int START_LIONS = 1; // number of lions to start, then move up ~linearly
+const int NUM_LIONS = 2; // maximum and final number of lions >= START_LIONS
 const int NUM_HYENAS = 14;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat tests to prevent luck
@@ -139,6 +140,7 @@ const char* const BEST_TEAM_TEMPLATE = "bestteam_%1.txt"; // best team output
 const char* const RETEST_GIVEN = NULL; // NULL to disable, else filename
 // seed output is "seed_%s.txt" where %s is argv[1]
 
+//// End of settings
 
 //// Global functions
 inline double dist(double x, double y){  // 'distance' is a built-in function
