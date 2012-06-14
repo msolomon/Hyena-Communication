@@ -33,7 +33,7 @@ public:
 	void member_reproduce();
 	void island_reproduce();
 	void OET1_reproduce();
-	void all_generational();
+    void all_generational(int generation);
 	int member_select(int, int);
 	void add_blank_nodes();
 	void draw_best(int, int);

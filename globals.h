@@ -34,7 +34,7 @@ const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const int KNOCKOUT_TESTS = 2000; // as above, but with given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const double PARSIMONY_COEFF = 0.001;
-const ops DISABLED_OPS[] = {};
+const ops DISABLED_OPS[] = {landmark};
 const ops KNOCKOUT_OPS[] = {};
 const selection_method SELECTION_METHOD = mean; // mean, median, minimum, maximum
 const bool FINAL_TEST_MEAN = false; // force mean fitness to pick final best team
@@ -73,10 +73,11 @@ const int GROW_DEPTH = 4;
 const int TREE_MAX_SIZE = INT_MAX; // size, not depth: INT_MAX for unlimited
 
 // Only pick one method below
-const bool OET_GENERATIONAL = false; // 50% team gen., 50% island gen.
+const bool OET_GENERATIONAL = false; // 50% team, 50% island (generational)
 const bool TEAM_GENERATIONAL = false; // 100% team generational
-const bool INDIV_GENERATIONAL = true; // 100% island generational
+const bool INDIV_GENERATIONAL = false; // 100% island generational
 const bool ISLAND_STEADY = false;
+const bool ALTERNATE_TEAM_INDIV = true; // alternate by generation
 
 // Model
 const int TRIALS = 1; // leaks memory; do via script
@@ -118,7 +119,7 @@ const int DRAW_EVERY = 10; // draw every X generations
 const bool ANTIALIAS = true; // antialias GUI drawing
 const bool HYENA_MARKERS = false; // draw short line to ID different hyenas
 const bool SMEAR_DRAW = true; // don't erase background between timesteps
-const int SMEAR_LAST = 3; // erase timesteps older than this; 0 for never
+const int SMEAR_LAST = 20; // erase timesteps older than this; 0 for never
 const bool FADE_DRAW = false; // hyenas less opaque toward end (more overlap)
 const bool FADE_OUT = true; // older positions fade with time
 const double ANIMAL_MAX_OPACITY = 0.8;
