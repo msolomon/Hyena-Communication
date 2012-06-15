@@ -423,9 +423,9 @@ void environment::draw(DrawHelper* helper, int itera, int timestep) {
         if(GUI)
             helper->lions[i].append(p);
     }
-	list.append("\n ");
+    list.append("\n ");
 
-	for (int i = 0; i < NUM_HYENAS; i++) {
+    for (int i = 0; i < NUM_HYENAS; i++) {
         QPointF p = QPointF(agents->hyenas[i]->getX(),
                             agents->hyenas[i]->getY());
 		list.append(QString("%1 %2").arg(p.x(), 0, 'g', 4)
@@ -434,13 +434,25 @@ void environment::draw(DrawHelper* helper, int itera, int timestep) {
 			helper->hyenas[i].append(p);
 	}
 	list.append("\n");
+
+    list.append("c"); // mark the calling section
+    for (int i = 0; i < NUM_HYENAS; i++) {
+        bool is_calling = agents->hyenas[i]->get_calling();
+        if(is_calling){
+            list.append(QString("t"));
+        } else {
+            list.append(QString("f"));
+        }
+        if(GUI)
+            helper->calling[i].append(is_calling);
+    }
+    list.append("\n");
+
 	ofstream f;
 	f.open(fname, ios_base::app);
-	f << list.join(" ").toStdString();
+    f << list.join(" ").toStdString();
 	f.close();
 }
-
-using namespace std;
 
 void environment::knockout_genes(const ops disabled[], int disabled_len){
     vect zero;

@@ -22,6 +22,7 @@ public:
 	void paint(QPainter *painter, QPaintEvent *event);
 	void updateGui();
 	QList<QPointF> hyenas[NUM_HYENAS];
+    QList<bool> calling[NUM_HYENAS];
 	QList<QPointF> lions[NUM_LIONS];
 	QQueue<QPointF> landmarks;
 
@@ -30,6 +31,7 @@ public:
 
 private:
 	QPen hyenaPen;
+    QPen callingPen;
 	QPen namedPen;
 	QPen hmarkerPen;
 	QPen lionPen;

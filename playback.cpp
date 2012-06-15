@@ -29,14 +29,17 @@ void Playback::on_but_play_clicked(){
 	QString key = ui->combo_iterations->currentText();
 	QQueue<QPointF>* h = &hyenas[key];
 	QQueue<QPointF>* l = &lions[key];
+    QQueue<bool>* c = &calling[key];
 
 	// TODO: make this not depend on compile-time constant num of animals
 	QPointF landmark = landmarks[key];
 	for(int it = 0; it < l->length()/NUM_LIONS; it++){
 		ui->widget->helper.landmarks.clear();
 		ui->widget->helper.step.clear();
-		for(int i = 0; i < NUM_HYENAS; i++)
+        for(int i = 0; i < NUM_HYENAS; i++){
 			ui->widget->helper.hyenas[i].clear();
+            ui->widget->helper.calling[i].clear();
+        }
 		for(int i = 0; i < NUM_LIONS; i++)
 			ui->widget->helper.lions[i].clear();
 	}
@@ -44,6 +47,7 @@ void Playback::on_but_play_clicked(){
 		ui->widget->helper.landmarks.enqueue(landmark);
 		for(int i = 0; i < NUM_HYENAS; i++){
 			ui->widget->helper.hyenas[i].append(h->at(it * NUM_HYENAS + i));
+            ui->widget->helper.calling[i].append(c->at(it * NUM_HYENAS + i));
 		}
 		for(int i = 0; i < NUM_LIONS; i++){
 			ui->widget->helper.lions[i].append(l->at(it * NUM_LIONS + i));
@@ -60,6 +64,7 @@ void Playback::on_but_browse_clicked(){
 		ui->txt_file->setText(fd);
 		lions.clear();
 		hyenas.clear();
+        calling.clear();
 		ui->combo_iterations->clear();
 		parse_video();
 	}
@@ -86,14 +91,21 @@ void Playback::parse_video(){
 					double y = coords.takeFirst().toFloat();
 					hyenas[key].append(QPointF(x, y));
 				}
-			} else { // lion section
+            } else if(s.startsWith(" c")){
+                QList<QString> calls = s.split(" ", QString::SkipEmptyParts);
+                calls.removeFirst(); // remove the "c"
+                while(!calls.isEmpty()){
+                    bool call = calls.takeFirst().startsWith("t");
+                    calling[key].append(call);
+                }
+            } else if(s.startsWith(" ")){ // lion section
 				QList<QString> coords = s.split(" ", QString::SkipEmptyParts);
 				while(!coords.isEmpty()){
 					double x = coords.takeFirst().toFloat();
 					double y = coords.takeFirst().toFloat();
 					lions[key].append(QPointF(x, y));
 				}
-			}
+            }
 		}
 		f.close();
 		ui->combo_iterations->addItems(hyenas.keys());

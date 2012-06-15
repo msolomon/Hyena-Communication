@@ -10,6 +10,7 @@ DrawHelper::DrawHelper() {
 	QColor zebraColor = QColor(220, 20, 20);
 	QColor landmarkColor = QColor(30, 200, 30);
 	QColor radStartColor = QColor(180, 240, 150);
+    QColor callingColor = QColor(255, 255, 255);
 
 	zeb = QPointF(ZEBRAX, ZEBRAY);
 	hyenaPen = QPen(QBrush(hyenaColor), hyenaSize, Qt::SolidLine, Qt::RoundCap);
@@ -22,6 +23,7 @@ DrawHelper::DrawHelper() {
 	callRadPen = QPen(QBrush(zebraColor), 2*CALLING_RANGE, Qt::SolidLine, Qt::RoundCap);
 	radStartPen = QPen(QBrush(radStartColor), 2*RADIUS_START, Qt::SolidLine, Qt::RoundCap);
 	landmarkPen = QPen(QBrush(landmarkColor), 2, Qt::SolidLine, Qt::RoundCap);
+    callingPen = QPen(QBrush(callingColor), hyenaSize / 5.0, Qt::SolidLine, Qt::RoundCap);
 
 	coloredPen[0] = new QPen(QBrush(QColor("#191919")), hyenaSize, Qt::SolidLine, Qt::RoundCap);
 	coloredPen[1] = new QPen(QBrush(QColor("#ffff00")), hyenaSize, Qt::SolidLine, Qt::RoundCap);
@@ -147,6 +149,7 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 		painter->setOpacity(nowOpacity);
 		for (int i = 0; i < NUM_HYENAS; i++) {
 			QPointF h = hyenas[i][j];
+            bool call = calling[i][j];
 			if(HYENA_MARKERS){
 				const double increment = (360*16)/((double)NUM_HYENAS);
 				QRectF rect = QRectF(h.x()-hyenaSize,
@@ -161,6 +164,10 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 			pen = getColor(i);
 			painter->setPen(*pen);
 			painter->drawPoint(h);
+            if(MARK_CALLING && call){
+                painter->setPen(callingPen);
+                painter->drawPoint(h);
+            }
 		}
 	}
 }
