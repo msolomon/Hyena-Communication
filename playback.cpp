@@ -44,15 +44,17 @@ void Playback::on_but_play_clicked(){
 			ui->widget->helper.lions[i].clear();
 	}
 	for(int it = 0; it < l->length()/NUM_LIONS; it++){
-		ui->widget->helper.landmarks.enqueue(landmark);
-		for(int i = 0; i < NUM_HYENAS; i++){
-			ui->widget->helper.hyenas[i].append(h->at(it * NUM_HYENAS + i));
-            ui->widget->helper.calling[i].append(c->at(it * NUM_HYENAS + i));
-		}
-		for(int i = 0; i < NUM_LIONS; i++){
-			ui->widget->helper.lions[i].append(l->at(it * NUM_LIONS + i));
-		}
-		ui->widget->helper.step.enqueue(it);
+        ui->widget->helper.landmarks.enqueue(landmark);
+        for(int i = 0; i < NUM_HYENAS; i++){
+            ui->widget->helper.hyenas[i].append(h->at(it * NUM_HYENAS + i));
+            if(!c->isEmpty()){
+                ui->widget->helper.calling[i].append(c->at(it * NUM_HYENAS + i));
+            }
+        }
+        for(int i = 0; i < NUM_LIONS; i++){
+            ui->widget->helper.lions[i].append(l->at(it * NUM_LIONS + i));
+        }
+        ui->widget->helper.step.enqueue(it);
 	}
 
 	ui->widget->playVideo();

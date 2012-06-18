@@ -149,13 +149,17 @@ void DrawHelper::paint(QPainter *painter, QPaintEvent *event) {
 		painter->setOpacity(nowOpacity);
 		for (int i = 0; i < NUM_HYENAS; i++) {
 			QPointF h = hyenas[i][j];
-            bool call = calling[i][j];
-			if(HYENA_MARKERS){
-				const double increment = (360*16)/((double)NUM_HYENAS);
-				QRectF rect = QRectF(h.x()-hyenaSize,
-									 h.y()-hyenaSize,
-									 2*hyenaSize,
-									 2*hyenaSize);
+            bool call = false;
+            if(calling[i].length() > j){
+                call = calling[i][j];
+            }
+
+            if(HYENA_MARKERS){
+                const double increment = (360*16)/((double)NUM_HYENAS);
+                QRectF rect = QRectF(h.x()-hyenaSize,
+                                     h.y()-hyenaSize,
+                                     2*hyenaSize,
+                                     2*hyenaSize);
 				painter->setPen(hmarkerPen);
 				painter->drawPie(rect, (i*increment), 0);
 //				painter->setPen(&getColor(i));
