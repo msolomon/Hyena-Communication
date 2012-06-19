@@ -6,6 +6,7 @@ Build Requirements
 ------------------------------------
 * [Qt SDK](http://qt.nokia.com/products/) 4.7 or greater (untested with older versions)
 * [Randomlib](http://randomlib.sourceforge.net/)
+* [ACML 5.1](http://developer.amd.com/libraries/acml/)
 
 Building
 ------------------------------------
