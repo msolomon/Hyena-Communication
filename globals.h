@@ -24,7 +24,7 @@ class indiv_nn;
 //// Settings
 const int GENERATIONS = 1500;
 const int POP_SIZE = 100;
-const int START_LIONS = 1; // number of lions to start, then move up ~linearly
+const int START_LIONS = 2; // number of lions to start, then move up ~linearly
 const int NUM_LIONS = 2; // maximum and final number of lions >= START_LIONS
 const int NUM_HYENAS = 14;
 const int TIME_STEPS = 100;
@@ -59,7 +59,7 @@ const double MUTATION_SIGMA = 0.1;
 const bool USE_ANN = true;  // true: ANN, false: vector expression trees
 // ANN only
 const bool LEARN_CALLING = true;
-const int NETWORK_NUM_INPUT = 2*NUM_HYENAS + 24; // # of input nodes
+const int NETWORK_NUM_INPUT = 2*NUM_HYENA_INPUTS + 24; // # of input nodes
 const int NETWORK_NUM_OUTPUT = 3; // # of output nodes: 2+, 3+ if LEARN_CALLING
 const int NETWORK[] = {NETWORK_NUM_INPUT, // input layer
                        // # of nodes in each hidden layer, e.g. 3, 2, 2

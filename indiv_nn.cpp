@@ -217,7 +217,7 @@ void indiv_nn::evaluate_ann(double input_vector[]){
 vect indiv_nn::evaluate(agent_info &the_info){
     double input[NETWORK_NUM_INPUT];
     int i = 0;
-    for(; i < NUM_HYENAS * 2; i += 2){
+    for(; i < NUM_HYENA_INPUTS * 2; i += 2){
         input[i] = the_info.hyenas[i / 2].direction;
         input[i + 1] = scale_magnitude(the_info.hyenas[i / 2].magnitude);
     }
