@@ -1,11 +1,30 @@
 #include "indiv_nn.h"
 
+int indiv_nn::num_inputs = -1;
+
 indiv_nn::indiv_nn(){
     last_output = NULL;
     calling = false;
-    if(USE_ANN && LEARN_CALLING){
-        assert(NETWORK_NUM_OUTPUT >= 3 &&
-               "Not enough output nodes to learn calling!");
+
+    if(num_inputs == -1){ // only calculate once
+        if(USE_ANN && LEARN_CALLING){
+            assert(NETWORK_NUM_OUTPUT >= 3 &&
+                   "Not enough output nodes to learn calling!");
+        }
+        int num_ops = NETWORK_NUM_INPUT;
+        if(is_disabled(zebra))           num_ops -= 2;
+        if(is_disabled(nearest_hyena))   num_ops -= 2;
+        if(is_disabled(nearest_lion))    num_ops -= 2;
+        if(is_disabled(nearest_calling)) num_ops -= 2;
+        if(is_disabled(north))           num_ops -= 2;
+        if(is_disabled(randm))           num_ops -= 2;
+        if(is_disabled(last_move))       num_ops -= 2;
+        if(is_disabled(number_calling))  num_ops -= 1;
+        if(is_disabled(mirror_nearest))  num_ops -= 2;
+        if(is_disabled(last_pen))        num_ops -= 1;
+        if(is_disabled(named))           num_ops -= 2;
+        if(is_disabled(landmark))        num_ops -= 2;
+        num_inputs = num_ops;
     }
 }
 
@@ -222,33 +241,56 @@ vect indiv_nn::evaluate(agent_info &the_info){
         input[i + 1] = scale_magnitude(the_info.hyenas[i / 2].magnitude);
     }
 
-    input[i++] = the_info.zebra.direction;
-    input[i++] = scale_magnitude(the_info.zebra.magnitude);
-    input[i++] = the_info.nearest_hyena.direction;
-    input[i++] = scale_magnitude(the_info.nearest_hyena.magnitude);
-    input[i++] = the_info.nearest_lion.direction;
-    input[i++] = scale_magnitude(the_info.nearest_lion.magnitude);
-    input[i++] = the_info.last_move.direction;
-    input[i++] = scale_magnitude(the_info.last_move.magnitude);
-    input[i++] = the_info.mirrored.direction;
-    input[i++] = scale_magnitude(the_info.mirrored.magnitude);
-    input[i++] = the_info.nearest_calling.direction;
-    input[i++] = scale_magnitude(the_info.nearest_calling.magnitude);
-    input[i++] = the_info.named.direction;
-    input[i++] = scale_magnitude(the_info.named.magnitude);
-    input[i++] = the_info.landmark.direction;
-    input[i++] = scale_magnitude(the_info.landmark.magnitude);
-    input[i++] = the_info.num_lions;
-    input[i++] = the_info.num_hyenas; // number calling (misleading name here)
-    input[i++] = calling ? PI : -PI;
-    input[i++] = the_info.last_pen;
-    input[i++] = the_info.north_enabled ? PI : 0; // direction
-    input[i++] = the_info.north_enabled ? 1 : 0; // magnitude
-    // include randomized inputs, same as for vector expression tree
-    input[i++] = the_info.randm_enabled ? Random::Global.FixedW() * PI : 0;
-    input[i++] = the_info.randm_enabled ? Random::Global.FixedW() * X : 0;
+    if(!is_disabled(zebra)){
+        input[i++] = scale_direction(the_info.zebra.direction);
+        input[i++] = scale_magnitude(the_info.zebra.magnitude);
+    }
+    if(!is_disabled(nearest_hyena)){
+        input[i++] = scale_direction(the_info.nearest_hyena.direction);
+        input[i++] = scale_magnitude(the_info.nearest_hyena.magnitude);
+    }
+    if(!is_disabled(nearest_lion)){
+        input[i++] = scale_direction(the_info.nearest_lion.direction);
+        input[i++] = scale_magnitude(the_info.nearest_lion.magnitude);
+    }
+    if(!is_disabled(nearest_calling)){
+        input[i++] = scale_direction(the_info.nearest_calling.direction);
+        input[i++] = scale_magnitude(the_info.nearest_calling.magnitude);
+    }
+    if(!is_disabled(north)){
+        input[i++] = the_info.north_enabled ? 1 : 0; // direction
+        input[i++] = the_info.north_enabled ? 1 : 0; // magnitude
+    }
+    if(!is_disabled(randm)){
+        input[i++] = the_info.randm_enabled ? Random::Global.FixedW() : 0;
+        input[i++] = the_info.randm_enabled ? Random::Global.FixedW() : 0;
+    }
+    if(!is_disabled(last_move)){
+        input[i++] = scale_direction(the_info.last_move.direction);
+        input[i++] = scale_magnitude(the_info.last_move.magnitude);
+    }
+    if(!is_disabled(mirror_nearest)){
+        input[i++] = scale_direction(the_info.mirrored.direction);
+        input[i++] = scale_magnitude(the_info.mirrored.magnitude);
+    }
+    if(!is_disabled(named)){
+        input[i++] = scale_direction(the_info.named.direction);
+        input[i++] = scale_magnitude(the_info.named.magnitude);
+    }
+    if(!is_disabled(landmark)){
+        input[i++] = scale_direction(the_info.landmark.direction);
+        input[i++] = scale_magnitude(the_info.landmark.magnitude);
+    }
+    // input[i++] = activation(the_info.num_lions / 2.0);
+    if(!is_disabled(number_calling)){
+        input[i++] = activation(the_info.num_hyenas / 15.0);
+    }
+    if(!is_disabled(last_pen)){
+        input[i++] = activation(the_info.last_pen);
+    }
+    input[i++] = calling ? 1 : -1;
 
-    assert(i == NETWORK_NUM_INPUT && "# ANN inputs not as expected!");
+    assert(i == num_inputs && "# ANN inputs not as expected!");
 
     evaluate_ann(input); // feed forward through network
 

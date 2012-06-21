@@ -13,7 +13,7 @@ enum ops {
 	north, // always (mag=1, dir=0)
 	randm, // an ever-randomized vect, ( mag=[0,X], dir=[-PI,PI) )
 	last_move, // a copy of the last move made or (0,0) at start
-	constant, // a once-randomized vect, otherwise as randm
+    constant, // a once-randomized vect, otherwise as randm *(VEP only)*
 	number_calling, // dir=0, mag=(number of calling hyenas), unlimited range
 	mirror_nearest, // the previous action of the nearest hyena (if seen)
 	last_pen, // mag=absolute value of penalty from last timestep, dir=0

@@ -35,7 +35,7 @@ const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
 const int KNOCKOUT_TESTS = 2000; // as above, but with given inputs disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const double PARSIMONY_COEFF = 0.001;
-const ops DISABLED_OPS[] = {landmark};
+const ops DISABLED_OPS[] = {randm};
 const ops KNOCKOUT_OPS[] = {};
 const selection_method SELECTION_METHOD = mean; // mean, median, minimum, maximum
 const bool FINAL_TEST_MEAN = false; // force mean fitness to pick final best team
@@ -59,7 +59,7 @@ const double MUTATION_SIGMA = 0.1;
 const bool USE_ANN = true;  // true: ANN, false: vector expression trees
 // ANN only
 const bool LEARN_CALLING = true;
-const int NETWORK_NUM_INPUT = 2*NUM_HYENA_INPUTS + 24; // # of input nodes
+const int NETWORK_NUM_INPUT = 2*NUM_HYENA_INPUTS + 23; // # of input nodes
 const int NETWORK_NUM_OUTPUT = 3; // # of output nodes: 2+, 3+ if LEARN_CALLING
 const int NETWORK[] = {NETWORK_NUM_INPUT, // input layer
                        // # of nodes in each hidden layer, e.g. 3, 2, 2
@@ -74,11 +74,11 @@ const int GROW_DEPTH = 4;
 const int TREE_MAX_SIZE = INT_MAX; // size, not depth: INT_MAX for unlimited
 
 // Only pick one method below
-const bool OET_GENERATIONAL = false; // 50% team, 50% island (generational)
+const bool OET_GENERATIONAL = true; // 50% team, 50% island (generational)
 const bool TEAM_GENERATIONAL = false; // 100% team generational
 const bool INDIV_GENERATIONAL = false; // 100% island generational
 const bool ISLAND_STEADY = false;
-const bool ALTERNATE_TEAM_INDIV = true; // alternate by generation
+const bool ALTERNATE_TEAM_INDIV = false; // alternate by generation
 
 // Model
 const int TRIALS = 1; // leaks memory; do via script

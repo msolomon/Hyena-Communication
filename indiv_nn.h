@@ -32,6 +32,7 @@ public:
 private:
     QList<weightset> network;
     double *last_output;
+    static int num_inputs;
     inline double activation(double input){
         return tanh(input / 2.0);
     }
