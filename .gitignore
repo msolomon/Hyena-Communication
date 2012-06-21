@@ -7,6 +7,7 @@ debug/
 release/
 doxygen/
 prof/
+RandomLib*/
 
 # file patterns
 /Makefile*
@@ -25,6 +26,8 @@ prof/
 /*.gz
 /*.backup
 /ui_*
+/*.so
+/*.so.*
 
 # files
 /seed.txt
