@@ -22,17 +22,17 @@ using RandomLib::Random;
 class indiv_nn;
 
 //// Settings
-const int GENERATIONS = 1500;
+const int GENERATIONS = 200;
 const int POP_SIZE = 100;
 const int START_LIONS = 2; // number of lions to start, then move up ~linearly
 const int NUM_LIONS = 2; // maximum and final number of lions >= START_LIONS
 const int NUM_HYENAS = 14;
 const int TIME_STEPS = 100;
-const int NUM_TESTS = 5; // times to repeat tests to prevent luck
+const int NUM_TESTS = 1; // times to repeat fitness tests to prevent luck
 const int NUM_HYENA_INPUTS = 0; // 0 to disable, otherwise first N
 const bool VEC_CALLING_ONLY = true; // vectors to all calling, or all period?
-const int FINAL_TESTS = 2000; // number of times to run best hyena of last trial
-const int KNOCKOUT_TESTS = 2000; // as above, but with given inputs disabled
+const int FINAL_TESTS = 2000; // number of times to run best team of last trial
+const int KNOCKOUT_TESTS = 2000; // as FINAL_TESTS, but with KNOCKOUT_OPS disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const double PARSIMONY_COEFF = 0.001;
 const ops DISABLED_OPS[] = {randm};
@@ -46,7 +46,7 @@ const double RADIUS_START = 16;
 // Selection, crossover, mutation, initial trees
 const int TOURNAMENT_SIZE = 3;
 const double MUTATION_CHANCE = 5.0; // flat % chance of mutation
-   // NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
+// NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
 const double NUM_OVER_SIZE_MUTATION = 0; // mean number of mutations/iteration
 // Vector expression trees only
 const bool SPECIALIZED_CONST_MUT = true;
@@ -59,11 +59,11 @@ const double MUTATION_SIGMA = 0.1;
 const bool USE_ANN = true;  // true: ANN, false: vector expression trees
 // ANN only
 const bool LEARN_CALLING = true;
-const int NETWORK_NUM_INPUT = 2*NUM_HYENA_INPUTS + 23; // # of input nodes
-const int NETWORK_NUM_OUTPUT = 3; // # of output nodes: 2+, 3+ if LEARN_CALLING
-const int NETWORK[] = {NETWORK_NUM_INPUT, // input layer
+const int NETWORK_NUM_INPUT_RAW = 2*NUM_HYENA_INPUTS + 23; // # of input nodes
+const int NETWORK_NUM_OUTPUT = 2 + LEARN_CALLING; // # of output nodes: 2+, 3+ if LEARN_CALLING
+const int NETWORK[] = {NETWORK_NUM_INPUT_RAW, // input layer: may not be actual number
                        // # of nodes in each hidden layer, e.g. 3, 2, 2
-                       NETWORK_NUM_INPUT / 2,
+                       15,
                        NETWORK_NUM_OUTPUT}; // output layer
 const int NETWORK_LAYERS = sizeof(NETWORK)/sizeof(int);
 // Vector expression trees only
@@ -140,45 +140,44 @@ const char* const BEST_TEAM_TEMPLATE = "bestteam_%1.txt"; // best team output
 // set RETEST_GIVEN path for input team (dumped by BEST_TEAM_TEMPLATE)
 const char* const RETEST_GIVEN = NULL; // NULL to disable, else filename
 // seed output is "seed_%s.txt" where %s is argv[1]
-
 //// End of settings
 
 //// Global functions
 inline double dist(double x, double y){  // 'distance' is a built-in function
-	return sqrt((x * x) + (y * y));
+    return sqrt((x * x) + (y * y));
 }
 
 inline double distance_sq(double x, double y){
-	return x * x + y * y;
+    return x * x + y * y;
 }
 
 inline bool is_disabled(ops op){
-	for(unsigned int i = 0; i < (sizeof(DISABLED_OPS) / sizeof(ops)); i++)
-		if(op == DISABLED_OPS[i]) return true;
-	return false;
+    for(unsigned int i = 0; i < (sizeof(DISABLED_OPS) / sizeof(ops)); i++)
+        if(op == DISABLED_OPS[i]) return true;
+    return false;
 }
 
 inline ops get_rand_terminal(ops except=(ops)255){
-	ops op;
-	do op = (ops) Random::Global.Integer(NUM_TERMS + NUM_HYENA_INPUTS);
-	while(is_disabled(op) || op == except);
-	if(op >= NUM_TERMS)
-		op = (ops) (op + NUM_NON_TERMS); // hyena inputs come after both
-	return op;
+    ops op;
+    do op = (ops) Random::Global.Integer(NUM_TERMS + NUM_HYENA_INPUTS);
+    while(is_disabled(op) || op == except);
+    if(op >= NUM_TERMS)
+        op = (ops) (op + NUM_NON_TERMS); // hyena inputs come after both
+    return op;
 }
 
 inline ops get_rand_nonterminal(ops except=(ops)255){
-	ops op;
-	do op = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
-	while(is_disabled(op) || op == except);
-	return op;
+    ops op;
+    do op = (ops) (NUM_TERMS + Random::Global.Integer(NUM_NON_TERMS));
+    while(is_disabled(op) || op == except);
+    return op;
 }
 
 inline ops get_rand_op(){
-	ops op;
-	do op = (ops) (Random::Global.Integer(NUM_OPS));
-	while(is_disabled(op));
-	return op;
+    ops op;
+    do op = (ops) (Random::Global.Integer(NUM_OPS));
+    while(is_disabled(op));
+    return op;
 }
 
 // Prototypes

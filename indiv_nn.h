@@ -16,7 +16,7 @@ public:
     ~indiv_nn();
     indiv_nn(const indiv_nn &indiv);
     indiv_nn &operator=(const indiv_nn &other);
-    void evaluate_ann(double input_vector[NETWORK_NUM_INPUT]);
+    void evaluate_ann(double input_vector[]);
     vect evaluate(agent_info &the_info);
 
     QStringList serialize();

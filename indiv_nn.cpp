@@ -11,7 +11,7 @@ indiv_nn::indiv_nn(){
             assert(NETWORK_NUM_OUTPUT >= 3 &&
                    "Not enough output nodes to learn calling!");
         }
-        int num_ops = NETWORK_NUM_INPUT;
+        int num_ops = NETWORK_NUM_INPUT_RAW;
         if(is_disabled(zebra))           num_ops -= 2;
         if(is_disabled(nearest_hyena))   num_ops -= 2;
         if(is_disabled(nearest_lion))    num_ops -= 2;
@@ -24,6 +24,7 @@ indiv_nn::indiv_nn(){
         if(is_disabled(last_pen))        num_ops -= 1;
         if(is_disabled(named))           num_ops -= 2;
         if(is_disabled(landmark))        num_ops -= 2;
+        if(!CALLING_ENABLED)             num_ops -= 1;
         num_inputs = num_ops;
     }
 }
@@ -93,10 +94,14 @@ void indiv_nn::generate(){
     // create a list of matrices representing weights
     network = QList<weightset>();
     const int num_layers = (sizeof(NETWORK) / sizeof(int));
-    network.reserve(num_layers);
     for(int i = 0; i < num_layers - 1; i++){
         // allocate and initialize weights
-        weightset *ws = new weightset(NETWORK[i], NETWORK[i+1]);
+        weightset *ws;
+        if(i == 0){
+            ws = new weightset(num_inputs, NETWORK[i+1]);
+        } else {
+            ws = new weightset(NETWORK[i], NETWORK[i+1]);
+        }
         ws->randomize_weights();
         network.append(*ws);
     }
@@ -190,7 +195,7 @@ void indiv_nn::evaluate_ann(double input_vector[]){
     int in_rows;
     int in_cols;
     double *temp_in = NULL;
-    int out_rows = NETWORK_NUM_INPUT;
+    int out_rows = num_inputs;
     const int out_cols = 1;  // could be changed to evaluate multiple cases at once
     double *temp_out = new double[out_rows * out_cols + 1]; // +1 = bias
     for(int i = 0; i < out_rows * out_cols; i++){
@@ -234,7 +239,7 @@ void indiv_nn::evaluate_ann(double input_vector[]){
 }
 
 vect indiv_nn::evaluate(agent_info &the_info){
-    double input[NETWORK_NUM_INPUT];
+    double input[num_inputs];
     int i = 0;
     for(; i < NUM_HYENA_INPUTS * 2; i += 2){
         input[i] = the_info.hyenas[i / 2].direction;
@@ -288,8 +293,9 @@ vect indiv_nn::evaluate(agent_info &the_info){
     if(!is_disabled(last_pen)){
         input[i++] = activation(the_info.last_pen);
     }
-    input[i++] = calling ? 1 : -1;
-
+    if(CALLING_ENABLED){
+        input[i++] = calling ? 1 : -1;
+    }
     assert(i == num_inputs && "# ANN inputs not as expected!");
 
     evaluate_ann(input); // feed forward through network
