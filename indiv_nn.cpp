@@ -182,8 +182,20 @@ void indiv_nn::mutate(){
                 loc -= matrix_size;
                 locations.enqueue(loc);
             } else { // mutation is in this set of weights
-                // mutate. notice the weights are NOT clamped to [-1, 1]
-                layer->weights[loc] += normal_sample(0, MUTATION_SIGMA);
+                // mutate. notice the weights are NOT clamped to [-1, 1], unless
+                // THREE_POINT_CLAMP is set
+                double weight = layer->weights[loc];
+                double mut = normal_sample(0, MUTATION_SIGMA);
+                if(THREE_POINT_CLAMP){
+                    if(weight < 0)
+                        layer->weights[loc] += mid(-1, 0, mut);
+                    else if(weight > 0)
+                        layer->weights[loc] += mid(0, 1, mut);
+                    else // weight == 0
+                        layer->weights[loc] += mid(-1, 1, mut);
+                } else {
+                    layer->weights[loc] += mut;
+                }
             }
 
         }

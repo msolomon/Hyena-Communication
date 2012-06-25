@@ -22,7 +22,7 @@ using RandomLib::Random;
 class indiv_nn;
 
 //// Settings
-const int GENERATIONS = 200;
+const int GENERATIONS = 7500;
 const int POP_SIZE = 100;
 const int START_LIONS = 2; // number of lions to start, then move up ~linearly
 const int NUM_LIONS = 2; // maximum and final number of lions >= START_LIONS
@@ -54,6 +54,9 @@ const double CONST_MUT_MAG_SIGMA = 1.0;
 const double CONST_MUT_DIR_SIGMA = 1.0;
 // ANNs only
 const double MUTATION_SIGMA = 0.1;
+// force weights to remain on [-1, 1] (increases chance of exactly -1 or 1)
+const bool THREE_POINT_CLAMP = true; // if mutation would cross a "boundary" at
+                                     // -1, 0, or 1, it is instead set to that boundary
 
 // Vector expression trees or artificial neural networks
 const bool USE_ANN = true;  // true: ANN, false: vector expression trees
@@ -178,6 +181,13 @@ inline ops get_rand_op(){
     do op = (ops) (Random::Global.Integer(NUM_OPS));
     while(is_disabled(op));
     return op;
+}
+
+// find middle point of [left, right, x], where left < right
+inline double mid(double left, double right, double x){
+    if(x < left) return left;
+    else if (x > right) return right;
+    else return x;
 }
 
 // Prototypes
