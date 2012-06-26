@@ -21,7 +21,7 @@ public:
 	int tourn_select(int);
 //	void write_fitnesses(void);
 //	void save_data(int, int);
-	void write_data(int);
+    void write_data(int trial, int iteration);
 	void save_data(int);
 	void evolve_repeat();
 	void evolve_repeat(int);
@@ -53,7 +53,7 @@ private:
 //        double data[(TEAM_SIZE * 2 + 4) * TRIALS][ITERATIONS];
 	// data. all team fitnesses plus 8 iteration attributes (avg. and soforth)
 	static const int NUM_EXTRA = 15;
-	double data[GENERATIONS][NUM_EXTRA + NUM_OPS + 3*NUM_HYENAS];
+    double data[NUM_EXTRA + NUM_OPS + 3*NUM_HYENAS];
 	double pop_bestfitness;
 	int pop_bestteam;
 

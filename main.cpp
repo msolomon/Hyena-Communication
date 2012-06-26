@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
 		sprintf(name, "seed_%s.txt", argv[1]);
 		outseed.open(name);
 		free(name);
-	} else{
+    } else {
 		outseed.open("seed.txt");
 	}
 	// Randomlib uses an unsigned long int vector of size 4 to seed. Print each.
@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 		qthyena ui;
 		ui.show();
 		return app.exec();
-	} else{
+    } else {
 		pop p;
 		DrawHelper h;
 		p.helper = &h;

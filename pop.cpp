@@ -20,36 +20,36 @@ void pop::add_blank_nodes(){
 
 void pop::save_data(int iteration){
 	// total ms from start
-	data[iteration][0] = QDateTime::currentMSecsSinceEpoch() - trialstarttime;
+    data[0] = QDateTime::currentMSecsSinceEpoch() - trialstarttime;
 	// generation's average team fitnesses
 	double team_fit = 0;
 	for (int i = 0; i < POP_SIZE; i++) {
 		team_fit += the_pop[i]->get_team_fit();
 	}
-	data[iteration][1] = team_fit / POP_SIZE;
+    data[1] = team_fit / POP_SIZE;
 
     //// Best team information
 	// average distance to zebra (per hyena)
-	data[iteration][2] = the_pop[pop_bestteam]->get_avg_dist_to_zebra();
+    data[2] = the_pop[pop_bestteam]->get_avg_dist_to_zebra();
 	// average number of lion attacks (for whole team per test, not per hyena)
-	data[iteration][3] = the_pop[pop_bestteam]->get_avg_lion_attacks();
+    data[3] = the_pop[pop_bestteam]->get_avg_lion_attacks();
     // average penalty from lion attacks (for whole team/test, not per hyena)
-    data[iteration][4] = the_pop[pop_bestteam]->get_avg_penalty();
+    data[4] = the_pop[pop_bestteam]->get_avg_penalty();
     // average penalty per hyena due to parsimony pressure
-    data[iteration][5] = the_pop[pop_bestteam]->get_avg_parsimony();
+    data[5] = the_pop[pop_bestteam]->get_avg_parsimony();
 	// average bonus from getting close to zebra (whole team/test, not per hy.)
-    data[iteration][6] = the_pop[pop_bestteam]->get_avg_reward();
+    data[6] = the_pop[pop_bestteam]->get_avg_reward();
 	// fitness for best team (for whole team per test, not per hyena)
-    data[iteration][7] = the_pop[pop_bestteam]->get_team_fit();
+    data[7] = the_pop[pop_bestteam]->get_team_fit();
 	// best team average tree size
-	data[iteration][8] = the_pop[pop_bestteam]->get_size() / (double) NUM_HYENAS;
+    data[8] = the_pop[pop_bestteam]->get_size() / (double) NUM_HYENAS;
 	// best team average number of hits
-	data[iteration][9] = the_pop[pop_bestteam]->get_avg_hits();
+    data[9] = the_pop[pop_bestteam]->get_avg_hits();
 	// best team average importance of a given node type
-	data[iteration][10] = 0;
+    data[10] = 0;
 	double *imp = the_pop[pop_bestteam]->get_importance();
 	for(int i = 0; i < NUM_OPS; i++){
-		data[iteration][10] += imp[i] / (NUM_OPS);
+        data[10] += imp[i] / (NUM_OPS);
 	}
 	// best team leader and 2nd best team leader. indexes and leadership scores
 	int leader_idx, leader_score, leader2_idx, leader2_score, total;
@@ -61,59 +61,58 @@ void pop::save_data(int iteration){
 	for(int i = 0; i < NUM_HYENAS; i++){
 		total += ENV->leadership[i];
 	}
-	data[iteration][11] = leader_idx;
-	data[iteration][12] = leader_score / double(total);
-	data[iteration][13] = leader2_idx;
-	data[iteration][14] = leader2_score / double(total);
+    data[11] = leader_idx;
+    data[12] = leader_score / double(total);
+    data[13] = leader2_idx;
+    data[14] = leader2_score / double(total);
 	// Best team average importance for each node type
 	for(int i = 0; i < NUM_OPS; i++){
-		data[iteration][i+NUM_EXTRA] = imp[i];
+        data[i+NUM_EXTRA] = imp[i];
 	}
 
 	// Best team individual fitnesses
 	for(int i = 0; i < NUM_HYENAS; i++){
-		data[iteration][i + (NUM_OPS) + NUM_EXTRA] =
+        data[i + (NUM_OPS) + NUM_EXTRA] =
 				the_pop[pop_bestteam]->get_hyena_fit(i);
 	}
 
 }
 
-void pop::write_data(int trial){
+void pop::write_data(int trial, int iteration){
 	QString fname = QString(DATA_TEMPLATE).arg(trial+1);
 	ofstream f;
-	f.open(fname.toStdString().c_str());
+    f.open(fname.toStdString().c_str(), ios_base::app);
 
-	// provide column labels
-	f << "trial gen time avg_fit best_zeb_dist best_num_attacks best_pen "
-		 "best_parsimony best_reward best_fit best_size best_hits best_imp "
-		 "leader_idx leader_score leader2_idx leader2_score "
-		 // terminals
-		 "zebra nearest_hyena nearest_lion nearest_calling "
-		 "north randm last_move constant number_calling mirror_nearest "
-		 "last_pen named landmark "
-		 // nonterminals
-		 "sum subtract compare invert iflteMAG iflteCLOCKWISE ifVectorZero ";
-	// hyena inputs (also terminals)
-	for(int i = 1; i <= NUM_HYENA_INPUTS; i++){
-		f << "h_" << i << " ";
-	}
-	// individual hyena fitnesses (not an input at all)
-	for(int i = 1; i < NUM_HYENAS; i++){
-		f << "h" << i << " ";
-	}
-	f << "h" << (int)NUM_HYENAS << "\n";
-
-	// iterations
-	for(int i = 0; i < GENERATIONS; i++){
-		f << trial + 1 << " " << i + 1 << " " ; // trial and generation
-		// now write all data fields
-		for(int j = 0; j < NUM_EXTRA + (NUM_OPS) + NUM_HYENAS - 1; j++){
-			f << data[i][j] << " ";
-		}
-		f << data[i][NUM_EXTRA + (NUM_OPS) + NUM_HYENAS - 1]
-		  << "\n";
-	}
-	f.close();
+    if(iteration == 0){
+        // provide column labels
+        f << "trial gen time avg_fit best_zeb_dist best_num_attacks best_pen "
+             "best_parsimony best_reward best_fit best_size best_hits best_imp "
+             "leader_idx leader_score leader2_idx leader2_score "
+             // terminals
+             "zebra nearest_hyena nearest_lion nearest_calling "
+             "north randm last_move constant number_calling mirror_nearest "
+             "last_pen named landmark "
+             // nonterminals
+             "sum subtract compare invert iflteMAG iflteCLOCKWISE ifVectorZero ";
+        // hyena inputs (also terminals)
+        for(int i = 1; i <= NUM_HYENA_INPUTS; i++){
+            f << "h_" << i << " ";
+        }
+        // individual hyena fitnesses (not an input at all)
+        for(int i = 1; i < NUM_HYENAS; i++){
+            f << "h" << i << " ";
+        }
+        f << "h" << (int)NUM_HYENAS << "\n";
+    }
+    // iterations
+    f << trial + 1 << " " << iteration << " " ; // trial and generation
+    // now write all data fields
+    for(int i = 0; i < NUM_EXTRA + (NUM_OPS) + NUM_HYENAS - 1; i++){
+        f << data[i] << " ";
+    }
+    f << data[NUM_EXTRA + (NUM_OPS) + NUM_HYENAS - 1]
+      << "\n";
+    f.close();
 }
 
 void pop::generate(void) {
@@ -240,6 +239,7 @@ void pop::evolve(int trial) {
             all_generational(i);
 		pop_bestteam = select_best_team(1);
 		save_data(i);
+        write_data(trial, i);
 
 		// draw the best team
 		if(i % DRAW_EVERY == (DRAW_EVERY - 1)){
@@ -252,8 +252,6 @@ void pop::evolve(int trial) {
 			draw_best(pop_bestteam, i);
 		}
 	}
-
-	write_data(trial); // one file per trial
 
     // reselect via mean if option set
     if(FINAL_TEST_MEAN){
