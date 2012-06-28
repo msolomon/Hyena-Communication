@@ -1,17 +1,6 @@
 #include "vect.h"
 #include "globals.h"
 
-vect::vect() {
-	magnitude = 0;
-	direction = 0;
-}
-
-vect& vect::operator=(const vect &v2) {
-	magnitude = v2.magnitude;
-	direction = v2.direction;
-	return *this;
-}
-
 vect& vect::operator+=(const vect &v2){
 	double x, y;
 	x = sin(direction) * magnitude;
@@ -25,25 +14,7 @@ vect& vect::operator+=(const vect &v2){
 	return *this;
 }
 
-const vect vect::operator+(const vect& v2) const {
-	vect answer = *this;
-	answer += v2;
-	return answer;
-}
-
 void vect::random(void) {
 	direction = Random::Global.FixedW() * PI;
 	magnitude = Random::Global.FixedN() * X; // proportion of map
-}
-
-void vect::reset(){
-	direction = 0;
-	magnitude = 0;
-}
-
-void vect::invert(){
-	if(direction > 0)
-		direction -= PI;
-	else
-		direction += PI;
 }

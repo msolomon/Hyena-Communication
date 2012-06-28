@@ -198,7 +198,7 @@ void environment::update_vectors(void){
             agents->hyenas[i]->set_landmark(temp);
 		}
 
-        // set first callers, only if calling not fixed behavior
+        // set first callers, only if calling isn't a fixed behavior
         if(USE_ANN && LEARN_CALLING){
             if(agents->hyenas[i]->get_calling()){ // calling
                 num_calling++;
@@ -288,11 +288,11 @@ void environment::update_vectors(void){
             agents->hyenas[i]->set_mirrored(temp);
 		} else { // set to nearest hyena
 			// set the closest hyena
-            temp = agents->hyenas[i]->get_hyena_vect(the_j);
-            agents->hyenas[i]->set_nearest_hyena(temp);
+            agents->hyenas[i]->set_nearest_hyena(
+                        agents->hyenas[i]->get_hyena_vect(the_j));
 			// set the mirrored input
-            temp = agents->hyenas[the_j]->get_last_move();
-            agents->hyenas[i]->set_mirrored(temp);
+            agents->hyenas[i]->set_mirrored(
+                        agents->hyenas[the_j]->get_last_move());
 		}
 
 		//// Set the named and nearest calling hyena
@@ -305,8 +305,8 @@ void environment::update_vectors(void){
 			temp.reset();
             agents->hyenas[i]->set_nearestcalling(temp);
 		} else { // set to nearest calling hyena
-            temp = agents->hyenas[i]->get_hyena_vect(calling_j);
-            agents->hyenas[i]->set_nearestcalling(temp);
+            agents->hyenas[i]->set_nearestcalling(
+                        agents->hyenas[i]->get_hyena_vect(calling_j));
 		}
 
 		//// Find nearest lion

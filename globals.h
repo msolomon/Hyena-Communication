@@ -110,8 +110,6 @@ const double LION_LION_RADIUS_SQ = LION_LION_RADIUS * LION_LION_RADIUS;
 const double LION_HYENA_RADIUS_SQ = LION_HYENA_RADIUS * LION_HYENA_RADIUS;
 const double HYENA_HYENA_RADIUS_SQ = HYENA_HYENA_RADIUS * HYENA_HYENA_RADIUS;
 const double CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
-// General constants
-const double PI = 3.1415926535897932384626433832795028842;
 // ANN scaling options
 const double SCALE_MAG_OUT = 2; // multiply magnitude output by this
 const double SCALE_DIR_OUT = PI; // multiply direction output by this
