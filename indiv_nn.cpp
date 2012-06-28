@@ -2,6 +2,27 @@
 
 int indiv_nn::num_inputs = -1;
 
+bool is_disabled_term(ops op){
+    // Behavior is tightly bound to order of ops
+    static const bool lut[] = { is_disabled(zebra),
+                                is_disabled(nearest_hyena),
+                                is_disabled(nearest_lion),
+                                is_disabled(nearest_calling),
+                                is_disabled(north),
+                                is_disabled(randm),
+                                is_disabled(last_move),
+                                is_disabled(constant),
+                                is_disabled(number_calling),
+                                is_disabled(mirror_nearest),
+                                is_disabled(last_pen),
+                                is_disabled(named),
+                                is_disabled(landmark),
+                              };
+    assert(op < NUM_TERMS && (unsigned int) op < sizeof(lut)/sizeof(bool) &&
+           "Input was not a terminal!");
+    return lut[op];
+}
+
 indiv_nn::indiv_nn(){
     last_output = NULL;
     calling = false;
@@ -12,18 +33,18 @@ indiv_nn::indiv_nn(){
                    "Not enough output nodes to learn calling!");
         }
         int num_ops = NETWORK_NUM_INPUT_RAW;
-        if(is_disabled(zebra))           num_ops -= 2;
-        if(is_disabled(nearest_hyena))   num_ops -= 2;
-        if(is_disabled(nearest_lion))    num_ops -= 2;
-        if(is_disabled(nearest_calling)) num_ops -= 2;
-        if(is_disabled(north))           num_ops -= 2;
-        if(is_disabled(randm))           num_ops -= 2;
-        if(is_disabled(last_move))       num_ops -= 2;
-        if(is_disabled(number_calling))  num_ops -= 1;
-        if(is_disabled(mirror_nearest))  num_ops -= 2;
-        if(is_disabled(last_pen))        num_ops -= 1;
-        if(is_disabled(named))           num_ops -= 2;
-        if(is_disabled(landmark))        num_ops -= 2;
+        if(is_disabled_term(zebra))           num_ops -= 2;
+        if(is_disabled_term(nearest_hyena))   num_ops -= 2;
+        if(is_disabled_term(nearest_lion))    num_ops -= 2;
+        if(is_disabled_term(nearest_calling)) num_ops -= 2;
+        if(is_disabled_term(north))           num_ops -= 2;
+        if(is_disabled_term(randm))           num_ops -= 2;
+        if(is_disabled_term(last_move))       num_ops -= 2;
+        if(is_disabled_term(number_calling))  num_ops -= 1;
+        if(is_disabled_term(mirror_nearest))  num_ops -= 2;
+        if(is_disabled_term(last_pen))        num_ops -= 1;
+        if(is_disabled_term(named))           num_ops -= 2;
+        if(is_disabled_term(landmark))        num_ops -= 2;
         if(!CALLING_ENABLED)             num_ops -= 1;
         num_inputs = num_ops;
     }
@@ -153,6 +174,13 @@ int indiv_nn::get_size(){
     return nn_size;
 }
 
+// find middle point of [left, right, x], where left < right
+inline double mid(double left, double right, double x){
+    if(x < left) return left;
+    else if (x > right) return right;
+    else return x;
+}
+
 void indiv_nn::mutate(){
     int num_mutes;
     QQueue<int> locations;
@@ -205,45 +233,42 @@ void indiv_nn::mutate(){
 void indiv_nn::evaluate_ann(double input_vector[]){
     delete[] last_output;
     int in_rows;
-    int in_cols;
     double *temp_in = NULL;
     int out_rows = num_inputs;
-    const int out_cols = 1;  // could be changed to evaluate multiple cases at once
-    double *temp_out = new double[out_rows * out_cols + 1]; // +1 = bias
-    for(int i = 0; i < out_rows * out_cols; i++){
-        temp_out[i] = activation(input_vector[i]); // apply activation function
+    // in_cols, out_cols aren't needed: they're vectors, so would always be 1
+    double *temp_out = new double[out_rows + 1]; // +1 = bias
+    for(int i = 0; i < out_rows; i++){
+        //temp_out[i] = activation(input_vector[i]); // apply activation function
+        temp_out[i] = input_vector[i];
     }
-    temp_out[out_rows * out_cols] = 1; // set bias node
+    temp_out[out_rows] = 1; // set bias node
 
     // feed-forward through the network
     for(int i = 0; i < network.length(); i++){
         weightset *w = &network[i];
         temp_in = temp_out;
         in_rows = out_rows;
-        in_cols = out_cols;
         out_rows = w->cols; // since weight matrix will be transposed
-        temp_out = new double[out_rows * out_cols + 1];
-        temp_out[out_rows * out_cols] = 1; // set bias for next iteration
-        // perform the matrix multiplication
-        dgemm('t', // transpose weight matrix
-              'n', // don't transpose net (input) matrix
-              w->cols, // w->cols == out_rows == # nodes in next layer
-              in_cols, // in_cols == out_cols == 1 == # test cases evaluated
+        temp_out = new double[out_rows + 1];
+        temp_out[out_rows] = 1; // set bias for next iteration
+        // perform the matrix-vector multiplication
+        dgemv('T', // transpose weight matrix
               w->rows, // w->rows == in_rows + 1 == # nodes in this layer + 1 bias
+              w->cols, // w->cols == out_rows == # nodes in next layer
               1, // multiply the resulting matrix by the scalar 1
-              w->weights, // c = a * b, so a = w->weights
-              w->rows, // first dimension of transpose(a), so = w->rows
-              temp_in, // c = a * b, so b = temp_in
-              in_rows + 1, // first dimension of b, so = in_rows + 1 == w->rows
-              0, // multiply c by 0 and add it (so essentially skip this)
-              temp_out, // output matrix. note that it doesn't fill the last
+              w->weights, // y = a * b, so a = w->weights (matrix)
+              w->rows, // first dimension of a, so = w->rows
+              temp_in, // y = a * b, so b = temp_in (vector)
+              1, // increment x by 1 (don't skip elements)
+              0, // multiply y by 0 and add it (so essentially skip this)
+              temp_out, // output vector. note that it doesn't fill the last
                         // slot, which holds the bias value 1
-              out_rows); // out_rows == w->cols == # nodes next layer
+              1); // increment y by 1 (don't skip elements)
         // apply the activation function to each element in the output, bar bias
-        for(int j = 0; j < out_rows * out_cols; j++){ // skip bias node
+        for(int j = 0; j < out_rows; j++){ // skip bias node
             temp_out[j] = activation(temp_out[j]);
         }
-        assert(temp_out[out_rows*out_cols] == 1 && "Bias node corrupted!");
+        assert(temp_out[out_rows] == 1 && "Bias node corrupted!");
         delete[] temp_in;
     }
     // temp_out now holds the output matrix, and an extraneous bias node
@@ -254,59 +279,59 @@ vect indiv_nn::evaluate(agent_info &the_info){
     double input[num_inputs];
     int i = 0;
     for(; i < NUM_HYENA_INPUTS * 2; i += 2){
-        input[i] = the_info.hyenas[i / 2].direction;
+        input[i] = scale_direction(the_info.hyenas[i / 2].direction);
         input[i + 1] = scale_magnitude(the_info.hyenas[i / 2].magnitude);
     }
 
-    if(!is_disabled(zebra)){
+    if(!is_disabled_term(zebra)){
         input[i++] = scale_direction(the_info.zebra.direction);
         input[i++] = scale_magnitude(the_info.zebra.magnitude);
     }
-    if(!is_disabled(nearest_hyena)){
+    if(!is_disabled_term(nearest_hyena)){
         input[i++] = scale_direction(the_info.nearest_hyena.direction);
         input[i++] = scale_magnitude(the_info.nearest_hyena.magnitude);
     }
-    if(!is_disabled(nearest_lion)){
+    if(!is_disabled_term(nearest_lion)){
         input[i++] = scale_direction(the_info.nearest_lion.direction);
         input[i++] = scale_magnitude(the_info.nearest_lion.magnitude);
     }
-    if(!is_disabled(nearest_calling)){
+    if(!is_disabled_term(nearest_calling)){
         input[i++] = scale_direction(the_info.nearest_calling.direction);
         input[i++] = scale_magnitude(the_info.nearest_calling.magnitude);
     }
-    if(!is_disabled(north)){
+    if(!is_disabled_term(north)){
         input[i++] = the_info.north_enabled ? 1 : 0; // direction
         input[i++] = the_info.north_enabled ? 1 : 0; // magnitude
     }
-    if(!is_disabled(randm)){
+    if(!is_disabled_term(randm)){
         input[i++] = the_info.randm_enabled ? Random::Global.FixedW() : 0;
         input[i++] = the_info.randm_enabled ? Random::Global.FixedW() : 0;
     }
-    if(!is_disabled(last_move)){
+    if(!is_disabled_term(last_move)){
         input[i++] = scale_direction(the_info.last_move.direction);
         input[i++] = scale_magnitude(the_info.last_move.magnitude);
     }
-    if(!is_disabled(mirror_nearest)){
+    if(!is_disabled_term(mirror_nearest)){
         input[i++] = scale_direction(the_info.mirrored.direction);
         input[i++] = scale_magnitude(the_info.mirrored.magnitude);
     }
-    if(!is_disabled(named)){
+    if(!is_disabled_term(named)){
         input[i++] = scale_direction(the_info.named.direction);
         input[i++] = scale_magnitude(the_info.named.magnitude);
     }
-    if(!is_disabled(landmark)){
+    if(!is_disabled_term(landmark)){
         input[i++] = scale_direction(the_info.landmark.direction);
         input[i++] = scale_magnitude(the_info.landmark.magnitude);
     }
     // input[i++] = activation(the_info.num_lions / 2.0);
-    if(!is_disabled(number_calling)){
+    if(!is_disabled_term(number_calling)){
         input[i++] = activation(the_info.num_hyenas / 15.0);
     }
-    if(!is_disabled(last_pen)){
+    if(!is_disabled_term(last_pen)){
         input[i++] = activation(the_info.last_pen);
     }
     if(CALLING_ENABLED){
-        input[i++] = calling ? 1 : -1;
+        input[i++] = calling ? 1 : 0;
     }
     assert(i == num_inputs && "# ANN inputs not as expected!");
 

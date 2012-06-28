@@ -41,8 +41,7 @@ public:
 
     void randomize_weights(){
         for(int i = 0; i < rows * cols; i++){
-            // use initialization adapted from Kim and Ra 1991
-            weights[i] = Random::Global.FixedW(); // * sqrt(0.5 / rows);
+            weights[i] = Random::Global.FixedW();
         }
     }
 };

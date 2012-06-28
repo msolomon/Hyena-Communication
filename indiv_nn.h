@@ -33,21 +33,25 @@ private:
     QList<weightset> network;
     double *last_output;
     static int num_inputs;
+
+
     inline double activation(double input){
-        return tanh(input / 2.0);
+        return tanh(input);
     }
     inline double scale_magnitude(double input){
-        return (input / (double) X);
+        return input * SCALE_MAG_IN;
+        // return (input / ((double) X / 2.0));
     }
     inline double scale_direction(double input){
-        return input / PI;
+        return input * SCALE_DIR_IN;
     }
 
     inline double inverse_scale_magnitude(double input){
-        return fabs(input) * X; // on [0, X]
+        return fabs(input) * SCALE_MAG_OUT;
+        // return fabs(input) * X / 2.0; // on [0, X]
     }
     inline double inverse_scale_direction(double input){
-        return input * PI;
+        return input * SCALE_DIR_OUT;
     }
     inline bool inverse_scale_calling(double input){
         return input > 0; // > 0 calling; <= 0 not calling

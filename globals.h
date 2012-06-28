@@ -22,16 +22,16 @@ using RandomLib::Random;
 class indiv_nn;
 
 //// Settings
-const int GENERATIONS = 7500;
+const int GENERATIONS = 500;
 const int POP_SIZE = 100;
-const int START_LIONS = 2; // number of lions to start, then move up ~linearly
-const int NUM_LIONS = 2; // maximum and final number of lions >= START_LIONS
+const int START_LIONS = 0; // number of lions to start, then move up ~linearly
+const int NUM_LIONS = 0; // maximum and final number of lions >= START_LIONS
 const int NUM_HYENAS = 14;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 1; // times to repeat fitness tests to prevent luck
 const int NUM_HYENA_INPUTS = 0; // 0 to disable, otherwise first N
 const bool VEC_CALLING_ONLY = true; // vectors to all calling, or all period?
-const int FINAL_TESTS = 2000; // number of times to run best team of last trial
+const int FINAL_TESTS = 0; // number of times to run best team of last trial
 const int KNOCKOUT_TESTS = 2000; // as FINAL_TESTS, but with KNOCKOUT_OPS disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const double PARSIMONY_COEFF = 0.001;
@@ -54,19 +54,18 @@ const double CONST_MUT_MAG_SIGMA = 1.0;
 const double CONST_MUT_DIR_SIGMA = 1.0;
 // ANNs only
 const double MUTATION_SIGMA = 0.1;
-// force weights to remain on [-1, 1] (increases chance of exactly -1 or 1)
-const bool THREE_POINT_CLAMP = true; // if mutation would cross a "boundary" at
+const bool THREE_POINT_CLAMP = false; // if mutation would cross a "boundary" at
                                      // -1, 0, or 1, it is instead set to that boundary
 
 // Vector expression trees or artificial neural networks
 const bool USE_ANN = true;  // true: ANN, false: vector expression trees
 // ANN only
-const bool LEARN_CALLING = true;
+const bool LEARN_CALLING = false;
 const int NETWORK_NUM_INPUT_RAW = 2*NUM_HYENA_INPUTS + 23; // # of input nodes
 const int NETWORK_NUM_OUTPUT = 2 + LEARN_CALLING; // # of output nodes: 2+, 3+ if LEARN_CALLING
 const int NETWORK[] = {NETWORK_NUM_INPUT_RAW, // input layer: may not be actual number
                        // # of nodes in each hidden layer, e.g. 3, 2, 2
-                       15,
+                       (NETWORK_NUM_INPUT_RAW - (sizeof(DISABLED_OPS)/sizeof(int))) / 2,
                        NETWORK_NUM_OUTPUT}; // output layer
 const int NETWORK_LAYERS = sizeof(NETWORK)/sizeof(int);
 // Vector expression trees only
@@ -113,6 +112,11 @@ const double HYENA_HYENA_RADIUS_SQ = HYENA_HYENA_RADIUS * HYENA_HYENA_RADIUS;
 const double CALLING_RANGE_SQ = CALLING_RANGE * CALLING_RANGE;
 // General constants
 const double PI = 3.1415926535897932384626433832795028842;
+// ANN scaling options
+const double SCALE_MAG_OUT = 2; // multiply magnitude output by this
+const double SCALE_DIR_OUT = PI; // multiply direction output by this
+const double SCALE_MAG_IN = 1.0 / SCALE_MAG_OUT;
+const double SCALE_DIR_IN = 1.0 / SCALE_DIR_OUT;
 
 //// GUI/Drawing settings
 // Set GUI to true to enable visualizer; set to false for running simulations
@@ -181,13 +185,6 @@ inline ops get_rand_op(){
     do op = (ops) (Random::Global.Integer(NUM_OPS));
     while(is_disabled(op));
     return op;
-}
-
-// find middle point of [left, right, x], where left < right
-inline double mid(double left, double right, double x){
-    if(x < left) return left;
-    else if (x > right) return right;
-    else return x;
 }
 
 // Prototypes

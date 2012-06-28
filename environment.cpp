@@ -19,14 +19,12 @@ void environment::set_up(team *a) {
 	}
 }
 
-
-
 void environment::generate_positions(){
 	for(int i = 0; i < NUM_TESTS; i++){
 		double dir, mag;
         for(int j = 0; j < deployed_lions; j++){
 			// place lions within 1 unit of zebra
-			dir = Random::Global.FixedS() * 2 * PI;
+            dir = Random::Global.FixedW() * PI;
 			mag = Random::Global.Fixed();
 			lioncoord[i][j][0] = ZEBRAX + sin(dir) * mag;
 			lioncoord[i][j][1] = ZEBRAY + cos(dir) * mag;
@@ -35,7 +33,7 @@ void environment::generate_positions(){
 		if(RADIUS_START > 0){ // place within given distance of zebra
 			// pick a random non-named hyena
 			int inside = Random::Global.IntegerC(1, NUM_HYENAS - 1);
-			dir = Random::Global.FixedS() * 2 * PI;
+            dir = Random::Global.FixedW() * PI;
 			mag = Random::Global.Fixed() * CALLING_RANGE;
 			hyenacoord[i][inside][0] = ZEBRAX + sin(dir) * mag;
 			hyenacoord[i][inside][1] = ZEBRAY + cos(dir) * mag;
@@ -43,7 +41,7 @@ void environment::generate_positions(){
 			// place the rest outside CALLING_RANGE and inside RADIUS_START
 			for(int j = 0; j < NUM_HYENAS; j++){
 				if(j == inside) continue;
-				dir = Random::Global.FixedS() * 2 * PI;
+                dir = Random::Global.FixedW() * PI;
 				mag = Random::Global.Fixed() *
 						(RADIUS_START - CALLING_RANGE) + CALLING_RANGE;
 				hyenacoord[i][j][0] = ZEBRAX + sin(dir) * mag;
@@ -85,7 +83,7 @@ void environment::generate_positions(){
 
 		// place the landmark inside the calling radius
 		if(!is_disabled(landmark)){
-			dir = Random::Global.FixedS() * 2 * PI;
+            dir = Random::Global.FixedW()* PI;
 			mag = Random::Global.Fixed() * CALLING_RANGE;
 			landmarkcoord[i][0] = ZEBRAX + sin(dir) * mag;
 			landmarkcoord[i][1] = ZEBRAY + cos(dir) * mag;
@@ -146,7 +144,7 @@ void environment::move(void) {
 }
 
 double invert_direction(double d){
-	if(d < 0) return d + PI;
+    if(d < 0) return d + PI;
 	else return d - PI;
 }
 
@@ -223,8 +221,6 @@ void environment::update_vectors(void){
                 }
                 agents->hyenas[i]->set_calling(true);
                 num_calling++;
-            } else {
-                agents->hyenas[i]->set_calling(false);
             }
         } else {
             temp.reset();
