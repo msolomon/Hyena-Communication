@@ -226,11 +226,12 @@ void pop::evolve(int trial) {
 		ENV->generate_positions();
 
         // update the number of lions present
-        if(START_LIONS != NUM_LIONS) {
+        if(START_LIONS != NUM_LIONS) { // ramp up lions
             const double switch_num = GENERATIONS / (double)
                                       (NUM_LIONS - START_LIONS + 1);
             ENV->deploy_lions(floor(i / switch_num) + START_LIONS);
-
+        } else { // constant # lions
+            ENV->deploy_lions(NUM_LIONS);
         }
 
 		// only use one method of reproduction
