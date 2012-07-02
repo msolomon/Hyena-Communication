@@ -2,10 +2,15 @@
 
 team::team(){
     for(int i = 0; i < NUM_HYENAS; i++){
-        if(USE_ANN)
+        if(HYBRID){
+            hyenas[i] = new indiv_hybrid;
+            ((indiv_hybrid *) (hyenas[i]))->set_type(hyena);
+        }
+        else if(ENABLE_ANN)
             hyenas[i] = new indiv_nn;
         else
             hyenas[i] = new indiv;
+
         hyenas[i]->set_type(hyena);
     }
 
@@ -70,11 +75,16 @@ void team::copy(team *p2) {
 }
 
 void team::copy(team *p2, int i) {
-    if(USE_ANN){
+    // copy using assignment operator (defined per-class)
+    if(HYBRID){
+        indiv_hybrid *a = (indiv_hybrid *) hyenas[i];
+        indiv_hybrid *b = (indiv_hybrid *) p2->hyenas[i];
+        *a = *b;
+    } else if(ENABLE_ANN){
         indiv_nn *a = (indiv_nn *) hyenas[i];
         indiv_nn *b = (indiv_nn *) p2->hyenas[i];
         *a = *b;
-    } else {
+    } else { // VEP only
         indiv *a = (indiv *) hyenas[i];
         indiv *b = (indiv *) hyenas[i];
         *a = *b;
@@ -100,7 +110,7 @@ int team::get_size(void) {
 }
 
 void team::apply_parsimony(){
-    if(!USE_ANN){
+    if(!ENABLE_ANN || !HYBRID){
         avg_parsimony = 0;
         for(int i = 0; i < NUM_HYENAS; i++){
             double penalty = hyenas[i]->get_size() * -PARSIMONY_COEFF;

@@ -184,6 +184,10 @@ public:
 		return type;
 	}
 
+    void set_info(agent_info other_info){
+        the_info = other_info;
+    }
+
     virtual QStringList serialize() = 0;
 	virtual void deserialize(QStringList input) = 0;
     virtual vect eval_me() = 0;
@@ -199,7 +203,7 @@ public:
     void reset_fitness();
     void reset();
 protected:
-	agent_info the_info;
+    agent_info the_info;
 	double fitnesses[NUM_TESTS];
 	double reward;
 	double avg_dist_to_zebra;

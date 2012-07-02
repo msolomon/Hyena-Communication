@@ -22,10 +22,10 @@ using RandomLib::Random;
 class indiv_nn;
 
 //// Settings
-const int GENERATIONS = 500;
+const int GENERATIONS = 100;
 const int POP_SIZE = 100;
-const int START_LIONS = 0; // number of lions to start, then move up ~linearly
-const int NUM_LIONS = 0; // maximum and final number of lions >= START_LIONS
+const int START_LIONS = 2; // number of lions to start, then move up ~linearly
+const int NUM_LIONS = 2; // maximum and final number of lions >= START_LIONS
 const int NUM_HYENAS = 14;
 const int TIME_STEPS = 100;
 const int NUM_TESTS = 1; // times to repeat fitness tests to prevent luck
@@ -45,24 +45,30 @@ const double RADIUS_START = 16;
 
 // Selection, crossover, mutation, initial trees
 const int TOURNAMENT_SIZE = 3;
-const double MUTATION_CHANCE = 5.0; // flat % chance of mutation
-// NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
-const double NUM_OVER_SIZE_MUTATION = 0; // mean number of mutations/iteration
 // Vector expression trees only
 const bool SPECIALIZED_CONST_MUT = true;
 const double CONST_MUT_MAG_SIGMA = 1.0;
 const double CONST_MUT_DIR_SIGMA = 1.0;
+const double MUTATION_CHANCE_VEP = 5.0; // flat % chance of mutation
+// NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
+const double NUM_OVER_SIZE_MUTATION_VEP = 0; // mean number of mutations/iteration
 // ANNs only
 const double MUTATION_SIGMA = 0.1;
 const bool THREE_POINT_CLAMP = false; // if mutation would cross a "boundary" at
                                      // -1, 0, or 1, it is instead set to that boundary
+const double MUTATION_CHANCE_ANN = MUTATION_CHANCE_VEP; // flat % chance of mutation
+// NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
+const double NUM_OVER_SIZE_MUTATION_ANN = NUM_OVER_SIZE_MUTATION_VEP; // mean number of mutations/iteration
 
 // Vector expression trees or artificial neural networks
-const bool USE_ANN = true;  // true: ANN, false: vector expression trees
+const bool ENABLE_ANN = true;  // true: ANN, false: VEP
+const bool HYBRID = true           // true: ANN and VEP, false: as above
+                    && ENABLE_ANN; // only true if ENABLE_ANN also true
 // ANN only
-const bool LEARN_CALLING = false;
+const bool LEARN_CALLING = true
+                           && ENABLE_ANN;  // can only learn with ANN enabled
 const int NETWORK_NUM_INPUT_RAW = 2*NUM_HYENA_INPUTS + 23; // # of input nodes
-const int NETWORK_NUM_OUTPUT = 2 + LEARN_CALLING; // # of output nodes: 2+, 3+ if LEARN_CALLING
+const int NETWORK_NUM_OUTPUT = (2 * !HYBRID) + LEARN_CALLING; // # of output nodes: 2+, 3+ if LEARN_CALLING
 const int NETWORK[] = {NETWORK_NUM_INPUT_RAW, // input layer: may not be actual number
                        // # of nodes in each hidden layer, e.g. 3, 2, 2
                        (NETWORK_NUM_INPUT_RAW - (sizeof(DISABLED_OPS)/sizeof(int))) / 2,
@@ -118,7 +124,7 @@ const double SCALE_DIR_IN = 1.0 / SCALE_DIR_OUT;
 
 //// GUI/Drawing settings
 // Set GUI to true to enable visualizer; set to false for running simulations
-const bool GUI = false;
+const bool GUI = true;
 const bool DRAW = true; // if false, videos are unavailable
 const bool COLOR_HYENAS = true; // if false, all hyenas are brown
 const bool MARK_CALLING = true; // mark calling hyenas

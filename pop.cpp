@@ -265,7 +265,7 @@ void pop::evolve(int trial) {
     }
 
 	// graphviz output of the first hyena in best team of last generation's tree
-    if(!USE_ANN){
+    if(!ENABLE_ANN || HYBRID){
         fname_s = QString(GRAPHVIZ_TEMPLATE).arg(trial+1).toStdString();
         f.open(fname_s.c_str());
         f << the_pop[pop_bestteam]->hyenas[0]->graphviz().toStdString() << endl;
@@ -451,12 +451,13 @@ void pop::all_generational(int generation){
 	delete temp->ENV;
 	temp->ENV = ENV;
 	int bound; // determines how to split the new population between island and team
+    assert(POP_SIZE / 4 == POP_SIZE / 4.0 && "Population size must be divisible by 4.");
     if(TEAM_GENERATIONAL || (ALTERNATE_TEAM_INDIV && generation % 2))
 		bound = POP_SIZE;       // team approach
     else if(INDIV_GENERATIONAL || ALTERNATE_TEAM_INDIV)
 		bound = 0;                      // island approach
     else if(OET_GENERATIONAL)
-		bound = POP_SIZE/2;   // OET approach,  POP_SIZE should always be even
+        bound = POP_SIZE/2;   // OET approach
 	for (int i = 0; i < bound; i = i + 2) {
 		int p1, p2;
 		// select teams

@@ -2,6 +2,7 @@
 #define TEAM_H
 
 #include "globals.h"
+#include "indiv_hybrid.h"
 #include "indiv_nn.h"
 #include "indiv.h"
 #include <fstream>

@@ -78,7 +78,7 @@ void node::copy(node *p) {
 	case randm:
 	case last_move:
 		return;
-	case constant:
+    case constant:
 		the_const = new vect();
 		the_const->direction = p->the_const->direction;
 		the_const->magnitude = p->the_const->magnitude;
@@ -183,25 +183,26 @@ void node::clear(void) {
 	}
 }
 
-ops mutate_internal(const ops choices[], ops except=(ops)255){
+ops mutate_internal(const ops choices[], const int size, ops except=(ops)255){
 	ops choice;
-	do
-		choice = choices[Random::Global.Integer(sizeof(choices)/sizeof(ops))];
-	while(choice == except);
-	return choice;
+    do
+        choice = choices[Random::Global.Integer(size)];
+    while(choice == except);
+    return choice;
 }
 
 /* chance of mutation on [0, 1] per node*/
 void node::mutate(double chance) {
-	bool mut_this = (Random::Global.FixedN() < chance);
+    bool mut_this = (Random::Global.Fixed() < chance);
 	switch (operation) {
 	// non-terminals
 	case sum:
     case subtract:
     case compare:
 		if(mut_this && ALLOW_INTERNAL_MUTATION){
-			const ops same_arity[] = {sum, subtract, compare};
-			operation = mutate_internal(same_arity, operation);
+            const ops same_arity[] = {sum, subtract, compare};
+            const int size = sizeof(same_arity)/sizeof(ops);
+            operation = mutate_internal(same_arity, size, operation);
 		}
 		children[0]->mutate(chance);
 		children[1]->mutate(chance);
@@ -214,7 +215,8 @@ void node::mutate(double chance) {
 	case iflteCLOCKWISE:
 		if(mut_this && ALLOW_INTERNAL_MUTATION){
 			const ops same_arity[] = {iflteMAG, iflteCLOCKWISE};
-			operation = mutate_internal(same_arity, operation);
+            const int size = sizeof(same_arity)/sizeof(ops);
+            operation = mutate_internal(same_arity, size, operation);
 		}
 		children[0]->mutate(chance);
 		children[1]->mutate(chance);
@@ -241,7 +243,9 @@ void node::mutate(double chance) {
 				else if(the_const->direction < -PI) the_const->direction += 2*PI;
 			}
 		break;
-		}
+        } else {
+            if(mut_this) delete the_const;
+        }
 	case zebra:
 	case nearest_hyena:
 	case nearest_lion:
@@ -258,9 +262,6 @@ void node::mutate(double chance) {
 		// handle hyena input case as well as terminals
 		if(operation < NUM_OPS){
 			if (mut_this){
-				if(!SPECIALIZED_CONST_MUT && operation == constant){
-					delete the_const;
-				}
 				operation = get_rand_terminal(operation);
 				if(operation == constant){
 					the_const = new vect();

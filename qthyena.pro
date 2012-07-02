@@ -21,7 +21,8 @@ HEADERS += qthyena.h \
     indiv_nn.h \
     indiv_base.h \
     weightset.h \
-    indiv.h
+    indiv.h \
+    indiv_hybrid.h
     
 SOURCES += qthyena.cpp \
     environment.cpp \
@@ -36,7 +37,8 @@ SOURCES += qthyena.cpp \
     globals.cpp \
     indiv_nn.cpp \
     indiv_base.cpp \
-    indiv.cpp
+    indiv.cpp \
+    indiv_hybrid.cpp
     
 FORMS += qthyena.ui \
     playback.ui

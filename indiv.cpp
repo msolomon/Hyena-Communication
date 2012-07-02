@@ -109,10 +109,10 @@ void indiv::clear(void) {
 
 void indiv::mutate(void) {
 	double chance;
-	if(NUM_OVER_SIZE_MUTATION > 0){
-		chance = NUM_OVER_SIZE_MUTATION / tree->get_size();
+    if(NUM_OVER_SIZE_MUTATION_VEP > 0){
+        chance = NUM_OVER_SIZE_MUTATION_VEP / tree->get_size();
 	} else{
-		chance = MUTATION_CHANCE / 100.0;
+        chance = MUTATION_CHANCE_VEP / 100.0;
 	}
 	tree->mutate(chance);
 }

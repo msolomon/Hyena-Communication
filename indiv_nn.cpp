@@ -28,9 +28,14 @@ indiv_nn::indiv_nn(){
     calling = false;
 
     if(num_inputs == -1){ // only calculate once
-        if(USE_ANN && LEARN_CALLING){
-            assert(NETWORK_NUM_OUTPUT >= 3 &&
-                   "Not enough output nodes to learn calling!");
+        if(LEARN_CALLING){
+            if(HYBRID){
+                assert(NETWORK_NUM_OUTPUT == 1 && "Wrong number of output nodes");
+            } else {
+                assert(NETWORK_NUM_OUTPUT == 3 && "Wrong number of output nodes");
+            }
+        } else if(ENABLE_ANN){
+            assert(NETWORK_NUM_OUTPUT == 2 && "Wrong number of output nodes");
         }
         int num_ops = NETWORK_NUM_INPUT_RAW;
         if(is_disabled_term(zebra))           num_ops -= 2;
@@ -66,6 +71,8 @@ indiv_nn::indiv_nn(const indiv_nn &indiv){
 
 indiv_nn& indiv_nn::operator=(const indiv_nn &indiv){
     if(this == &indiv) return *this; // check for self-assignment
+    x = indiv.x;
+    y = indiv.y;
     delete[] last_output;
     network = indiv.network; // uses copy-on-write
     if(indiv.last_output != NULL){
@@ -102,6 +109,7 @@ vect indiv_nn::eval_me(){
 }
 
 QString indiv_nn::graphviz(){
+    // TODO: fill in stub
     return QString();
 }
 
@@ -186,10 +194,10 @@ void indiv_nn::mutate(){
     QQueue<int> locations;
 
     // get the number of weights to be mutated
-    if(NUM_OVER_SIZE_MUTATION == 0){ // use flat % chance per weight
-        num_mutes = poisson_sample(MUTATION_CHANCE/100.0 * get_size());
+    if(NUM_OVER_SIZE_MUTATION_ANN == 0){ // use flat % chance per weight
+        num_mutes = poisson_sample(MUTATION_CHANCE_ANN/100.0 * get_size());
     } else { // use X/size mutations
-        num_mutes = poisson_sample(NUM_OVER_SIZE_MUTATION);
+        num_mutes = poisson_sample(NUM_OVER_SIZE_MUTATION_ANN);
     }
 
     // get the locations to be mutated
@@ -337,19 +345,26 @@ vect indiv_nn::evaluate(agent_info &the_info){
 
     evaluate_ann(input); // feed forward through network
 
-    assert(NETWORK_NUM_OUTPUT >= 2 && "Require 2+ output nodes in ANN.");
+    i = 0;
     // rescale outputs
-    last_output[0] = inverse_scale_direction(last_output[0]);
-    assert(last_output[0] <= PI &&
-           last_output[0] >= -PI &&
-           "Got direction outside of valid range!");
-    last_output[1] = inverse_scale_magnitude(last_output[1]);
-    if(LEARN_CALLING){
-        set_calling(inverse_scale_calling(last_output[2]));
-    }
     vect v;
-    v.direction = last_output[0];
-    v.magnitude = last_output[1];
+    if(HYBRID || !ENABLE_ANN){
+        // direction
+        last_output[i] = inverse_scale_direction(last_output[i]);
+        assert(last_output[i] <= PI &&
+               last_output[i] >= -PI &&
+               "Got direction outside of valid range!");
+        v.direction = last_output[i];
+        i++;
+        // magnitude
+        last_output[i] = inverse_scale_magnitude(last_output[i]);
+        v.magnitude = last_output[i];
+        i++;
+    }
+
+    if(LEARN_CALLING){
+        set_calling(inverse_scale_calling(last_output[i]));
+    }
     return v;
 }
 
