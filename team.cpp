@@ -86,7 +86,7 @@ void team::copy(team *p2, int i) {
         *a = *b;
     } else { // VEP only
         indiv *a = (indiv *) hyenas[i];
-        indiv *b = (indiv *) hyenas[i];
+        indiv *b = (indiv *) p2->hyenas[i];
         *a = *b;
     }
 	hyena_fits[i] = p2->hyena_fits[i];
@@ -110,7 +110,7 @@ int team::get_size(void) {
 }
 
 void team::apply_parsimony(){
-    if(!ENABLE_ANN || !HYBRID){
+    if(!ENABLE_ANN || HYBRID){
         avg_parsimony = 0;
         for(int i = 0; i < NUM_HYENAS; i++){
             double penalty = hyenas[i]->get_size() * -PARSIMONY_COEFF;

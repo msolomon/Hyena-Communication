@@ -13,7 +13,7 @@ node::node(){
 //	for(int i=0; i < 4; i++){
 //		children[i] = NULL;
 //	}
-	operation = north; // just initializing; will be written over
+    operation = north; // just initializing; will be written over
 	the_const = NULL;
     size = 0;
 }
