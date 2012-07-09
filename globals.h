@@ -35,8 +35,8 @@ const int FINAL_TESTS = 0; // number of times to run best team of last trial
 const int KNOCKOUT_TESTS = 2000; // as FINAL_TESTS, but with KNOCKOUT_OPS disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const double PARSIMONY_COEFF = 0.001;
-const ops DISABLED_OPS[] = {};
-const ops KNOCKOUT_OPS[] = {};
+const ops DISABLED_OPS[] = {randm};
+const ops KNOCKOUT_OPS[] = {randm};
 const selection_method SELECTION_METHOD = mean; // mean, median, minimum, maximum
 const bool FINAL_TEST_MEAN = false; // force mean fitness to pick final best team
 // 0 to disable, else start hyenas within X units: exactly 1 non-named inside
@@ -49,26 +49,22 @@ const int TOURNAMENT_SIZE = 3;
 const bool SPECIALIZED_CONST_MUT = true;
 const double CONST_MUT_MAG_SIGMA = 1.0;
 const double CONST_MUT_DIR_SIGMA = 1.0;
-const double MUTATION_CHANCE_VEP = 5.0; // flat % chance of mutation
+const double MUTATION_CHANCE_VET = 5.0; // flat % chance of mutation
 // NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
-const double NUM_OVER_SIZE_MUTATION_VEP = 1; // mean number of mutations/iteration
+const double NUM_OVER_SIZE_MUTATION_VET = 1; // mean number of mutations/iteration
 // ANNs only
 const double MUTATION_SIGMA = 0.1;
 const bool THREE_POINT_CLAMP = false; // if mutation would cross a "boundary" at
                                      // -1, 0, or 1, it is instead set to that boundary
-const double MUTATION_CHANCE_ANN = MUTATION_CHANCE_VEP; // flat % chance of mutation
+const double MUTATION_CHANCE_ANN = MUTATION_CHANCE_VET; // flat % chance of mutation
 // NUM_OVER... overrides above if nonzero. gives X/size chance mut. per node
 const double NUM_OVER_SIZE_MUTATION_ANN = 0; // mean number of mutations/iteration
 
-// Vector expression trees or artificial neural networks
-const bool ENABLE_ANN = false;  // true: ANN, false: VEP
-const bool HYBRID = true           // true: ANN and VEP, false: as above
-                    && ENABLE_ANN; // only true if ENABLE_ANN also true
+// Vector expression trees, artificial neural networks, or hybrid model
+const gene_type REPRESENTATION = hybrid;
 // ANN only
-const bool LEARN_CALLING = false
-                           && ENABLE_ANN;  // can only learn with ANN enabled
 const int NETWORK_NUM_INPUT_RAW = 2*NUM_HYENA_INPUTS + 23; // # of input nodes
-const int NETWORK_NUM_OUTPUT = (2 * !HYBRID) + LEARN_CALLING; // # of output nodes: 2+, 3+ if LEARN_CALLING
+const int NETWORK_NUM_OUTPUT = REPRESENTATION; // # of output nodes
 const int NETWORK[] = {NETWORK_NUM_INPUT_RAW, // input layer: may not be actual number
                        // # of nodes in each hidden layer, e.g. 3, 2, 2
                        (NETWORK_NUM_INPUT_RAW - (sizeof(DISABLED_OPS)/sizeof(int))) / 2,

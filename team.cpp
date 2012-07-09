@@ -2,16 +2,21 @@
 
 team::team(){
     for(int i = 0; i < NUM_HYENAS; i++){
-        if(HYBRID){
+        switch(REPRESENTATION){
+        case hybrid:
             hyenas[i] = new indiv_hybrid;
             ((indiv_hybrid *) (hyenas[i]))->set_type(hyena);
-        }
-        else if(ENABLE_ANN)
+            break;
+        case ann_fixed:
+        case ann_learn:
             hyenas[i] = new indiv_nn;
-        else
+            hyenas[i]->set_type(hyena);
+            break;
+        case vet:
             hyenas[i] = new indiv;
-
-        hyenas[i]->set_type(hyena);
+            hyenas[i]->set_type(hyena);
+            break;
+        }
     }
 
     for(int i = 0; i < NUM_LIONS; i++){
@@ -76,15 +81,15 @@ void team::copy(team *p2) {
 
 void team::copy(team *p2, int i) {
     // copy using assignment operator (defined per-class)
-    if(HYBRID){
+    if(REPRESENTATION == hybrid){
         indiv_hybrid *a = (indiv_hybrid *) hyenas[i];
         indiv_hybrid *b = (indiv_hybrid *) p2->hyenas[i];
         *a = *b;
-    } else if(ENABLE_ANN){
+    } else if(REPRESENTATION == ann_fixed || REPRESENTATION == ann_learn){
         indiv_nn *a = (indiv_nn *) hyenas[i];
         indiv_nn *b = (indiv_nn *) p2->hyenas[i];
         *a = *b;
-    } else { // VEP only
+    } else if(REPRESENTATION == vet){
         indiv *a = (indiv *) hyenas[i];
         indiv *b = (indiv *) p2->hyenas[i];
         *a = *b;
@@ -110,7 +115,7 @@ int team::get_size(void) {
 }
 
 void team::apply_parsimony(){
-    if(!ENABLE_ANN || HYBRID){
+    if(REPRESENTATION == hybrid || REPRESENTATION == vet){
         avg_parsimony = 0;
         for(int i = 0; i < NUM_HYENAS; i++){
             double penalty = hyenas[i]->get_size() * -PARSIMONY_COEFF;

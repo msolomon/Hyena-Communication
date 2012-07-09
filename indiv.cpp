@@ -4,6 +4,10 @@ indiv::indiv(){
     tree = NULL;
 }
 
+indiv::~indiv(){
+    clear();
+}
+
 void indiv::xOver_regular(indiv *p2) {
 	int temp = 0;
     int point1, point2, tmp1, tmp2, size1, size2;
@@ -109,10 +113,10 @@ void indiv::clear(void) {
 
 void indiv::mutate(void) {
 	double chance;
-    if(NUM_OVER_SIZE_MUTATION_VEP > 0){
-        chance = NUM_OVER_SIZE_MUTATION_VEP / tree->get_size();
+    if(NUM_OVER_SIZE_MUTATION_VET > 0){
+        chance = NUM_OVER_SIZE_MUTATION_VET / tree->get_size();
 	} else{
-        chance = MUTATION_CHANCE_VEP / 100.0;
+        chance = MUTATION_CHANCE_VET / 100.0;
 	}
 	tree->mutate(chance);
 }

@@ -13,7 +13,7 @@ enum ops {
 	north, // always (mag=1, dir=0)
 	randm, // an ever-randomized vect, ( mag=[0,X], dir=[-PI,PI) )
 	last_move, // a copy of the last move made or (0,0) at start
-    constant, // a once-randomized vect, otherwise as randm *(VEP only)*
+    constant, // a once-randomized vect, otherwise as randm *(VET only)*
 	number_calling, // dir=0, mag=(number of calling hyenas), unlimited range
 	mirror_nearest, // the previous action of the nearest hyena (if seen)
 	last_pen, // mag=absolute value of penalty from last timestep, dir=0
@@ -60,11 +60,18 @@ const int NUM_NON_TERMS = 7;
 const int NUM_UNIQUE_OPS = NUM_TERMS + NUM_NON_TERMS;
 
 // how to combine results from retesting, at both the individual and team levels
-enum selection_method{
+enum selection_method {
 	mean, // O(n)
 	median, // selection sort. good if n < ~20
 	minimum, // O(n)
 	maximum // O(n)
+};
+
+enum gene_type {
+    vet,       // vector expression trees (no calling learning)
+    hybrid,    // vet for movement, ann for learning calling behavior
+    ann_fixed, // artificial neural network (no calling learning)
+    ann_learn // artificial neural network with calling learning
 };
 
 enum agent_type {

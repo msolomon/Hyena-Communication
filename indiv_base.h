@@ -9,6 +9,7 @@
 
 class indiv_base {
 public:
+    virtual ~indiv_base();
 	double x;
 	double y;
 

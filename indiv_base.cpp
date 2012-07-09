@@ -13,6 +13,9 @@ void indiv_base::lion_move(void) {
     }
 }
 
+indiv_base::~indiv_base(){
+}
+
 void indiv_base::move(void) {
     vect v;
     if (type == lion) {

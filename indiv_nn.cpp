@@ -28,15 +28,21 @@ indiv_nn::indiv_nn(){
     calling = false;
 
     if(num_inputs == -1){ // only calculate once
-        if(LEARN_CALLING){
-            if(HYBRID){
-                assert(NETWORK_NUM_OUTPUT == 1 && "Wrong number of output nodes");
-            } else {
-                assert(NETWORK_NUM_OUTPUT == 3 && "Wrong number of output nodes");
-            }
-        } else if(ENABLE_ANN){
+        switch(REPRESENTATION){
+        case hybrid:
+            assert(NETWORK_NUM_OUTPUT == 1 && "Wrong number of output nodes");
+            break;
+        case ann_learn:
+            assert(NETWORK_NUM_OUTPUT == 3 && "Wrong number of output nodes");
+            break;
+        case ann_fixed:
             assert(NETWORK_NUM_OUTPUT == 2 && "Wrong number of output nodes");
+            break;
+        case vet:
+            assert(NETWORK_NUM_OUTPUT == 0 && "Wrong number of output nodes");
+            break;
         }
+
         int num_ops = NETWORK_NUM_INPUT_RAW;
         if(is_disabled_term(zebra))           num_ops -= 2;
         if(is_disabled_term(nearest_hyena))   num_ops -= 2;
@@ -240,7 +246,6 @@ void indiv_nn::mutate(){
 
 void indiv_nn::evaluate_ann(double input_vector[]){
     delete[] last_output;
-    int in_rows;
     double *temp_in = NULL;
     int out_rows = num_inputs;
     // in_cols, out_cols aren't needed: they're vectors, so would always be 1
@@ -255,7 +260,6 @@ void indiv_nn::evaluate_ann(double input_vector[]){
     for(int i = 0; i < network.length(); i++){
         weightset *w = &network[i];
         temp_in = temp_out;
-        in_rows = out_rows;
         out_rows = w->cols; // since weight matrix will be transposed
         temp_out = new double[out_rows + 1];
         temp_out[out_rows] = 1; // set bias for next iteration
@@ -284,7 +288,7 @@ void indiv_nn::evaluate_ann(double input_vector[]){
 }
 
 vect indiv_nn::evaluate(agent_info &the_info){
-    double input[num_inputs];
+    double *input = new double[num_inputs];
     int i = 0;
     for(; i < NUM_HYENA_INPUTS * 2; i += 2){
         input[i] = scale_direction(the_info.hyenas[i / 2].direction);
@@ -345,10 +349,12 @@ vect indiv_nn::evaluate(agent_info &the_info){
 
     evaluate_ann(input); // feed forward through network
 
+    delete[] input;
+
     i = 0;
     // rescale outputs
     vect v;
-    if(HYBRID || !ENABLE_ANN){
+    if(REPRESENTATION == hybrid || REPRESENTATION == vet){
         // direction
         last_output[i] = inverse_scale_direction(last_output[i]);
         assert(last_output[i] <= PI &&
@@ -362,7 +368,7 @@ vect indiv_nn::evaluate(agent_info &the_info){
         i++;
     }
 
-    if(LEARN_CALLING){
+    if(REPRESENTATION == hybrid || REPRESENTATION == ann_learn){
         set_calling(inverse_scale_calling(last_output[i]));
     }
     return v;

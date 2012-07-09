@@ -199,7 +199,8 @@ void environment::update_vectors(void){
 		}
 
         // set first callers, only if calling isn't a fixed behavior
-        if(LEARN_CALLING){
+        if(CALLING_ENABLED &&
+          (REPRESENTATION == ann_learn || REPRESENTATION == hybrid)){
             if(agents->hyenas[i]->get_calling()){ // calling
                 num_calling++;
                 if(uncalled.contains(i)){ // first time calling
@@ -213,7 +214,8 @@ void environment::update_vectors(void){
         if (temp.magnitude < CALLING_RANGE_SQ) { // min range to zebra
             temp.magnitude = sqrt(temp.magnitude); // now calculate sqrt
             temp.direction = atan2(agentx - ZEBRAX, agenty - ZEBRAY);
-            if(CALLING_ENABLED && !LEARN_CALLING){ // fixed calling only
+            if(CALLING_ENABLED &&  // fixed calling only
+                    (REPRESENTATION == ann_fixed || REPRESENTATION == vet)){
                 if(uncalled.contains(i)){ // first time calling
                     just_called.insert(i);
                     uncalled.remove(i);
@@ -223,7 +225,7 @@ void environment::update_vectors(void){
             }
         } else {
             temp.reset();
-            if(!LEARN_CALLING){
+            if(REPRESENTATION == ann_fixed || REPRESENTATION == vet){
                 agents->hyenas[i]->set_calling(false);
             }
         }

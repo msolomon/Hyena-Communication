@@ -21,7 +21,7 @@ public:
     void set_type(agent_type t);
 
 private:
-    indiv vep;
+    indiv vet;
     indiv_nn ann;
 };
 

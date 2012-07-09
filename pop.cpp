@@ -265,7 +265,7 @@ void pop::evolve(int trial) {
     }
 
 	// graphviz output of the first hyena in best team of last generation's tree
-    if(!ENABLE_ANN || HYBRID){
+    if(REPRESENTATION == hybrid || REPRESENTATION == vet){
         fname_s = QString(GRAPHVIZ_TEMPLATE).arg(trial+1).toStdString();
         f.open(fname_s.c_str());
         f << the_pop[pop_bestteam]->hyenas[0]->graphviz().toStdString() << endl;

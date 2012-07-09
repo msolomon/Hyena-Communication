@@ -6,6 +6,7 @@
 class indiv: public indiv_base {
 public:
     indiv();
+    ~indiv();
     void rand_move();
     indiv &operator=(const indiv &);
 
