@@ -534,7 +534,7 @@ void pop::team_reproduce() {
 */
 
 int pop::member_select(int c, int member) {
-	int best = 0, current;
+    int best, current;
 	double current_fit;
 	double best_fit;
 	best = Random::Global.Integer(POP_SIZE);
@@ -558,7 +558,7 @@ int pop::member_select(int c, int member) {
 }
 
 int pop::tourn_select(int c) { // or worst if c = -1
-	int best = 0, current;
+    int best, current;
 	double current_fit;
 	double best_fit;
 	best = Random::Global.Integer(POP_SIZE);

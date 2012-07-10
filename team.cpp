@@ -248,10 +248,16 @@ double team::calc_team_fit(void) {
 	avg_reward = 0;
 	avg_dist_to_zebra = 0;
 	avg_hits = 0;
-	for (int i = 0; i < NUM_HYENAS; i++) {
-		for(int j = 0; j < NUM_TESTS; j++)
+    for (int i = NUM_HYENAS - 1; i >= 0; i--) {
+        for(int j = 0; j < NUM_TESTS; j++){
             run_fits[j] += hyenas[i]->get_fitness(j);
+        }
         hyena_fits[i] = hyenas[i]->get_fitness(); // destroys order of fitnesses
+        if(FIT_SHARE == linear && i < NUM_HYENAS - 1){
+            double stolen_fitness = hyena_fits[i+1] * SHARE_PERCENT / 100.0;
+            hyena_fits[i+1] -= stolen_fitness;
+            hyena_fits[i] += stolen_fitness;
+        }
         avg_dist_to_zebra += hyenas[i]->get_avg_dist_to_zebra();
         avg_lion_attacks += hyenas[i]->get_lion_attacks();
         avg_penalty += hyenas[i]->get_penalty();

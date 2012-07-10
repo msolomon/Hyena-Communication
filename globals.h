@@ -23,7 +23,7 @@ class indiv_nn;
 class indiv;
 
 //// Settings
-const int GENERATIONS = 1500;
+const int GENERATIONS = 40;
 const int POP_SIZE = 100;
 const int START_LIONS = 2; // number of lions to start, then move up ~linearly
 const int NUM_LIONS = 2; // maximum and final number of lions >= START_LIONS
@@ -32,7 +32,7 @@ const int TIME_STEPS = 100;
 const int NUM_TESTS = 5; // times to repeat fitness tests to prevent luck
 const int NUM_HYENA_INPUTS = 0; // 0 to disable, otherwise first N
 const bool VEC_CALLING_ONLY = true; // vectors to all calling, or all period?
-const int FINAL_TESTS = 0; // number of times to run best team of last trial
+const int FINAL_TESTS = 2000; // number of times to run best team of last trial
 const int KNOCKOUT_TESTS = 2000; // as FINAL_TESTS, but with KNOCKOUT_OPS disabled
 const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const double PARSIMONY_COEFF = 0.001;
@@ -81,6 +81,9 @@ const int TREE_MAX_SIZE = INT_MAX; // size, not depth: INT_MAX for unlimited
 // Selection method
 // indiv: 100% indiv, team: 100% team, oet: 50% each, alt: alternate team/indiv
 const selection SELECTION = oet_sel;
+// Fitness sharing method
+const fitness_sharing FIT_SHARE = linear;
+const double SHARE_PERCENT = 10.0; // % fitness to share for linear method
 
 // Model
 const int TRIALS = 1; // leaks memory; do via script

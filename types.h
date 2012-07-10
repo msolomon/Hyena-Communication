@@ -82,6 +82,11 @@ enum selection {
     island_sel  // 100% steady-state island model
 };
 
+enum fitness_sharing {
+    none,       // each individual keeps their full fitness
+    linear      // hyena N yields SHARE_PERCENT% fitness to hyena N - 1
+};
+
 enum agent_type {
 	hyena, lion
 };
