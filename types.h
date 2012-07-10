@@ -60,7 +60,7 @@ const int NUM_NON_TERMS = 7;
 const int NUM_UNIQUE_OPS = NUM_TERMS + NUM_NON_TERMS;
 
 // how to combine results from retesting, at both the individual and team levels
-enum selection_method {
+enum combine_method {
 	mean, // O(n)
 	median, // selection sort. good if n < ~20
 	minimum, // O(n)
@@ -72,6 +72,14 @@ enum gene_type {
     hybrid,    // vet for movement, ann for learning calling behavior
     ann_fixed, // artificial neural network (no calling learning)
     ann_learn // artificial neural network with calling learning
+};
+
+enum selection {
+    indiv_sel,  // 100% individual generational selection
+    team_sel,   // 100% team generational selection
+    oet_sel,    // 50% team selection, 50% ind selection
+    alt_sel,    // alternate between team/ind selection each generation
+    island_sel  // 100% steady-state island model
 };
 
 enum agent_type {

@@ -20,6 +20,7 @@ using RandomLib::Random;
 
 #include "types.h"
 class indiv_nn;
+class indiv;
 
 //// Settings
 const int GENERATIONS = 1500;
@@ -37,7 +38,7 @@ const bool LIONS_RETURN = false; // lions return to kill if close and few hyenas
 const double PARSIMONY_COEFF = 0.001;
 const ops DISABLED_OPS[] = {randm};
 const ops KNOCKOUT_OPS[] = {randm};
-const selection_method SELECTION_METHOD = mean; // mean, median, minimum, maximum
+const combine_method COMBINE_METHOD = mean; // mean, median, minimum, maximum
 const bool FINAL_TEST_MEAN = false; // force mean fitness to pick final best team
 // 0 to disable, else start hyenas within X units: exactly 1 non-named inside
 // the calling radius
@@ -77,12 +78,9 @@ const bool FULL = true; // false = GROW (for initial trees)
 const int GROW_DEPTH = 4;
 const int TREE_MAX_SIZE = INT_MAX; // size, not depth: INT_MAX for unlimited
 
-// Only pick one method below
-const bool OET_GENERATIONAL = true; // 50% team, 50% island (generational)
-const bool TEAM_GENERATIONAL = false; // 100% team generational
-const bool INDIV_GENERATIONAL = false; // 100% island generational
-const bool ISLAND_STEADY = false;
-const bool ALTERNATE_TEAM_INDIV = false; // alternate by generation
+// Selection method
+// indiv: 100% indiv, team: 100% team, oet: 50% each, alt: alternate team/indiv
+const selection SELECTION = oet_sel;
 
 // Model
 const int TRIALS = 1; // leaks memory; do via script

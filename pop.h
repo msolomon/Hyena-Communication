@@ -6,6 +6,7 @@
 #include "globals.h"
 #include "indiv.h"
 #include "indiv_nn.h"
+#include "indiv_hybrid.h"
 #include "team.h"
 #include "environment.h"
 #include "drawhelper.h"

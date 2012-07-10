@@ -235,11 +235,11 @@ void pop::evolve(int trial) {
         }
 
 		// only use one method of reproduction
-		if(ISLAND_STEADY)
-			island_reproduce();
-		if(TEAM_GENERATIONAL || INDIV_GENERATIONAL ||
-           OET_GENERATIONAL || ALTERNATE_TEAM_INDIV)
+        if(SELECTION == island_sel){
+            island_reproduce();
+        } else {
             all_generational(i);
+        }
 		pop_bestteam = select_best_team(1);
 		save_data(i);
         write_data(trial, i);
@@ -452,11 +452,11 @@ void pop::all_generational(int generation){
 	temp->ENV = ENV;
 	int bound; // determines how to split the new population between island and team
     assert(POP_SIZE / 4 == POP_SIZE / 4.0 && "Population size must be divisible by 4.");
-    if(TEAM_GENERATIONAL || (ALTERNATE_TEAM_INDIV && generation % 2))
+    if(SELECTION == team_sel || (SELECTION == alt_sel && generation % 2))
 		bound = POP_SIZE;       // team approach
-    else if(INDIV_GENERATIONAL || ALTERNATE_TEAM_INDIV)
+    else if(SELECTION == indiv_sel || SELECTION == alt_sel)
 		bound = 0;                      // island approach
-    else if(OET_GENERATIONAL)
+    else if(SELECTION == oet_sel)
         bound = POP_SIZE/2;   // OET approach
 	for (int i = 0; i < bound; i = i + 2) {
 		int p1, p2;

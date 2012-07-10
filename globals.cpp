@@ -6,7 +6,7 @@ double select_from_numtests(double fitnesses[NUM_TESTS]){
 	const int end = (int) ceil(NUM_TESTS/2.0);
 	const bool odd = ((NUM_TESTS % 2) == 1);
 	double fit;
-	switch(SELECTION_METHOD){
+	switch(COMBINE_METHOD){
 	case mean:
 		fit = 0;
 		for(int i = 0; i < NUM_TESTS; i++){
